@@ -17,6 +17,8 @@ All Phase 1 (Critical Fixes) and Phase 2 (Missing Features) items have been succ
 - **Promo-Aware Hero CTA**: Rewrote the homepage hero banner to evaluate active store promotions dynamically. It extracts active discounts and names, displaying the correct discount details. If no promotions exist, it defaults to standard welcome taglines.
 - **Tracking Deep Links**: Added a "Track Order" link in the success bar upon successful checkout. Clicking it auto-switches page views to the `OrderTracking` page and pre-fills the input box with the order ID.
 - **Upsert-Aware Google Sheets Import**: Rebuilt the CSV import parser and background synchronization timer. The app now checks for existing items matching by ID or case-insensitive name, running an update (upsert) instead of creating duplicates.
+- **Cloudinary Image Auto-Cleanup**: Created a secure serverless Netlify function (`netlify/functions/delete-image.js`) that deletes images from your Cloudinary storage using your API credentials when you delete a product or replace its photos in the admin panel.
+- **Resolved Storefront Image Syncing**: Fixed the issue where new products/images added in the admin panel didn't show on the storefront. Previously, because your database was empty, the storefront's background polling loop would override the local storage state back to the default unsplash placeholders within 3 seconds. Now that the tables are active, it syncs directly with Supabase correctly.
 
 ---
 
