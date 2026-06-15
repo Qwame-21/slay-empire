@@ -254,7 +254,7 @@ async function uploadToCloudinary(file, publicId = null) {
 async function deleteCloudinaryImage(imageUrl) {
   if (!imageUrl || !imageUrl.includes("res.cloudinary.com")) return;
   try {
-    const res = await fetch("/.netlify/functions/delete-image", {
+    const res = await fetch("/api/delete-image", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageUrl }),
@@ -263,7 +263,7 @@ async function deleteCloudinaryImage(imageUrl) {
       console.warn("Cloudinary image deletion failed:", res.statusText);
     }
   } catch (e) {
-    console.warn("Local env: Netlify function not available. Image will be deleted in production.");
+    console.warn("Local env: Cloudflare function not available. Image will be deleted in production.");
   }
 }
 
