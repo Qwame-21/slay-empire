@@ -1,0 +1,13 @@
+# Environment variables (contains private API keys)
+.env
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Local/system files
+.DS_Store
+*.local
