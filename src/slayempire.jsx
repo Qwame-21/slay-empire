@@ -251,6 +251,22 @@ async function uploadToCloudinary(file, publicId = null) {
   } catch (e) { return { error: e.message || "Network error" }; }
 }
 
+async function deleteCloudinaryImage(imageUrl) {
+  if (!imageUrl || !imageUrl.includes("res.cloudinary.com")) return;
+  try {
+    const res = await fetch("/.netlify/functions/delete-image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl }),
+    });
+    if (!res.ok) {
+      console.warn("Cloudinary image deletion failed:", res.statusText);
+    }
+  } catch (e) {
+    console.warn("Local env: Netlify function not available. Image will be deleted in production.");
+  }
+}
+
 const GHS  = (n) => "GH₵ " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 0 });
 const ago  = (ts) => { const d = Math.floor((Date.now() - ts) / 86400000); return d === 0 ? "Today" : d === 1 ? "Yesterday" : d + " days ago"; };
 const genCode = () => { const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = "SLY-"; for (let i = 0; i < 6; i++) s += c[Math.floor(Math.random() * c.length)]; return s; };
@@ -577,6 +593,7 @@ function useProducts() {
   }, [products, setProducts]);
 
   const updateProduct = useCallback(async (cat, id, updates) => {
+    const oldProduct = products[cat]?.find(p => p.id === id);
     setProducts(prev => ({ ...prev, [cat]: prev[cat].map(p => p.id === id ? { ...p, ...updates } : p) }));
     if (supa._ready) {
       const snaked = {};
@@ -598,24 +615,37 @@ function useProducts() {
       if ("isTrending"       in updates) snaked.is_trending         = updates.isTrending;
       try {
         await supa.updateProduct(id, snaked);
+        if (oldProduct) {
+          if (updates.image !== undefined && oldProduct.image && updates.image !== oldProduct.image) {
+            deleteCloudinaryImage(oldProduct.image);
+          }
+          if (updates.secondaryImage !== undefined && oldProduct.secondaryImage && updates.secondaryImage !== oldProduct.secondaryImage) {
+            deleteCloudinaryImage(oldProduct.secondaryImage);
+          }
+        }
       } catch (err) {
         console.error("Failed to update product in Supabase:", err);
       }
     }
-  }, [setProducts]);
+  }, [products, setProducts]);
 
   const deleteProduct = useCallback(async (cat, id) => {
     if (!verifyAdminPassword("delete this product")) return;
     if (!confirm("Delete this product permanently?")) return;
+    const productToDelete = products[cat]?.find(p => p.id === id);
     setProducts(prev => ({ ...prev, [cat]: prev[cat].filter(p => p.id !== id) }));
     if (supa._ready) {
       try {
         await supa.deleteProduct(id);
+        if (productToDelete) {
+          if (productToDelete.image) deleteCloudinaryImage(productToDelete.image);
+          if (productToDelete.secondaryImage) deleteCloudinaryImage(productToDelete.secondaryImage);
+        }
       } catch (err) {
         console.error("Failed to delete product in Supabase:", err);
       }
     }
-  }, [setProducts]);
+  }, [products, setProducts]);
 
   const decrementStock = useCallback(async (items) => {
     setProducts(prev => {
