@@ -46,7 +46,7 @@ exports.handler = async function (event, context) {
     }
 
     // Extract Cloudinary public ID from URL
-    const regex = /\/upload\/(?:[a-zA-Z0-9_,.-]+\/)?(?:v\d+\/)?([^\s?#]+)$/;
+    const regex = /\/upload\/(?:(?:[a-zA-Z]{1,2}|dpr)_[a-zA-Z0-9_.-]+(?:,(?:[a-zA-Z]{1,2}|dpr)_[a-zA-Z0-9_.-]+)*\/)*(?:v\d+\/)?([^\s?#]+)$/;
     const match = imageUrl.split("?")[0].match(regex);
     if (!match) {
       return {

@@ -350,8 +350,12 @@ git push -u origin main
 | `VITE_SUPABASE_URL` | `https://eksgpzcdasftmpcqrmwv.supabase.co` |
 | `VITE_SUPABASE_KEY` | *(your full JWT anon key)* |
 | `VITE_PAYSTACK_PUBLIC_KEY` | *(your Paystack live key)* |
-| `VITE_CLOUDINARY_CLOUD_NAME` | *(your cloud name)* |
-| `VITE_CLOUDINARY_PRESET` | *(your preset name)* |
+| `VITE_CLOUDINARY_CLOUD_NAME` | *(your cloud name e.g. `dccf0ffxr`)* |
+| `VITE_CLOUDINARY_PRESET` | *(your preset name e.g. `slay_products`)* |
+| `CLOUDINARY_API_KEY` | *(your Cloudinary API Key — from Cloudinary dashboard → Settings → Access Keys)* |
+| `CLOUDINARY_API_SECRET` | *(your Cloudinary API Secret — same location, keep this private!)* |
+
+> ⚠️ **`CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` are required** for image deletion to work in production. Without them, the server function cannot sign deletion requests to Cloudinary and deleted product images will remain in your Cloudinary library.
 
 4. After adding all variables, go to **"Deploys"** → click **"Trigger deploy"** → **"Deploy site"**
 
