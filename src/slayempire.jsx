@@ -218,8 +218,8 @@ function TypewriterTitle({ text, style }) {
 }
 
 // ─── CLOUDINARY CONFIG ───────────────────────────────────────────────────────
-const CLOUDINARY_CLOUD  = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || import.meta.env.VITE_CLOUDINARY_CLOUD || "slay_cloud";
-const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET || "slay_products";
+const CLOUDINARY_CLOUD  = "dccf0ffxr";
+const CLOUDINARY_PRESET = "slay_products";
 
 function compressImage(file, maxWidth = 1200, quality = 0.82) {
   return new Promise((resolve) => {
@@ -315,11 +315,11 @@ function applyFilter(list, f) {
 }
 
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
-const SUPA_URL = import.meta.env.VITE_SUPABASE_URL || "https://your-project.supabase.co";
-const SUPA_KEY = import.meta.env.VITE_SUPABASE_KEY || "";
+const SUPA_URL = "https://eksgpzcdasftmpcqrmwv.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrc2dwemNkYXNmdG1wY3FybXd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NzM0MDIsImV4cCI6MjA5NzA0OTQwMn0.aRt63Q87_JYTbtUloBVCvlZUuYkxL7oTAEz0jZa1kUc";
 
-const isPlaceholderUrl = SUPA_URL.includes("your-project.supabase.co") || SUPA_URL.includes("your-project-id.supabase.co");
-const isPlaceholderKey = SUPA_KEY === "your-anon-public-key-here" || !SUPA_KEY;
+const isPlaceholderUrl = false;
+const isPlaceholderKey = false;
 
 const supa = {
   _url: SUPA_URL, _key: SUPA_KEY, _ready: !!SUPA_KEY && !isPlaceholderUrl && !isPlaceholderKey,
