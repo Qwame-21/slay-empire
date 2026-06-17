@@ -1135,9 +1135,10 @@ html,body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',seri
 .ghost-btn{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #dddddd;background:#ffffff;color:#666666;cursor:pointer;padding:13px 28px;transition:all .3s;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;}
 .ghost-btn:hover{border-color:#e8a0b4;color:#111111;}
 .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;}
-.drawer{position:fixed;top:0;right:0;height:100vh;width:100vw;background:#ffffff;border-left:1px solid #e8e8e8;z-index:100;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.08);}
+.drawer{position:fixed;top:0;right:0;height:100vh;height:100dvh;width:100vw;background:#ffffff;border-left:1px solid #e8e8e8;z-index:100;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.08);}
 @media(min-width:481px){.drawer{width:440px;}}
-input,textarea,select{background:#ffffff;border:1px solid #e8e8e8;color:#111111;padding:11px 14px;font-family:'Raleway',sans-serif;font-size:13px;width:100%;outline:none;transition:border-color .3s;min-height:44px;border-radius:0;-webkit-appearance:none;}
+input,textarea,select{background:#ffffff;border:1px solid #e8e8e8;color:#111111;padding:11px 14px;font-family:'Raleway',sans-serif;font-size:14px;width:100%;outline:none;transition:border-color .3s;min-height:44px;border-radius:0;-webkit-appearance:none;}
+@media(max-width:768px){input,textarea,select{font-size:16px;}}
 input:focus,textarea:focus,select:focus{border-color:#e8a0b4;}
 input::placeholder,textarea::placeholder{color:#999999;}
 select option{background:#ffffff;color:#111111;}
@@ -1987,19 +1988,19 @@ function CartDrawer({ cart, updateCartQty, removeFromCart, cartTotal, onClose, a
         {step === "details" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {returning && <div style={{ background: "#fafafa", border: "1px solid #333333", padding: "10px 14px", fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#111111", letterSpacing: ".1em", display: "flex", alignItems: "center", gap: 6 }}><Icon name="check" size={12} color="#111111" /> Welcome back! We recognise your number.</div>}
-            <Fld label="Full Name *" error={errors.name}><input value={details.name} onChange={e => set("name", e.target.value)} placeholder="Your full name" /></Fld>
-            <Fld label="Phone Number *" error={errors.phone}><input value={details.phone} onChange={e => set("phone", e.target.value)} onBlur={checkReturning} placeholder="+233 XXXXXXXXX" /></Fld>
-            <Fld label="Street Address *" error={errors.streetAddress}><input value={details.streetAddress} onChange={e => set("streetAddress", e.target.value)} placeholder="Street name and number" /></Fld>
-            <Fld label="Town / City *" error={errors.city}><input value={details.city} onChange={e => set("city", e.target.value)} placeholder="e.g. Accra" /></Fld>
+            <Fld label="Full Name *" error={errors.name}><input value={details.name} onChange={e => set("name", e.target.value)} placeholder="Your full name" autoComplete="name" /></Fld>
+            <Fld label="Phone Number *" error={errors.phone}><input value={details.phone} onChange={e => set("phone", e.target.value)} onBlur={checkReturning} placeholder="+233 XXXXXXXXX" autoComplete="tel" /></Fld>
+            <Fld label="Street Address *" error={errors.streetAddress}><input value={details.streetAddress} onChange={e => set("streetAddress", e.target.value)} placeholder="Street name and number" autoComplete="street-address" /></Fld>
+            <Fld label="Town / City *" error={errors.city}><input value={details.city} onChange={e => set("city", e.target.value)} placeholder="e.g. Accra" autoComplete="address-level2" /></Fld>
             <div className="two-col">
-              <Fld label="Apartment / Unit (opt.)"><input value={details.apartment} onChange={e => set("apartment", e.target.value)} placeholder="Apt, Suite…" /></Fld>
-              <Fld label="Country"><select value={details.country} onChange={e => set("country", e.target.value)}>{["Ghana", "Nigeria", "UK", "USA", "Other"].map(c => <option key={c}>{c}</option>)}</select></Fld>
+              <Fld label="Apartment / Unit (opt.)"><input value={details.apartment} onChange={e => set("apartment", e.target.value)} placeholder="Apt, Suite…" autoComplete="address-line2" /></Fld>
+              <Fld label="Country"><select value={details.country} onChange={e => set("country", e.target.value)} autoComplete="country">{["Ghana", "Nigeria", "UK", "USA", "Other"].map(c => <option key={c}>{c}</option>)}</select></Fld>
             </div>
             <div className="two-col">
-              <Fld label="Postal / Zip (opt.)"><input value={details.postalCode} onChange={e => set("postalCode", e.target.value)} placeholder="Optional" /></Fld>
-              <Fld label="Email (opt.)"><input type="email" value={details.email} onChange={e => set("email", e.target.value)} placeholder="you@example.com" /></Fld>
+              <Fld label="Postal / Zip (opt.)"><input value={details.postalCode} onChange={e => set("postalCode", e.target.value)} placeholder="Optional" autoComplete="postal-code" /></Fld>
+              <Fld label="Email (opt.)"><input type="email" value={details.email} onChange={e => set("email", e.target.value)} placeholder="you@example.com" autoComplete="email" /></Fld>
             </div>
-            <Fld label="Order Notes (opt.)"><textarea rows={2} value={details.notes} onChange={e => set("notes", e.target.value)} placeholder="Special instructions…" style={{ resize: "vertical", minHeight: 80 }} /></Fld>
+            <Fld label="Order Notes (opt.)"><textarea rows={2} value={details.notes} onChange={e => set("notes", e.target.value)} placeholder="Special instructions…" autoComplete="off" style={{ resize: "vertical", minHeight: 80 }} /></Fld>
             <div style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "16px" }}>
               <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".18em", color: "#e8a0b4", marginBottom: 12 }}>PAYMENT METHOD</p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
