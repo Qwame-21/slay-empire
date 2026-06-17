@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/delete-image", "destination": "/api/delete-image" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
