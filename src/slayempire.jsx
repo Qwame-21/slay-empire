@@ -1374,6 +1374,26 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   animation: slideDown 0.3s ease-out;
 }
+.admin-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  border: 1px solid #e8a0b4;
+  background: transparent;
+  color: #e8a0b4;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 40px;
+}
+.admin-logout-btn:hover {
+  background: #e8a0b4;
+  color: #000000;
+}
 `;
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
@@ -2888,6 +2908,125 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
             <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, color: supa._ready ? "#22c55e" : "#e8a0b4", letterSpacing: ".05em", fontWeight: "bold" }}>{supa._ready ? "CLOUD CONNECTED" : "OFFLINE MODE"}</span>
           </div>
         </div>
+      </div>
+
+      {/* Tab select row & action options on same lineage */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22, position: "relative", zIndex: 40, flexWrap: "wrap", gap: 12 }}>
+        {/* Tab Select Dropdown (Shelter) */}
+        <div style={{ position: "relative", width: "fit-content" }}>
+          <button 
+            onClick={() => setDropdownOpen(!dropdownOpen)} 
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 18px",
+              background: "#ffffff",
+              border: "1px solid #e8a0b4",
+              color: "#e8a0b4",
+              cursor: "pointer",
+              fontFamily: "'Raleway', sans-serif",
+              fontSize: 11,
+              fontWeight: "bold",
+              letterSpacing: ".15em",
+              textTransform: "uppercase",
+              transition: "all 0.25s ease",
+              borderRadius: 0,
+              minWidth: 160,
+              justifyContent: "space-between"
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "#fce8ee";
+            }}
+            onMouseLeave={e => {
+              if (!dropdownOpen) e.currentTarget.style.background = "#ffffff";
+            }}
+          >
+            <span>{TABS.find(t => t[0] === view)?.[1] || view}</span>
+            <svg 
+              width="12" 
+              height="12" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              style={{ 
+                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)", 
+                transition: "transform 0.25s ease" 
+              }}
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          {dropdownOpen && (
+            <>
+              <div 
+                style={{ position: "fixed", inset: 0, zIndex: 41 }} 
+                onClick={() => setDropdownOpen(false)} 
+              />
+              <div 
+                className="fade-in"
+                style={{ 
+                  position: "absolute", 
+                  top: "100%", 
+                  left: 0, 
+                  marginTop: 4, 
+                  background: "#ffffff", 
+                  border: "1px solid #e8e8e8", 
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)", 
+                  zIndex: 42, 
+                  minWidth: 160,
+                  display: "flex",
+                  flexDirection: "column",
+                  animation: "fadeIn 0.2s ease-out forwards"
+                }}
+              >
+                {TABS.map(([v, l]) => (
+                  <button
+                    key={v}
+                    onClick={() => {
+                      setView(v);
+                      setDropdownOpen(false);
+                    }}
+                    style={{
+                      padding: "12px 18px",
+                      background: view === v ? "#fce8ee" : "transparent",
+                      border: "none",
+                      color: view === v ? "#111111" : "#666666",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontFamily: "'Raleway', sans-serif",
+                      fontSize: 11,
+                      letterSpacing: ".1em",
+                      textTransform: "uppercase",
+                      width: "100%",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={e => {
+                      if (view !== v) {
+                        e.currentTarget.style.background = "#fafafa";
+                        e.currentTarget.style.color = "#111111";
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (view !== v) {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.color = "#666666";
+                      }
+                    }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Sync, Staff Cart, and Logout Actions on the Right (same lineage) */}
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {syncing && <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", animation: "fadeIn 1s infinite alternate" }}>● Syncing…</span>}
           {view === "shop" && (
@@ -2896,141 +3035,8 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
               Staff Cart {adminCartCount > 0 && <span style={{ background: "#e8a0b4", color: "#000000", borderRadius: "50%", width: 18, height: 18, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700 }}>{adminCartCount}</span>}
             </button>
           )}
-          <button 
-            className="ghost-btn" 
-            style={{ 
-              padding: "10px 18px", 
-              borderColor: "#e8a0b4", 
-              color: "#e8a0b4",
-              transition: "all 0.25s ease" 
-            }} 
-            onMouseEnter={e => {
-              e.currentTarget.style.background = "#e8a0b4";
-              e.currentTarget.style.color = "#000000";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "#e8a0b4";
-            }}
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          <button className="admin-logout-btn" onClick={handleLogout}>Logout</button>
         </div>
-      </div>
-
-      {/* Tab Select Dropdown (Shelter) */}
-      <div style={{ position: "relative", marginBottom: 22, zIndex: 40, width: "fit-content" }}>
-        <button 
-          onClick={() => setDropdownOpen(!dropdownOpen)} 
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "10px 18px",
-            background: "#ffffff",
-            border: "1px solid #e8a0b4",
-            color: "#e8a0b4",
-            cursor: "pointer",
-            fontFamily: "'Raleway', sans-serif",
-            fontSize: 11,
-            fontWeight: "bold",
-            letterSpacing: ".15em",
-            textTransform: "uppercase",
-            transition: "all 0.25s ease",
-            borderRadius: 0,
-            minWidth: 160,
-            justifyContent: "space-between"
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = "#fce8ee";
-          }}
-          onMouseLeave={e => {
-            if (!dropdownOpen) e.currentTarget.style.background = "#ffffff";
-          }}
-        >
-          <span>{TABS.find(t => t[0] === view)?.[1] || view}</span>
-          <svg 
-            width="12" 
-            height="12" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            style={{ 
-              transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)", 
-              transition: "transform 0.25s ease" 
-            }}
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-
-        {dropdownOpen && (
-          <>
-            <div 
-              style={{ position: "fixed", inset: 0, zIndex: 41 }} 
-              onClick={() => setDropdownOpen(false)} 
-            />
-            <div 
-              className="fade-in"
-              style={{ 
-                position: "absolute", 
-                top: "100%", 
-                left: 0, 
-                marginTop: 4, 
-                background: "#ffffff", 
-                border: "1px solid #e8e8e8", 
-                boxShadow: "0 8px 24px rgba(0,0,0,0.08)", 
-                zIndex: 42, 
-                minWidth: 160,
-                display: "flex",
-                flexDirection: "column",
-                animation: "fadeIn 0.2s ease-out forwards"
-              }}
-            >
-              {TABS.map(([v, l]) => (
-                <button
-                  key={v}
-                  onClick={() => {
-                    setView(v);
-                    setDropdownOpen(false);
-                  }}
-                  style={{
-                    padding: "12px 18px",
-                    background: view === v ? "#fce8ee" : "transparent",
-                    border: "none",
-                    color: view === v ? "#111111" : "#666666",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontFamily: "'Raleway', sans-serif",
-                    fontSize: 11,
-                    letterSpacing: ".1em",
-                    textTransform: "uppercase",
-                    width: "100%",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={e => {
-                    if (view !== v) {
-                      e.currentTarget.style.background = "#fafafa";
-                      e.currentTarget.style.color = "#111111";
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (view !== v) {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.style.color = "#666666";
-                    }
-                  }}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
       </div>
 
       {view === "orders" && (
