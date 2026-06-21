@@ -1326,29 +1326,32 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 }
 @media (max-width: 500px) {
   .stepper-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    padding-left: 20px;
+    margin: 20px 0;
   }
   .stepper-line {
-    top: 0; bottom: 0;
-    left: 15px; right: auto;
-    width: 2px; height: 100%;
+    top: 14px;
+    left: 12px;
+    right: 12px;
   }
   .stepper-line-progress {
-    top: 0; left: 15px;
-    width: 2px; height: 0%;
-    transition: height 0.4s ease;
+    top: 14px;
+    left: 12px;
   }
-  .stepper-step {
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
+  .stepper-dot {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
   }
-  .stepper-label, .stepper-timestamp { text-align: left; margin-top: 0; }
-  .stepper-label { font-size: 11px; max-width: unset; }
+  .stepper-label {
+    font-size: 8px;
+    max-width: 70px;
+    margin-top: 6px;
+    letter-spacing: .02em;
+  }
+  .stepper-timestamp {
+    font-size: 7.5px;
+    margin-top: 2px;
+  }
 }
 
 /* ─── MODAL OVERLAY ─── */
@@ -1495,6 +1498,17 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
     }
   }, [trackOrderId]);
   const hasPromo = useMemo(() => Object.values(products).flat().some(p => p.promoActive && p.promoPrice), [products]);
+  useEffect(() => {
+    const isPromoVisible = !hidePromo && hasPromo;
+    const themeColor = isPromoVisible ? "#fce8ee" : "#ffffff";
+    let metaTag = document.querySelector("meta[name='theme-color']");
+    if (!metaTag) {
+      metaTag = document.createElement("meta");
+      metaTag.setAttribute("name", "theme-color");
+      document.head.appendChild(metaTag);
+    }
+    metaTag.setAttribute("content", themeColor);
+  }, [hidePromo, hasPromo]);
   const addToCart = useCallback((product, qty = 1) => {
     setCart(prev => {
       const ex = prev.find(i => i.id === product.id);
