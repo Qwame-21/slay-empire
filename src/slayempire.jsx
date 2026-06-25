@@ -16,7 +16,7 @@ const WA        = "https://wa.me/233537959673";
 const TIKTOK    = "https://www.tiktok.com/discover/hajia-slay-empire";
 const INSTAGRAM = "https://www.instagram.com/slayempire";
 const LOCATION  = "Lapaz, Accra";
-const MAPS_URL  = "https://maps.google.com/?q=Lapaz+Accra+Ghana";
+const MAPS_URL  = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
 
 const STORE_NAME = "Hajia Slay Empire";
 const HERO_BG = "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80&auto=format&fit=crop";
@@ -312,6 +312,16 @@ function applyFilter(list, f) {
     (p.notes || "").toLowerCase().includes(f) ||
     (p.extra || "").toLowerCase().includes(f)
   );
+}
+
+function findCoverImage(products, cat, filterKey) {
+  const list = products[cat] || [];
+  const match = list.find(p =>
+    (p.subcategory || "").toLowerCase().includes(filterKey) ||
+    (p.notes || "").toLowerCase().includes(filterKey) ||
+    (p.extra || "").toLowerCase().includes(filterKey)
+  );
+  return (match || list[0] || {}).image || null;
 }
 
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
@@ -1117,6 +1127,9 @@ function ImageInputCompact({ value, onChange }) {
 // ─── GLOBAL CSS ───────────────────────────────────────────────────────────────
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap');
+@keyframes wobble{0%,100%{transform:rotate(0deg) scale(1);}15%{transform:rotate(-4deg) scale(1.03);}30%{transform:rotate(4deg) scale(1.03);}45%{transform:rotate(-2.5deg);}60%{transform:rotate(2.5deg);}75%{transform:rotate(-1deg);}}
+.wobble-pill{transition:border-color .2s,background .2s;}
+.wobble-pill:hover,.wobble-pill:active{animation:wobble .5s ease-in-out;border-color:#e8a0b4;background:#fce8ee;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#f5f5f5;}::-webkit-scrollbar-thumb{background:#cccccc;border-radius:2px;}
@@ -1212,7 +1225,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .product-modal-image{position:relative;height:100%;min-height:300px;max-height:90vh;overflow:hidden;background:#fafafa;}
 .product-modal-image img{width:100%;height:100%;object-fit:cover;display:block;}
 .product-modal-content{overflow-y:auto;max-height:90vh;padding:32px 40px;display:flex;flex-direction:column;}
-@media(max-width:640px){.product-modal{grid-template-columns:1fr;height:auto;max-height:90vh;}.product-modal-image{height:220px;min-height:220px;max-height:40vh;}.product-modal-image img{height:220px;min-height:220px;max-height:40vh;object-fit:cover;display:block;}.product-modal-content{max-height:50vh;padding:24px 20px;}}
+@media(max-width:640px){.product-modal{grid-template-columns:1fr;height:auto;max-height:92vh;}.product-modal-image{height:auto;min-height:320px;max-height:48vh;}.product-modal-image img{height:100%;min-height:320px;max-height:48vh;object-fit:cover;object-position:center 25%;display:block;}.product-modal-content{max-height:50vh;padding:24px 20px;}}
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2, 1fr)!important;} .desktop-nav{display:none!important;} .mobile-menu-btn{display:flex!important;} .two-col{grid-template-columns:1fr!important;}}
@@ -1510,6 +1523,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [hidePromo, setHidePromo] = useState(false);
+  const [initialFilter, setInitialFilter] = useState(null);
 
   useEffect(() => {
     if (trackOrderId) {
@@ -1613,8 +1627,8 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
           </div>
         </>
       )}
-      {page === "home"    && <HomePage setPage={nav} setActiveCat={setActiveCat} products={products} addToCart={addToCart} cart={cart} testimonials={testimonials} onSelectProduct={setSelectedProduct} />}
-      {page === "shop"    && <ShopPage products={products} activeCat={activeCat} setActiveCat={setActiveCat} addToCart={addToCart} cart={cart} onSelectProduct={setSelectedProduct} />}
+      {page === "home"    && <HomePage setPage={nav} setActiveCat={setActiveCat} setInitialFilter={setInitialFilter} products={products} addToCart={addToCart} cart={cart} testimonials={testimonials} onSelectProduct={setSelectedProduct} />}
+      {page === "shop"    && <ShopPage products={products} activeCat={activeCat} setActiveCat={setActiveCat} initialFilter={initialFilter} setInitialFilter={setInitialFilter} addToCart={addToCart} cart={cart} onSelectProduct={setSelectedProduct} />}
       {page === "about"   && <AboutPage />}
       {page === "faq"     && <FaqPage setPage={nav} />}
       {page === "privacy" && <PrivacyPage />}
@@ -1633,7 +1647,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
   );
 }
 
-function HomePage({ setPage, setActiveCat, products, addToCart, cart, testimonials, onSelectProduct }) {
+function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart, cart, testimonials, onSelectProduct }) {
   const [localQtys, setLocalQtys] = useState({});
   const qty = (id) => localQtys[id] ?? 1;
   const setQty = (id, v) => setLocalQtys(prev => ({ ...prev, [id]: Math.max(1, v) }));
@@ -1687,7 +1701,13 @@ function HomePage({ setPage, setActiveCat, products, addToCart, cart, testimonia
             )}
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <button className="rose-btn" onClick={() => setPage("shop")}>Shop Now</button>
-              <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn">Get Directions ({LOCATION})</a>
+              <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 21s7-7.58 7-12a7 7 0 10-14 0c0 4.42 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+                  <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6"/>
+                </svg>
+                Get Directions ({LOCATION})
+              </a>
             </div>
           </div>
         </section>
@@ -1753,20 +1773,38 @@ function HomePage({ setPage, setActiveCat, products, addToCart, cart, testimonia
       <section className="section-pad">
         <p className="section-label">Shop by category</p>
         <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 32 }}>Find your routine</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
           {[
-            { key: "skincare", label: "Skincare", desc: "Cleansers · Serums · Moisturisers · Sunscreen", icon: "skincare" },
-            { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", icon: "wellness" },
-            { key: "bundles", label: "Bundles & Sets", desc: "Starter Kits · Glow Kits · Gift Sets", icon: "bundle" },
+            { key: "skincare", label: "Skincare", desc: "Cleansers · Serums · Moisturisers · Sunscreen", image: "https://images.unsplash.com/photo-1747303969063-3b90bcb3942e?w=900&h=1100&q=80&auto=format&fit=crop" },
+            { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
+            { key: "bundles", label: "Bundles & Sets", desc: "Starter Kits · Glow Kits · Gift Sets", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
           ].map(c => (
             <div key={c.key} onClick={() => { setActiveCat(c.key); setPage("shop"); }}
-              style={{ background: "#ffffff", padding: "36px 28px", cursor: "pointer", border: "1px solid #e8e8e8", borderTop: "3px solid #e8a0b4", transition: "all .25s" }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 8px 28px rgba(232,160,180,.12)"; e.currentTarget.style.borderColor = "#e8a0b4"; }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = "#e8e8e8"; e.currentTarget.style.borderTopColor = "#e8a0b4"; }}>
-              <span style={{ display: "block", marginBottom: 12 }}><Icon name={c.icon} size={24} color="#e8a0b4" /></span>
-              <h3 style={{ fontSize: 24, fontWeight: 300, marginBottom: 8 }}>{c.label}</h3>
-              <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#666666", letterSpacing: ".06em", lineHeight: 1.6 }}>{c.desc}</p>
+              style={{ position: "relative", height: 380, overflow: "hidden", cursor: "pointer", border: "1px solid #e8e8e8" }}
+              onMouseEnter={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1.06)"; }}
+              onMouseLeave={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1)"; }}>
+              <img src={c.image} alt={c.label} loading="lazy"
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transition: "transform .5s ease" }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,.68) 100%)" }} />
+              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "24px 26px" }}>
+                <h3 style={{ fontSize: 26, fontWeight: 300, color: "#ffffff", marginBottom: 6 }}>{c.label}</h3>
+                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "rgba(255,255,255,.85)", letterSpacing: ".06em", lineHeight: 1.6, marginBottom: 12 }}>{c.desc}</p>
+                <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".15em", textTransform: "uppercase", color: "#e8a0b4", fontWeight: 600 }}>Shop {c.label} →</span>
+              </div>
             </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16 }}>
+          {[
+            { cat: "wellness", filter: "intimate", label: "Intimate Care" },
+            { cat: "wellness", filter: "hormonal", label: "Period Support" },
+            { cat: "bundles", filter: "skincare", label: "Skincare Kits" },
+            { cat: "bundles", filter: "wellness", label: "Wellness Kits" },
+          ].map(s => (
+            <button key={s.label} className="wobble-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
+              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "12px 20px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600 }}>
+              {s.label}
+            </button>
           ))}
         </div>
       </section>
@@ -1780,10 +1818,13 @@ function HomePage({ setPage, setActiveCat, products, addToCart, cart, testimonia
   );
 }
 
-function ShopPage({ products, activeCat, setActiveCat, addToCart, cart, onSelectProduct }) {
+function ShopPage({ products, activeCat, setActiveCat, initialFilter, setInitialFilter, addToCart, cart, onSelectProduct }) {
   const [filter, setFilter] = useState("all");
   const [localQtys, setLocalQtys] = useState({});
-  useEffect(() => setFilter("all"), [activeCat]);
+  useEffect(() => {
+    setFilter(initialFilter || "all");
+    if (initialFilter && setInitialFilter) setInitialFilter(null);
+  }, [activeCat, initialFilter]);
   const rawList = products[activeCat] || [];
   const filtered = useMemo(() => applyFilter(rawList, filter), [rawList, filter]);
   const pills = useMemo(() => buildPills(activeCat), [activeCat]);
@@ -2179,6 +2220,7 @@ function SearchOverlay({ products, onClose, onSelect }) {
 function ProductModal({ p, onClose, addToCart, cart }) {
   const [q, setQ] = useState(1);
   const [showSecondary, setShowSecondary] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const inCart    = cart.find(c => c.id === p.id);
   const qtyInCart = inCart ? inCart.qty : 0;
   const avail     = p.stock - qtyInCart;
@@ -2190,7 +2232,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.95)" }} onClick={onClose} />
+      <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,.55)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }} onClick={onClose} />
       <div className="fade-in product-modal" style={{ position: "relative", width: "100%", maxWidth: 1000, background: "#ffffff", border: "1px solid #e8e8e8" }}>
         <button
           onClick={onClose}
@@ -2232,7 +2274,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
           </svg>
         </button>
         <div className="product-modal-image" style={{ background: BG_MAP[p.category] }}>
-          <img src={displayImg} style={{ transition: "opacity .3s" }} alt="" />
+          <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => setLightboxOpen(true)} />
           <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
             {trulyOos
               ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>OUT OF STOCK</span>
@@ -2288,6 +2330,14 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             </button>
           </div>
         </div>
+        {lightboxOpen && (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 20, cursor: "zoom-out" }} onClick={() => setLightboxOpen(false)}>
+            <img src={displayImg} alt={p.name} style={{ maxWidth: "92%", maxHeight: "88vh", objectFit: "contain" }} />
+            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
