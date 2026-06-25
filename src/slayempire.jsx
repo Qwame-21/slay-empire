@@ -19,7 +19,7 @@ const LOCATION  = "Lapaz, Accra";
 const MAPS_URL  = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
 
 const STORE_NAME = "Hajia Slay Empire";
-const HERO_BG = "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80&auto=format&fit=crop";
+const HERO_BG = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=1600&q=85&auto=format&fit=crop&crop=top";
 
 const STORE_ABOUT = "Hajia Slay Empire is a trusted cosmetics and beauty essentials shop in Accra, Ghana, offering skincare, body wash, glow products, makeup and premium beauty items with secure online checkout.";
 
@@ -1221,11 +1221,17 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 @media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px;} .feature-grid{grid-template-columns:1fr;}}
 .hero-section-content{max-width:720px;}
-.product-modal{height:600px;max-height:90vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
-.product-modal-image{position:relative;height:100%;min-height:300px;max-height:90vh;overflow:hidden;background:#fafafa;}
-.product-modal-image img{width:100%;height:100%;object-fit:cover;display:block;}
-.product-modal-content{overflow-y:auto;max-height:90vh;padding:32px 40px;display:flex;flex-direction:column;}
-@media(max-width:640px){.product-modal{grid-template-columns:1fr;height:auto;max-height:92vh;}.product-modal-image{height:auto;min-height:320px;max-height:48vh;}.product-modal-image img{height:100%;min-height:320px;max-height:48vh;object-fit:cover;object-position:center 25%;display:block;}.product-modal-content{max-height:50vh;padding:24px 20px;}}
+.product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
+.product-modal-image{position:relative;overflow:hidden;background:#fafafa;}
+.product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+.product-modal-content{overflow-y:auto;height:100%;padding:32px 40px;display:flex;flex-direction:column;box-sizing:border-box;}
+@media(max-width:640px){
+  .product-modal{grid-template-columns:1fr;height:auto;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;}
+  .product-modal-image{height:56vw;min-height:260px;max-height:360px;flex-shrink:0;}
+  .product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
+  .product-modal-content{overflow-y:visible;height:auto;padding:20px 18px;flex:1;}
+  .product-modal-content > div:last-child{position:static!important;}
+}
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2, 1fr)!important;} .desktop-nav{display:none!important;} .mobile-menu-btn{display:flex!important;} .two-col{grid-template-columns:1fr!important;}}
@@ -1677,7 +1683,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
 
   return (
       <div>
-        <section className="section-pad hero-section" style={{ paddingTop: 120, paddingBottom: 140, maxWidth: "none", backgroundImage: `linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.25)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center", borderBottom: "1px solid #e8e8e8" }}>
+        <section className="section-pad hero-section" style={{ paddingTop: 120, paddingBottom: 140, maxWidth: "none", backgroundImage: `linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.25)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center top", borderBottom: "1px solid #e8e8e8" }}>
           <div className="hero-section-content" style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
@@ -2316,7 +2322,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             })()}
             {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
           </div>
-          <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #f0f0f0" }}>
+          <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #f0f0f0", position: "sticky", bottom: 0, background: "#ffffff" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <button className="qty-ctrl" onClick={() => setQ(Math.max(1, q - 1))} disabled={q <= 1}>-</button>
