@@ -1208,7 +1208,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
 .feature-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;}
 .trust-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:24px 40px;padding:20px 24px;background:#fafafa;border-top:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8;}
-.section-pad{padding:72px 20px;max-width:1400px;margin:0 auto;}
+.section-pad{padding:72px 20px;max-width:1400px;margin:0 auto;}.hero-section.section-pad{padding-left:0!important;padding-right:0!important;max-width:none!important;margin:0!important;}
 .section-label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#e8a0b4;margin-bottom:12px;}
 @media(max-width:1150px){
 .grid-products{grid-template-columns:repeat(3, 1fr);gap:16px;}
@@ -1218,7 +1218,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .grid-products{grid-template-columns:repeat(2, 1fr);gap:12px;}
 .grid-products-compact{grid-template-columns:repeat(2, 1fr);gap:12px;}
 }
-@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:100px 16px 120px!important;background-size:cover!important;background-position:center 20%!important;width:100%!important;box-sizing:border-box!important;}}
+@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:90px 0 110px!important;background-size:cover!important;background-position:center 20%!important;width:100vw!important;max-width:100vw!important;box-sizing:border-box!important;margin-left:0!important;margin-right:0!important;}.hero-section.section-pad .hero-section-content{padding:0 20px!important;margin:0!important;max-width:100%!important;}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px;} .feature-grid{grid-template-columns:1fr;}}
 .hero-section-content{max-width:720px;}
 .product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
@@ -1229,8 +1229,8 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .modal-body{overflow-y:auto;padding:0 40px 16px;}
 .modal-footer{padding:16px 40px 28px;border-top:1px solid #f0f0f0;background:#ffffff;flex-shrink:0;}
 @media(max-width:640px){
-  .product-modal{grid-template-columns:1fr;height:min(92vh,700px);overflow:hidden;display:grid;grid-template-rows:52vw 1fr;}
-  .product-modal-image{height:100%;min-height:240px;}
+  .product-modal{grid-template-columns:1fr;height:min(92vh,700px);overflow:hidden;display:grid;grid-template-rows:56vw 1fr;width:100%;border-radius:0;}
+  .product-modal-image{height:100%;min-height:240px;width:100%;margin:0;border-radius:0;}
   .product-modal-image img{object-position:center 15%;}
   .product-modal-content{display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;height:100%;}
   .modal-header{padding:18px 18px 0;}
@@ -1689,7 +1689,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   return (
       <div>
         <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "100%", boxSizing: "border-box", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
-          <div className="hero-section-content" style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
+          <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
               <>
@@ -2243,7 +2243,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,.55)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }} onClick={onClose} />
+      <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={onClose} />
       <div className="fade-in product-modal" style={{ position: "relative", width: "100%", maxWidth: 1000, background: "#ffffff", border: "1px solid #e8e8e8" }}>
         <button
           onClick={onClose}
@@ -2353,8 +2353,8 @@ function ProductModal({ p, onClose, addToCart, cart }) {
 
         </div>
         {lightboxOpen && (
-          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 20, cursor: "zoom-out" }} onClick={() => setLightboxOpen(false)}>
-            <img src={displayImg} alt={p.name} style={{ maxWidth: "92%", maxHeight: "88vh", objectFit: "contain" }} />
+          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 24, cursor: "zoom-out" }} onClick={() => setLightboxOpen(false)}>
+            <img src={displayImg} alt={p.name} style={{ maxWidth: "94%", maxHeight: "90vh", objectFit: "contain", boxShadow: "0 4px 32px rgba(0,0,0,0.10)" }} />
             <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
             </button>
