@@ -1131,7 +1131,7 @@ const CSS = `
 .wobble-pill{transition:border-color .2s,background .2s;}
 .wobble-pill:hover,.wobble-pill:active{animation:wobble .5s ease-in-out;border-color:#e8a0b4;background:#fce8ee;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
+html,body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#f5f5f5;}::-webkit-scrollbar-thumb{background:#cccccc;border-radius:2px;}
 .nav-link{cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#666666;transition:color .3s;background:none;border:none;}
 .nav-link:hover,.nav-link.active{color:#111111;}
@@ -1208,7 +1208,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
 .feature-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;}
 .trust-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:24px 40px;padding:20px 24px;background:#fafafa;border-top:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8;}
-.section-pad{padding:72px 20px;max-width:1400px;margin:0 auto;}.hero-section.section-pad{padding-left:0!important;padding-right:0!important;max-width:none!important;margin:0!important;width:100vw!important;box-sizing:border-box!important;overflow:hidden!important;}
+.section-pad{padding:72px 20px;max-width:1400px;margin:0 auto;}.hero-section.section-pad{padding-left:0!important;padding-right:0!important;max-width:none!important;width:auto!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;box-sizing:border-box!important;overflow:hidden!important;}
 .section-label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#e8a0b4;margin-bottom:12px;}
 @media(max-width:1150px){
 .grid-products{grid-template-columns:repeat(3, 1fr);gap:16px;}
@@ -1218,7 +1218,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .grid-products{grid-template-columns:repeat(2, 1fr);gap:12px;}
 .grid-products-compact{grid-template-columns:repeat(2, 1fr);gap:12px;}
 }
-@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:80px 0 100px!important;background-size:cover!important;background-position:center 20%!important;width:100vw!important;max-width:100vw!important;box-sizing:border-box!important;margin-left:-50vw!important;margin-right:-50vw!important;left:50%!important;right:50%!important;position:relative!important;overflow:hidden!important;}.hero-section.section-pad .hero-section-content{padding:0 20px!important;margin:0!important;max-width:100%!important;}}
+@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:80px 0 100px!important;background-size:cover!important;background-position:center 20%!important;width:auto!important;max-width:none!important;box-sizing:border-box!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;overflow:hidden!important;}.hero-section.section-pad .hero-section-content{padding:0 20px!important;margin:0!important;max-width:100%!important;}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px;} .feature-grid{grid-template-columns:1fr;}}
 .hero-section-content{max-width:720px;}
 .product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
@@ -1229,9 +1229,10 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .modal-body{overflow-y:auto;padding:0 40px 16px;}
 .modal-footer{padding:16px 40px 28px;border-top:1px solid #f0f0f0;background:#ffffff;flex-shrink:0;}
 @media(max-width:640px){
-  .product-modal-overlay-wrap{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-end;justify-content:center;}
+  .modal-overlay-fixed{align-items:flex-end!important;justify-content:center!important;padding:0!important;}
+  .modal-sheet{max-height:96vh!important;border-radius:14px 14px 0 0!important;border:none!important;border-top:1px solid #e8e8e8!important;}
   .product-modal{display:flex;flex-direction:column;width:100%;height:auto;max-height:none;overflow:visible;grid-template-columns:unset;grid-template-rows:unset;border-radius:0;}
-  .product-modal-image{height:72vw;min-height:260px;max-height:none;width:100%;flex-shrink:0;border-radius:0;}
+  .product-modal-image{height:72vw;min-height:260px;max-height:none;width:100%;flex-shrink:0;border-radius:0;position:sticky;top:0;z-index:1;}
   .product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;}
   .product-modal-content{display:block;height:auto;overflow:visible;padding:0;}
   .modal-header{padding:20px 18px 0;}
@@ -1689,8 +1690,9 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
 
   return (
       <div>
-        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "100vw", boxSizing: "border-box", position: "relative", left: "50%", right: "50%", marginLeft: "-50vw", marginRight: "-50vw", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
+        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
           <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
+            <img src="/logo.png" alt="Hajia Slay Empire" style={{ height: "clamp(54px,9vw,90px)", width: "auto", marginBottom: 28, filter: "drop-shadow(0 2px 10px rgba(0,0,0,.25))" }} />
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
               <>
@@ -2243,9 +2245,9 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const displayImg   = showSecondary && hasSecondary ? p.secondaryImage : p.image;
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+    <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={onClose} />
-      <div className="fade-in" style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
+      <div className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
       <div className="product-modal" style={{ width: "100%" }}>
         <button
           onClick={onClose}
@@ -2454,10 +2456,36 @@ function TestimonialSection({ testimonials }) {
   const [idx, setIdx] = useState(0);
   const [dir, setDir] = useState("fwd");
   const [animKey, setAnimKey] = useState(0);
-  const visible = 3;
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" && window.innerWidth <= 640);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const visible = isMobile ? 1 : 3;
   const go = (direction) => { setDir(direction); setAnimKey(k => k + 1); if (direction === "fwd") setIdx(i => (i + 1) % list.length); else setIdx(i => (i - 1 + list.length) % list.length); };
   const cards = Array.from({ length: Math.min(visible, list.length) }, (_, i) => list[(idx + i) % list.length]);
+  const stackCards = Array.from({ length: Math.min(3, list.length) }, (_, i) => list[(idx + i) % list.length]);
   if (!list.length) return null;
+
+  const touchRef = useRef({ x: 0 });
+  const onTouchStart = (e) => { touchRef.current.x = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - touchRef.current.x;
+    if (Math.abs(dx) > 50) go(dx < 0 ? "fwd" : "back");
+  };
+
+  const Card = ({ t }) => (
+    <div style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "32px", position: "relative" }}>
+      <div style={{ marginBottom: 16 }}><StarRating count={t.rating || 5} size={14} /></div>
+      <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontStyle: "italic", color: "#111111", lineHeight: 1.6, marginBottom: 24 }}>"{t.review}"</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "#e8a0b4", fontWeight: "bold", border: "1px solid #e8a0b444" }}>{t.name[0]}</div>
+        <div><p style={{ fontSize: 12, fontWeight: "bold", color: "#111111", margin: 0 }}>{t.name}</p><p style={{ fontSize: 10, color: "#e8a0b4", margin: 0 }}>@{t.handle || "verified_customer"}</p></div>
+      </div>
+    </div>
+  );
+
   return (
     <div style={{ padding: "80px 0", borderTop: "1px solid #e8e8e8", overflow: "hidden", background: "#ffffff" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
@@ -2465,18 +2493,30 @@ function TestimonialSection({ testimonials }) {
         <h2 style={{ textAlign: "center", marginBottom: 48, fontSize: "clamp(28px,5vw,48px)", fontWeight: 300 }}>What our customers say</h2>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <button className="tnav-btn" onClick={() => go("back")} aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square"><polyline points="15 18 9 12 15 6" /></svg></button>
-          <div key={animKey} style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, overflow: "hidden", animation: "fadeIn .45s ease forwards" }}>
-            {cards.map((t, i) => (
-              <div key={t.id + "-" + i} style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "32px", position: "relative" }}>
-                <div style={{ marginBottom: 16 }}><StarRating count={t.rating || 5} size={14} /></div>
-                <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontStyle: "italic", color: "#111111", lineHeight: 1.6, marginBottom: 24 }}>"{t.review}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "#e8a0b4", fontWeight: "bold", border: "1px solid #e8a0b444" }}>{t.name[0]}</div>
-                  <div><p style={{ fontSize: 12, fontWeight: "bold", color: "#111111", margin: 0 }}>{t.name}</p><p style={{ fontSize: 10, color: "#e8a0b4", margin: 0 }}>@{t.handle || "verified_customer"}</p></div>
-                </div>
-              </div>
-            ))}
-          </div>
+
+          {isMobile ? (
+            <div style={{ flex: 1, position: "relative", height: 280 }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+              {stackCards.slice().reverse().map((t, i) => {
+                const depth = stackCards.length - 1 - i;
+                return (
+                  <div key={t.id + "-" + i} style={{
+                    position: "absolute", inset: 0,
+                    transform: `translateY(${depth * 10}px) scale(${1 - depth * 0.05})`,
+                    opacity: depth === 0 ? 1 : 0.55 - depth * 0.15,
+                    zIndex: 10 - depth,
+                    transition: "transform .35s ease, opacity .35s ease",
+                  }}>
+                    <Card t={t} />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div key={animKey} style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, overflow: "hidden", animation: "fadeIn .45s ease forwards" }}>
+              {cards.map((t, i) => <Card key={t.id + "-" + i} t={t} />)}
+            </div>
+          )}
+
           <button className="tnav-btn" onClick={() => go("fwd")} aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square"><polyline points="9 18 15 12 9 6" /></svg></button>
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 32 }}>
