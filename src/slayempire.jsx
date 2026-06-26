@@ -315,6 +315,21 @@ function applyFilter(list, f) {
   );
 }
 
+function useScrollReveal() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setVisible(true); obs.disconnect(); }
+    }, { threshold: 0.15 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
 function findCoverImage(products, cat, filterKey) {
   const list = products[cat] || [];
   const match = list.find(p =>
@@ -1245,12 +1260,13 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2, 1fr)!important;} .desktop-nav{display:none!important;} .mobile-menu-btn{display:flex!important;} .two-col{grid-template-columns:1fr!important;}}
-@media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr!important;} .order-row{flex-direction:column;align-items:flex-start!important;} nav{padding:0 12px!important;height:60px!important;} .store-logo{font-size:18px!important;letter-spacing:.12em!important;}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr!important;} .order-row{flex-direction:column;align-items:flex-start!important;} nav{padding:0 12px!important;height:60px!important;} .store-logo{font-size:18px!important;letter-spacing:.12em!important;}.mobile-menu-panel{top:60px!important;}}
 @media(max-width:768px){.order-status-checks{width:100%;justify-content:flex-start!important;}}
 @media(min-width:769px){.mobile-menu-btn{display:none!important;}}
 .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none;}.no-scrollbar::-webkit-scrollbar{display:none;}
 .tnav-btn{width:44px;height:44px;border:1px solid #e8e8e8;background:#ffffff;color:#666666;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;flex-shrink:0;}
 .tnav-btn:hover{border-color:#e8a0b4;color:#e8a0b4;background:#fce8ee;}
+@media(max-width:640px){.tnav-btn{width:32px;height:32px;}}
 @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes slideUp{from{transform:translateY(150%);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -1636,7 +1652,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
       {mobileMenu && (
         <>
           <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 48 }} onClick={() => setMobileMenu(false)} />
-          <div style={{ position: "fixed", top: 68, left: 0, right: 0, background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "24px 16px", display: "flex", flexDirection: "column", gap: 24, zIndex: 49, animation: "fadeIn 0.3s ease-out", boxShadow: "0 8px 24px rgba(0,0,0,.06)" }}>
+          <div className="mobile-menu-panel" style={{ position: "fixed", top: 68, left: 0, right: 0, background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "24px 16px", display: "flex", flexDirection: "column", gap: 24, zIndex: 49, animation: "fadeIn 0.3s ease-out", boxShadow: "0 8px 24px rgba(0,0,0,.06)" }}>
             {["home", "shop", "about", "track", "privacy"].map(p => (
               <button key={p} className="nav-link" style={{ textAlign: "left", fontSize: 14 }} onClick={() => nav(p)}>{p === "track" ? "Track Order" : p.charAt(0).toUpperCase() + p.slice(1)}</button>
             ))}
@@ -1667,6 +1683,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   const [localQtys, setLocalQtys] = useState({});
   const qty = (id) => localQtys[id] ?? 1;
   const setQty = (id, v) => setLocalQtys(prev => ({ ...prev, [id]: Math.max(1, v) }));
+  const [bsRef, bsVisible] = useScrollReveal();
   const bestsellers = useMemo(() => Object.values(products).flat().filter(p => p.bestseller).slice(0, 4), [products]);
   const trending    = useMemo(() => {
     const shown = new Set(bestsellers.map(p => p.id));
@@ -1693,13 +1710,13 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
 
   return (
       <div>
-        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
+        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
           <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
 
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
               <>
-                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 24px rgba(255,255,255,0.9)" }}>
+                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
                   Enjoy up to {heroPromo.pct}% off<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>our beauty range</em>
                 </h1>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
@@ -1708,7 +1725,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
               </>
             ) : (
               <>
-                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 24px rgba(255,255,255,0.9)" }}>
+                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
                   Your Ultimate<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>beauty destination</em>
                 </h1>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
@@ -1736,12 +1753,16 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
       </div>
 
       {bestsellers.length > 0 && (
-        <section className="section-pad">
+        <section ref={bsRef} className="section-pad">
           <p className="section-label">Best Sellers</p>
           <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 12 }}>Top selling products</h2>
           <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#888888", marginBottom: 40, maxWidth: 480 }}>Popular customer favourites from our trusted beauty collection.</p>
           <div className="grid-products-compact">
-            {bestsellers.map((p, i) => <ProductCard key={p.id} p={p} index={i} activeCat={p.category} addToCart={addToCart} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />)}
+            {bestsellers.map((p, i) => (
+              <div key={p.id} style={{ transform: bsVisible ? "translateY(0) scale(1)" : "translateY(36px) scale(0.94)", opacity: bsVisible ? 1 : 0, transition: `transform .5s cubic-bezier(.22,1,.36,1) ${i * 90}ms, opacity .5s ease ${i * 90}ms` }}>
+                <ProductCard p={p} index={i} activeCat={p.category} addToCart={addToCart} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />
+              </div>
+            ))}
           </div>
           <div style={{ textAlign: "center", marginTop: 40 }}>
             <button className="ghost-btn" onClick={() => setPage("shop")}>View All Products</button>
@@ -2391,7 +2412,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
         </div>
         {lightboxOpen && createPortal(
           <div
-            style={{ position: "fixed", inset: 0, background: `rgba(255,255,255,${Math.max(1 - dragY / 300, 0.4)})`, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
+            style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
             onClick={() => setLightboxOpen(false)}
             onTouchStart={onLightboxTouchStart}
             onTouchMove={onLightboxTouchMove}
@@ -2403,13 +2424,12 @@ function ProductModal({ p, onClose, addToCart, cart }) {
               onClick={e => e.stopPropagation()}
               style={{
                 maxWidth: "94%", maxHeight: "90vh", objectFit: "contain",
-                transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.85)})`,
-                opacity: Math.max(1 - dragY / 400, 0.3),
-                transition: dragging ? "none" : "transform .25s ease, opacity .25s ease",
+                transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.9)})`,
+                transition: dragging ? "none" : "transform .2s ease",
                 boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
               }}
             />
-            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: Math.max(1 - dragY / 150, 0) }}>
+            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
             </button>
           </div>,
@@ -2530,7 +2550,7 @@ function TestimonialSection({ testimonials }) {
   const Card = ({ t }) => (
     <div style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "22px 26px", position: "relative", height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center" }}>
       <div style={{ marginBottom: 10 }}><StarRating count={t.rating || 5} size={13} /></div>
-      <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 16, fontStyle: "italic", color: "#111111", lineHeight: 1.5, marginBottom: 14, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>"{t.review}"</p>
+      <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 16, fontStyle: "italic", color: "#111111", lineHeight: 1.5, marginBottom: 14 }}>"{t.review}"</p>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "#e8a0b4", fontWeight: "bold", border: "1px solid #e8a0b444" }}>{t.name[0]}</div>
         <div><p style={{ fontSize: 12, fontWeight: "bold", color: "#111111", margin: 0 }}>{t.name}</p><p style={{ fontSize: 10, color: "#e8a0b4", margin: 0 }}>@{t.handle || "verified_customer"}</p></div>
@@ -2547,12 +2567,12 @@ function TestimonialSection({ testimonials }) {
           <button className="tnav-btn" onClick={() => go("back")} aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square"><polyline points="15 18 9 12 15 6" /></svg></button>
 
           {isMobile ? (
-            <div style={{ flex: 1, position: "relative", height: 190 }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div style={{ flex: 1, position: "relative", minHeight: 170 }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
               {stackCards.slice().reverse().map((t, i) => {
                 const depth = stackCards.length - 1 - i;
                 return (
                   <div key={t.id + "-" + i} style={{
-                    position: "absolute", inset: 0,
+                    position: "absolute", top: 0, left: 0, right: 0,
                     transform: `translateY(${depth * 10}px) scale(${1 - depth * 0.05})`,
                     opacity: depth === 0 ? 1 : 0.55 - depth * 0.15,
                     zIndex: 10 - depth,
