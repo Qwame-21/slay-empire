@@ -2265,8 +2265,6 @@ function ProductModal({ p, onClose, addToCart, cart }) {
     <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={onClose} />
       <div style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh" }}>
-      <div ref={sheetRef} className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
-      <div className="product-modal" style={{ width: "100%" }}>
         <button
           onClick={onClose}
           aria-label="Close product details"
@@ -2306,6 +2304,9 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             <line x1="1" y1="13" x2="13" y2="1"></line>
           </svg>
         </button>
+      <div ref={sheetRef} className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
+      <div className="product-modal" style={{ width: "100%" }}>
+
         <div className="product-modal-image" style={{ background: BG_MAP[p.category] }}>
           <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => setLightboxOpen(true)} />
           <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
