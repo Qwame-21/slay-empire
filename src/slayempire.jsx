@@ -1132,7 +1132,8 @@ const CSS = `
 .wobble-pill{transition:border-color .2s,background .2s;}
 .wobble-pill:hover,.wobble-pill:active{animation:wobble .5s ease-in-out;border-color:#e8a0b4;background:#fce8ee;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+html{overflow-x:hidden;}
+body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#f5f5f5;}::-webkit-scrollbar-thumb{background:#cccccc;border-radius:2px;}
 .nav-link{cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#666666;transition:color .3s;background:none;border:none;}
 .nav-link:hover,.nav-link.active{color:#111111;}
@@ -2239,6 +2240,19 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const [showSecondary, setShowSecondary] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const sheetRef = useRef(null);
+  const [dragY, setDragY] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const dragStartY = useRef(0);
+  const onLightboxTouchStart = (e) => { dragStartY.current = e.touches[0].clientY; setDragging(true); };
+  const onLightboxTouchMove = (e) => {
+    const delta = e.touches[0].clientY - dragStartY.current;
+    if (delta > 0) setDragY(delta); // only respond to downward drag
+  };
+  const onLightboxTouchEnd = () => {
+    setDragging(false);
+    if (dragY > 110) { setLightboxOpen(false); }
+    setDragY(0);
+  };
   useEffect(() => {
     if (lightboxOpen) {
       const prevBodyOverflow = document.body.style.overflow;
@@ -2376,9 +2390,26 @@ function ProductModal({ p, onClose, addToCart, cart }) {
 
         </div>
         {lightboxOpen && createPortal(
-          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }} onClick={() => setLightboxOpen(false)} onTouchMove={e => e.preventDefault()}>
-            <img src={displayImg} alt={p.name} style={{ maxWidth: "94%", maxHeight: "90vh", objectFit: "contain", boxShadow: "0 4px 32px rgba(0,0,0,0.10)" }} />
-            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{ position: "fixed", inset: 0, background: `rgba(255,255,255,${Math.max(1 - dragY / 300, 0.4)})`, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
+            onClick={() => setLightboxOpen(false)}
+            onTouchStart={onLightboxTouchStart}
+            onTouchMove={onLightboxTouchMove}
+            onTouchEnd={onLightboxTouchEnd}
+          >
+            <img
+              src={displayImg}
+              alt={p.name}
+              onClick={e => e.stopPropagation()}
+              style={{
+                maxWidth: "94%", maxHeight: "90vh", objectFit: "contain",
+                transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.85)})`,
+                opacity: Math.max(1 - dragY / 400, 0.3),
+                transition: dragging ? "none" : "transform .25s ease, opacity .25s ease",
+                boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
+              }}
+            />
+            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", opacity: Math.max(1 - dragY / 150, 0) }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
             </button>
           </div>,
