@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const SK_ORDERS   = "slay_orders";
@@ -2237,11 +2238,18 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const [q, setQ] = useState(1);
   const [showSecondary, setShowSecondary] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const sheetRef = useRef(null);
   useEffect(() => {
     if (lightboxOpen) {
-      const prevOverflow = document.body.style.overflow;
+      const prevBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prevOverflow; };
+      const sheetEl = sheetRef.current;
+      const prevSheetOverflow = sheetEl ? sheetEl.style.overflow : "";
+      if (sheetEl) sheetEl.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prevBodyOverflow;
+        if (sheetEl) sheetEl.style.overflow = prevSheetOverflow;
+      };
     }
   }, [lightboxOpen]);
   const inCart    = cart.find(c => c.id === p.id);
@@ -2257,7 +2265,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
     <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={onClose} />
       <div style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh" }}>
-      <div className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
+      <div ref={sheetRef} className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
       <div className="product-modal" style={{ width: "100%" }}>
         <button
           onClick={onClose}
@@ -2366,13 +2374,14 @@ function ProductModal({ p, onClose, addToCart, cart }) {
           </div>
 
         </div>
-        {lightboxOpen && (
-          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }} onClick={() => setLightboxOpen(false)} onTouchMove={e => e.preventDefault()}>
+        {lightboxOpen && createPortal(
+          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }} onClick={() => setLightboxOpen(false)} onTouchMove={e => e.preventDefault()}>
             <img src={displayImg} alt={p.name} style={{ maxWidth: "94%", maxHeight: "90vh", objectFit: "contain", boxShadow: "0 4px 32px rgba(0,0,0,0.10)" }} />
             <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
             </button>
-          </div>
+          </div>,
+          document.body
         )}
         </div>
       </div>
