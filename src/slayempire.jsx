@@ -1692,7 +1692,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
       <div>
         <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
           <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
-            <img src="/logo.png" alt="Hajia Slay Empire" style={{ height: "clamp(54px,9vw,90px)", width: "auto", marginBottom: 28, filter: "drop-shadow(0 2px 10px rgba(0,0,0,.25))" }} />
+
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
               <>
@@ -2235,6 +2235,13 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const [q, setQ] = useState(1);
   const [showSecondary, setShowSecondary] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  useEffect(() => {
+    if (lightboxOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prevOverflow; };
+    }
+  }, [lightboxOpen]);
   const inCart    = cart.find(c => c.id === p.id);
   const qtyInCart = inCart ? inCart.qty : 0;
   const avail     = p.stock - qtyInCart;
@@ -2357,7 +2364,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
 
         </div>
         {lightboxOpen && (
-          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 24, cursor: "zoom-out" }} onClick={() => setLightboxOpen(false)}>
+          <div style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }} onClick={() => setLightboxOpen(false)} onTouchMove={e => e.preventDefault()}>
             <img src={displayImg} alt={p.name} style={{ maxWidth: "94%", maxHeight: "90vh", objectFit: "contain", boxShadow: "0 4px 32px rgba(0,0,0,0.10)" }} />
             <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
