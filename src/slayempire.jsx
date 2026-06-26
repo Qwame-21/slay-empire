@@ -19,7 +19,7 @@ const LOCATION  = "Lapaz, Accra";
 const MAPS_URL  = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
 
 const STORE_NAME = "Hajia Slay Empire";
-const HERO_BG = "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=1600&q=85&auto=format&fit=crop&crop=top";
+const HERO_BG = "https://res.cloudinary.com/dccf0ffxr/image/upload/v1782445718/hero/hero_bg.jpg";
 
 const STORE_ABOUT = "Hajia Slay Empire is a trusted cosmetics and beauty essentials shop in Accra, Ghana, offering skincare, body wash, glow products, makeup and premium beauty items with secure online checkout.";
 
@@ -1223,14 +1223,19 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .hero-section-content{max-width:720px;}
 .product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
 .product-modal-image{position:relative;overflow:hidden;background:#fafafa;}
-.product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
-.product-modal-content{overflow-y:auto;height:100%;padding:32px 40px;display:flex;flex-direction:column;box-sizing:border-box;}
+.product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;}
+.product-modal-content{overflow:hidden;height:100%;display:grid;grid-template-rows:auto 1fr auto;box-sizing:border-box;}
+.modal-header{padding:32px 40px 0;flex-shrink:0;}
+.modal-body{overflow-y:auto;padding:0 40px 16px;}
+.modal-footer{padding:16px 40px 28px;border-top:1px solid #f0f0f0;background:#ffffff;flex-shrink:0;}
 @media(max-width:640px){
-  .product-modal{grid-template-columns:1fr;height:auto;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column;}
-  .product-modal-image{height:56vw;min-height:260px;max-height:360px;flex-shrink:0;}
-  .product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block;}
-  .product-modal-content{overflow-y:visible;height:auto;padding:20px 18px;flex:1;}
-  .product-modal-content > div:last-child{position:static!important;}
+  .product-modal{grid-template-columns:1fr;height:min(92vh,700px);overflow:hidden;display:grid;grid-template-rows:52vw 1fr;}
+  .product-modal-image{height:100%;min-height:240px;}
+  .product-modal-image img{object-position:center 15%;}
+  .product-modal-content{display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;height:100%;}
+  .modal-header{padding:18px 18px 0;}
+  .modal-body{padding:0 18px 12px;overflow-y:auto;}
+  .modal-footer{padding:12px 18px 18px;}
 }
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -2297,33 +2302,43 @@ function ProductModal({ p, onClose, addToCart, cart }) {
           )}
         </div>
         <div className="product-modal-content">
-          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: accent, letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 12 }}>{p.brand}</p>
-          <h2 style={{ fontSize: 32, fontWeight: 300, marginBottom: 20, color: "#111111" }}>{p.name}</h2>
-          <div style={{ marginBottom: 24 }}>
-            {p.promoActive && <p style={{ fontSize: 14, color: "#888888", textDecoration: "line-through", marginBottom: 4 }}>{GHS(p.originalPrice)}</p>}
-            <p style={{ fontSize: 24, color: "#e8a0b4" }}>{GHS(p.promoActive ? p.promoPrice : p.price)}</p>
+
+          {/* ZONE 1 — header: brand, name, price */}
+          <div className="modal-header">
+            <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: accent, letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 8 }}>{p.brand}</p>
+            <h2 style={{ fontSize: 28, fontWeight: 300, marginBottom: 14, color: "#111111", lineHeight: 1.2 }}>{p.name}</h2>
+            <div style={{ marginBottom: 0, paddingBottom: 14, borderBottom: "1px solid #f0f0f0" }}>
+              {p.promoActive && <p style={{ fontSize: 13, color: "#888888", textDecoration: "line-through", marginBottom: 2 }}>{GHS(p.originalPrice)}</p>}
+              <p style={{ fontSize: 22, color: "#e8a0b4", margin: 0 }}>{GHS(p.promoActive ? p.promoPrice : p.price)}</p>
+            </div>
           </div>
-          <div style={{ marginBottom: 24, fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.9 }}>
-            {p.notes && (() => {
-              const lines = p.notes.split('\n');
-              return (
-                <div>
-                  {lines.map((line, i) => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return <div key={i} style={{ height: 10 }} />;
-                    const isHeading = trimmed === trimmed.toUpperCase() && trimmed.length < 60 && !/·/.test(trimmed) || trimmed.endsWith(':');
-                    if (isHeading) return <p key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 6, marginTop: i > 0 ? 14 : 0, fontWeight: 600 }}>{trimmed.replace(/:$/, '')}</p>;
-                    const parts = trimmed.split(' · ');
-                    if (parts.length > 1) return <p key={i} style={{ color: "#111111", marginBottom: 4, display: "flex", flexWrap: "wrap", gap: "0 10px" }}>{parts.map((pt, pi) => <span key={pi} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{pi > 0 && <span style={{ color: "#e8a0b4", fontSize: 10 }}>·</span>}{pt}</span>)}</p>;
-                    return <p key={i} style={{ color: "#111111", marginBottom: 4 }}>{trimmed}</p>;
-                  })}
-                </div>
-              );
-            })()}
-            {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
+
+          {/* ZONE 2 — scrollable body: description */}
+          <div className="modal-body">
+            <div style={{ paddingTop: 16, fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.9 }}>
+              {p.notes && (() => {
+                const lines = p.notes.split('\n');
+                return (
+                  <div>
+                    {lines.map((line, i) => {
+                      const trimmed = line.trim();
+                      if (!trimmed) return <div key={i} style={{ height: 10 }} />;
+                      const isHeading = trimmed === trimmed.toUpperCase() && trimmed.length < 60 && !/·/.test(trimmed) || trimmed.endsWith(':');
+                      if (isHeading) return <p key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 6, marginTop: i > 0 ? 14 : 0, fontWeight: 600 }}>{trimmed.replace(/:$/, '')}</p>;
+                      const parts = trimmed.split(' · ');
+                      if (parts.length > 1) return <p key={i} style={{ color: "#111111", marginBottom: 4, display: "flex", flexWrap: "wrap", gap: "0 10px" }}>{parts.map((pt, pi) => <span key={pi} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{pi > 0 && <span style={{ color: "#e8a0b4", fontSize: 10 }}>·</span>}{pt}</span>)}</p>;
+                      return <p key={i} style={{ color: "#111111", marginBottom: 4 }}>{trimmed}</p>;
+                    })}
+                  </div>
+                );
+              })()}
+              {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
+            </div>
           </div>
-          <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #f0f0f0", position: "sticky", bottom: 0, background: "#ffffff" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+
+          {/* ZONE 3 — pinned footer: qty + add to bag */}
+          <div className="modal-footer">
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <button className="qty-ctrl" onClick={() => setQ(Math.max(1, q - 1))} disabled={q <= 1}>-</button>
                 <span style={{ fontSize: 16, minWidth: 24, textAlign: "center", color: "#111111" }}>{q}</span>
@@ -2331,10 +2346,11 @@ function ProductModal({ p, onClose, addToCart, cart }) {
               </div>
               {!trulyOos && <span style={{ fontSize: 11, color: lowStock ? "#e8a0b4" : "#666666" }}>{avail} available</span>}
             </div>
-            <button className="rose-btn" style={{ width: "100%", padding: "20px" }} onClick={() => { addToCart(p, q); onClose(); }} disabled={trulyOos}>
+            <button className="rose-btn" style={{ width: "100%", padding: "18px" }} onClick={() => { addToCart(p, q); onClose(); }} disabled={trulyOos}>
               {trulyOos ? "OUT OF STOCK" : "ADD TO BAG"}
             </button>
           </div>
+
         </div>
         {lightboxOpen && (
           <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000, padding: 20, cursor: "zoom-out" }} onClick={() => setLightboxOpen(false)}>
