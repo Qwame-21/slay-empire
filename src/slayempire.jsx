@@ -1218,7 +1218,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .grid-products{grid-template-columns:repeat(2, 1fr);gap:12px;}
 .grid-products-compact{grid-template-columns:repeat(2, 1fr);gap:12px;}
 }
-@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:100px 16px 120px!important;background-size:cover!important;background-position:center top!important;width:100%!important;box-sizing:border-box!important;}}
+@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:100px 16px 120px!important;background-size:cover!important;background-position:center 20%!important;width:100%!important;box-sizing:border-box!important;}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px;} .feature-grid{grid-template-columns:1fr;}}
 .hero-section-content{max-width:720px;}
 .product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
@@ -1688,7 +1688,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
 
   return (
       <div>
-        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "100%", boxSizing: "border-box", backgroundImage: `linear-gradient(rgba(255,255,255,0.30), rgba(255,255,255,0.20)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center top", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
+        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "100%", boxSizing: "border-box", backgroundImage: `linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.10)), url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
           <div className="hero-section-content" style={{ maxWidth: 720, margin: "0 auto", padding: "0 24px" }}>
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
             {heroPromo ? (
