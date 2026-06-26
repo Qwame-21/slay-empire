@@ -1232,13 +1232,14 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
   .modal-overlay-fixed{align-items:flex-end!important;justify-content:center!important;padding:0!important;}
   .modal-sheet{max-height:96vh!important;border-radius:14px 14px 0 0!important;border:none!important;border-top:1px solid #e8e8e8!important;}
   .product-modal{display:flex;flex-direction:column;width:100%;height:auto;max-height:none;overflow:visible;grid-template-columns:unset;grid-template-rows:unset;border-radius:0;}
-  .product-modal-image{height:72vw;min-height:260px;max-height:none;width:100%;flex-shrink:0;border-radius:0;position:sticky;top:0;z-index:1;}
+  .product-modal-image{height:72vw;min-height:260px;max-height:none;width:100%;flex-shrink:0;border-radius:14px 14px 0 0;position:sticky;top:0;z-index:1;overflow:hidden;}
   .product-modal-image img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;}
   .product-modal-content{display:block;height:auto;overflow:visible;padding:0;}
   .modal-header{padding:20px 18px 0;}
   .modal-body{padding:8px 18px 0;overflow:visible;}
   .modal-footer{padding:16px 18px 28px;border-top:none;background:transparent;position:static;}
 }
+@media(max-width:640px){.subcat-pill-img{display:none!important;}.subcat-pill{padding:12px 20px!important;margin-top:0!important;}}
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2, 1fr)!important;} .desktop-nav{display:none!important;} .mobile-menu-btn{display:flex!important;} .two-col{grid-template-columns:1fr!important;}}
@@ -1808,15 +1809,16 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16 }}>
+        <div className="subcat-row" style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16 }}>
           {[
-            { cat: "wellness", filter: "intimate", label: "Intimate Care" },
-            { cat: "wellness", filter: "hormonal", label: "Period Support" },
-            { cat: "bundles", filter: "skincare", label: "Skincare Kits" },
-            { cat: "bundles", filter: "wellness", label: "Wellness Kits" },
-          ].map(s => (
-            <button key={s.label} className="wobble-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
-              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "12px 20px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600 }}>
+            { cat: "wellness", filter: "intimate", label: "Intimate Care", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=120&h=120&q=80&auto=format&fit=crop" },
+            { cat: "wellness", filter: "hormonal", label: "Period Support", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=120&h=120&q=80&auto=format&fit=crop" },
+            { cat: "bundles", filter: "skincare", label: "Skincare Kits", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=120&h=120&q=80&auto=format&fit=crop" },
+            { cat: "bundles", filter: "wellness", label: "Wellness Kits", image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=120&h=120&q=80&auto=format&fit=crop" },
+          ].map((s, i) => (
+            <button key={s.label} className="wobble-pill subcat-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
+              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 18px 8px 8px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600, display: "flex", alignItems: "center", gap: 10, marginTop: i % 2 === 1 ? 14 : 0 }}>
+              <img src={s.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} className="subcat-pill-img" />
               {s.label}
             </button>
           ))}
@@ -2254,7 +2256,8 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   return (
     <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={onClose} />
-      <div className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
+      <div style={{ position: "relative", width: "100%", maxWidth: 1000, maxHeight: "92vh" }}>
+      <div className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
       <div className="product-modal" style={{ width: "100%" }}>
         <button
           onClick={onClose}
@@ -2263,11 +2266,11 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             position: "absolute",
             top: 20,
             right: 20,
+            zIndex: 50,
             background: "rgba(255, 255, 255, 0.95)",
             border: "1px solid #e8e8e8",
             color: "#111111",
             cursor: "pointer",
-            zIndex: 10,
             width: 42,
             height: 42,
             borderRadius: "50%",
@@ -2372,6 +2375,7 @@ function ProductModal({ p, onClose, addToCart, cart }) {
           </div>
         )}
         </div>
+      </div>
       </div>
     </div>
   );
@@ -2483,9 +2487,9 @@ function TestimonialSection({ testimonials }) {
   };
 
   const Card = ({ t }) => (
-    <div style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "32px", position: "relative" }}>
-      <div style={{ marginBottom: 16 }}><StarRating count={t.rating || 5} size={14} /></div>
-      <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 18, fontStyle: "italic", color: "#111111", lineHeight: 1.6, marginBottom: 24 }}>"{t.review}"</p>
+    <div style={{ background: "#fafafa", border: "1px solid #e8e8e8", padding: "22px 26px", position: "relative", height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <div style={{ marginBottom: 10 }}><StarRating count={t.rating || 5} size={13} /></div>
+      <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 16, fontStyle: "italic", color: "#111111", lineHeight: 1.5, marginBottom: 14, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>"{t.review}"</p>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "#e8a0b4", fontWeight: "bold", border: "1px solid #e8a0b444" }}>{t.name[0]}</div>
         <div><p style={{ fontSize: 12, fontWeight: "bold", color: "#111111", margin: 0 }}>{t.name}</p><p style={{ fontSize: 10, color: "#e8a0b4", margin: 0 }}>@{t.handle || "verified_customer"}</p></div>
@@ -2502,7 +2506,7 @@ function TestimonialSection({ testimonials }) {
           <button className="tnav-btn" onClick={() => go("back")} aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square"><polyline points="15 18 9 12 15 6" /></svg></button>
 
           {isMobile ? (
-            <div style={{ flex: 1, position: "relative", height: 280 }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div style={{ flex: 1, position: "relative", height: 190 }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
               {stackCards.slice().reverse().map((t, i) => {
                 const depth = stackCards.length - 1 - i;
                 return (
