@@ -1146,6 +1146,8 @@ const CSS = `
 @keyframes wobble{0%,100%{transform:rotate(0deg) scale(1);}15%{transform:rotate(-4deg) scale(1.03);}30%{transform:rotate(4deg) scale(1.03);}45%{transform:rotate(-2.5deg);}60%{transform:rotate(2.5deg);}75%{transform:rotate(-1deg);}}
 .wobble-pill{transition:border-color .2s,background .2s;}
 .wobble-pill:hover,.wobble-pill:active{animation:wobble .5s ease-in-out;border-color:#e8a0b4;background:#fce8ee;}
+@keyframes pillWave{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.subcat-pill{animation:pillWave 2.4s ease-in-out infinite;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{overflow-x:hidden;}
 body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
@@ -1235,7 +1237,8 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
 .grid-products{grid-template-columns:repeat(2, 1fr);gap:12px;}
 .grid-products-compact{grid-template-columns:repeat(2, 1fr);gap:12px;}
 }
-@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:80px 0 100px!important;background-size:cover!important;background-position:center 20%!important;width:auto!important;max-width:none!important;box-sizing:border-box!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;overflow:hidden!important;}.hero-section.section-pad .hero-section-content{padding:0 20px!important;margin:0!important;max-width:100%!important;}}
+.hero-mobile-img{display:none;}
+@media(max-width:540px){.grid-products{grid-template-columns:1fr 1fr!important;gap:12px!important;} .grid-products-compact{grid-template-columns:1fr 1fr!important;gap:12px!important;} .card-detail-panel{padding:10px 8px;max-height:84px;} .product-card:hover .card-detail-panel{max-height:300px;} .card-title-row{flex-direction:column;align-items:flex-start;gap:4px;} .card-title{font-size:14px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;} .qty-ctrl{width:28px;height:28px;font-size:16px;} .rose-btn{padding:10px 14px;font-size:9px;} .section-pad{padding:40px 12px!important;}.hero-section.section-pad{padding:0 0 48px!important;background-image:none!important;width:auto!important;max-width:none!important;box-sizing:border-box!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;overflow:hidden!important;}.hero-section.section-pad .hero-section-content{padding:28px 20px 0!important;margin:0!important;max-width:100%!important;}.hero-mobile-img{display:block!important;width:100%!important;height:380px!important;object-fit:cover!important;object-position:center 20%!important;}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px;} .feature-grid{grid-template-columns:1fr;}}
 .hero-section-content{max-width:720px;}
 .product-modal{height:min(680px,90vh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
@@ -1639,12 +1642,13 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
           ))}
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <button onClick={() => setShowSearch(true)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", minWidth: 44, minHeight: 44, padding: "10px", color: "#111111" }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="1.2" strokeLinecap="square"/></svg>
+          <button onClick={() => setShowSearch(true)} style={{ background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, padding: 0, color: "#111111", boxShadow: "0 1px 4px rgba(0,0,0,.04)", transition: "border-color .2s, box-shadow .2s" }} onMouseEnter={e => { e.currentTarget.style.borderColor = "#e8a0b4"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(232,160,180,.18)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e8e8e8"; e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,.04)"; }} aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.5"/><path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
           </button>
-          <button onClick={() => setShowCart(true)} style={{ background: "none", border: "none", cursor: "pointer", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", minWidth: 44, minHeight: 44, padding: "10px", color: "#111111" }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            {cartCount > 0 && <span key={cartCount} className="badge-pop" style={{ position: "absolute", top: 4, right: 4, background: "#e8a0b4", color: "#000000", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, fontFamily: "'Raleway',sans-serif" }}>{cartCount}</span>}
+          <button onClick={() => setShowCart(true)} style={{ background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 999, cursor: "pointer", position: "relative", display: "flex", alignItems: "center", gap: 8, minHeight: 44, padding: "9px 16px 9px 14px", color: "#111111", boxShadow: "0 1px 4px rgba(0,0,0,.04)", transition: "border-color .2s, box-shadow .2s" }} onMouseEnter={e => { e.currentTarget.style.borderColor = "#e8a0b4"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(232,160,180,.18)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e8e8e8"; e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,.04)"; }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", fontWeight: 600 }}>Bag</span>
+            {cartCount > 0 && <span key={cartCount} className="badge-pop" style={{ position: "absolute", top: -6, right: -6, background: "#e8a0b4", color: "#000000", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, fontFamily: "'Raleway',sans-serif" }}>{cartCount}</span>}
           </button>
           <button className="mobile-menu-btn" style={{ display: "none", background: "none", border: "none", color: "#111111", cursor: "pointer", minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" }} onClick={() => setMobileMenu(!mobileMenu)} aria-label="Menu"><Icon name="menu" size={22} color="#111111" /></button>
         </div>
@@ -1684,6 +1688,8 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   const qty = (id) => localQtys[id] ?? 1;
   const setQty = (id, v) => setLocalQtys(prev => ({ ...prev, [id]: Math.max(1, v) }));
   const [bsRef, bsVisible] = useScrollReveal();
+  const [trustRef, trustVisible] = useScrollReveal();
+  const [drRef, drVisible] = useScrollReveal();
   const bestsellers = useMemo(() => Object.values(products).flat().filter(p => p.bestseller).slice(0, 4), [products]);
   const trending    = useMemo(() => {
     const shown = new Set(bestsellers.map(p => p.id));
@@ -1711,6 +1717,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   return (
       <div>
         <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
+          <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" />
           <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
 
             <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
@@ -1746,9 +1753,11 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
           </div>
         </section>
 
-      <div className="trust-strip">
-        {TRUST_BULLETS.map(t => (
-          <TrustBullet key={t.text} item={t} />
+      <div ref={trustRef} className="trust-strip">
+        {TRUST_BULLETS.map((t, i) => (
+          <div key={t.text} style={{ transform: trustVisible ? "translateY(0)" : "translateY(16px)", opacity: trustVisible ? 1 : 0, transition: `transform .45s ease ${i * 100}ms, opacity .45s ease ${i * 100}ms` }}>
+            <TrustBullet item={t} />
+          </div>
         ))}
       </div>
 
@@ -1769,6 +1778,31 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
           </div>
         </section>
       )}
+
+      <section ref={drRef} className="section-pad" style={{ textAlign: "center", background: "#fafafa" }}>
+        <div style={{ transform: drVisible ? "translateY(0)" : "translateY(24px)", opacity: drVisible ? 1 : 0, transition: "transform .5s ease, opacity .5s ease" }}>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#e8a0b4", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
+            <Icon name="truck" size={26} color="#ffffff" />
+          </div>
+          <p className="section-label">Delivery & Returns</p>
+          <h2 style={{ fontSize: "clamp(26px,4.5vw,42px)", fontWeight: 300, marginBottom: 16 }}>Delivered with care</h2>
+          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#888888", maxWidth: 480, margin: "0 auto 32px", lineHeight: 1.8 }}>
+            Orders placed before 4:00 PM qualify for 24-hour delivery in supported areas, with nationwide delivery available across Ghana.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginBottom: 32 }}>
+            {[
+              { icon: "truck", text: "24-hour delivery in supported areas" },
+              { icon: "check", text: "7-day returns for manufacturing defects" },
+              { icon: "bag", text: "Secure Mobile Money checkout" },
+            ].map(b => (
+              <span key={b.text} style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "'Raleway',sans-serif", fontSize: 12, color: "#444444", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 999, padding: "10px 18px" }}>
+                <Icon name={b.icon} size={13} color="#e8a0b4" /> {b.text}
+              </span>
+            ))}
+          </div>
+          <button className="rose-btn" onClick={() => setPage("terms")}>Read Delivery & Returns Policy</button>
+        </div>
+      </section>
 
       <section className="section-pad" style={{ background: "#fafafa", maxWidth: "none", borderTop: "1px solid #e8e8e8", borderBottom: "1px solid #e8e8e8" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -1832,7 +1866,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
             </div>
           ))}
         </div>
-        <div className="subcat-row" style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16 }}>
+        <div className="subcat-row" style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16, paddingTop: 10 }}>
           {[
             { cat: "wellness", filter: "intimate", label: "Intimate Care", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=120&h=120&q=80&auto=format&fit=crop" },
             { cat: "wellness", filter: "hormonal", label: "Period Support", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=120&h=120&q=80&auto=format&fit=crop" },
@@ -1840,7 +1874,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
             { cat: "bundles", filter: "wellness", label: "Wellness Kits", image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=120&h=120&q=80&auto=format&fit=crop" },
           ].map((s, i) => (
             <button key={s.label} className="wobble-pill subcat-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
-              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 18px 8px 8px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600, display: "flex", alignItems: "center", gap: 10, marginTop: i % 2 === 1 ? 14 : 0 }}>
+              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 18px 8px 8px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600, display: "flex", alignItems: "center", gap: 10, animationDelay: `${i * 180}ms` }}>
               <img src={s.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} className="subcat-pill-img" />
               {s.label}
             </button>
@@ -1866,6 +1900,15 @@ function ShopPage({ products, activeCat, setActiveCat, initialFilter, setInitial
   }, [activeCat, initialFilter]);
   const rawList = products[activeCat] || [];
   const filtered = useMemo(() => applyFilter(rawList, filter), [rawList, filter]);
+  const PAGE_SIZE = 8;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [loadingMore, setLoadingMore] = useState(false);
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [activeCat, filter]);
+  const visibleFiltered = filtered.slice(0, visibleCount);
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setTimeout(() => { setVisibleCount(v => v + PAGE_SIZE); setLoadingMore(false); }, 600);
+  };
   const pills = useMemo(() => buildPills(activeCat), [activeCat]);
   const qty = (id) => localQtys[id] ?? 1;
   const setQty = (id, v) => setLocalQtys(prev => ({ ...prev, [id]: Math.max(1, v) }));
@@ -1889,9 +1932,24 @@ function ShopPage({ products, activeCat, setActiveCat, initialFilter, setInitial
           ))}
         </div>
       </div>
-      <div className="grid-products">
-        {filtered.map((p, i) => <ProductCard key={p.id} p={p} index={i} activeCat={activeCat} addToCart={handleAdd} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />)}
-      </div>
+      {filtered.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "100px 20px" }}>
+          <div style={{ opacity: 0.35, marginBottom: 20, display: "flex", justifyContent: "center" }}><Icon name="bag" size={56} color="#e8a0b4" /></div>
+          <h3 style={{ fontSize: 20, fontWeight: 300, letterSpacing: ".05em", marginBottom: 12 }}>No Products Yet</h3>
+          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#888888", maxWidth: 360, margin: "0 auto" }}>This catalog is still being curated. Check back soon, the shelves are filling up.</p>
+        </div>
+      ) : (
+        <div className="grid-products">
+          {visibleFiltered.map((p, i) => <ProductCard key={p.id} p={p} index={i} activeCat={activeCat} addToCart={handleAdd} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />)}
+        </div>
+      )}
+      {filtered.length > visibleCount && (
+        <div style={{ textAlign: "center", marginTop: 32 }}>
+          <button className="ghost-btn" onClick={handleLoadMore} disabled={loadingMore}>
+            {loadingMore ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
       <div style={{ marginTop: 32, padding: "14px 18px", background: "#fce8ee", border: "1px solid #e8a0b444", display: "flex", gap: 10, alignItems: "center" }}>
         <Icon name="sparkle" size={14} color="#e8a0b4" />
         <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#666666", letterSpacing: ".08em" }}>{DELIVERY_NOTE} · {PHONE}</p>
@@ -2874,17 +2932,17 @@ function SiteFooter({ setPage }) {
           <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 24 }}>Quick Links</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {["home", "shop", "about"].map(p => (
-              <button key={p} onClick={() => nav(p)} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0 }}>{p.charAt(0).toUpperCase() + p.slice(1)}</button>
+              <button key={p} onClick={() => nav(p)} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>{p.charAt(0).toUpperCase() + p.slice(1)}</button>
             ))}
           </div>
         </div>
         <div>
           <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 24 }}>Support</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <button onClick={() => nav("faq")}     style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0 }}>FAQ</button>
-            <button onClick={() => nav("track")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0 }}>Track Order</button>
-            <button onClick={() => nav("privacy")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0 }}>Privacy Policy</button>
-            <button onClick={() => nav("terms")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0 }}>Terms & Conditions</button>
+            <button onClick={() => nav("faq")}     style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>FAQ</button>
+            <button onClick={() => nav("track")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Track Order</button>
+            <button onClick={() => nav("privacy")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Privacy Policy</button>
+            <button onClick={() => nav("terms")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Terms & Conditions</button>
           </div>
         </div>
         <div>
