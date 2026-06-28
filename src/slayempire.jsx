@@ -2,22 +2,22 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { createPortal } from "react-dom";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
-const SK_ORDERS   = "slay_orders";
-const SK_ADMIN    = "slay_admin_session";
-const SK_PWD      = "slay_admin_password";
+const SK_ORDERS = "slay_orders";
+const SK_ADMIN = "slay_admin_session";
+const SK_PWD = "slay_admin_password";
 const SK_PRODUCTS = "slay_products";
-const SK_SHEETS   = "slay_sheets_url";
-const SK_SYNC     = "slay_sheets_autosync";
-const SK_CART     = "slay_cart";
+const SK_SHEETS = "slay_sheets_url";
+const SK_SYNC = "slay_sheets_autosync";
+const SK_CART = "slay_cart";
 const SK_TESTIMONIALS = "slay_testimonials";
 const SK_SESSION_AT = "slay_session_at";
 
-const PHONE     = "053 795 9673";
-const WA        = "https://wa.me/233537959673";
-const TIKTOK    = "https://www.tiktok.com/discover/hajia-slay-empire";
+const PHONE = "053 795 9673";
+const WA = "https://wa.me/233537959673";
+const TIKTOK = "https://www.tiktok.com/discover/hajia-slay-empire";
 const INSTAGRAM = "https://www.instagram.com/slayempire";
-const LOCATION  = "Lapaz, Accra";
-const MAPS_URL  = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
+const LOCATION = "Lapaz, Accra";
+const MAPS_URL = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
 
 const STORE_NAME = "Hajia Slay Empire";
 const HERO_BG = "https://res.cloudinary.com/dccf0ffxr/image/upload/v1782445718/hero/hero_bg.jpg";
@@ -55,7 +55,7 @@ const DELIVERY_NOTE = "Order before 4:00 PM for 24-hour delivery · MoMo & Payst
 
 const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "";
 const POLL_MS_PRODUCTS = 3000;
-const POLL_MS_ORDERS   = 3000;
+const POLL_MS_ORDERS = 3000;
 const POLL_MS_TESTIMONIALS = 8000;
 
 function loadPaystackScript() {
@@ -96,7 +96,7 @@ function verifyAdminPassword(action = "delete this item") {
   try {
     const raw = localStorage.getItem(SK_PWD);
     if (raw) storedPwd = JSON.parse(raw);
-  } catch {}
+  } catch { }
   if (!storedPwd) {
     if (pwd === "slay2025admin") return true;
     alert("Incorrect password.");
@@ -157,21 +157,21 @@ function syncDefaultProductImages(products) {
 const Icon = ({ name, size = 16, color = "currentColor", style }) => {
   const s = { width: size, height: size, flexShrink: 0, display: "inline-block", verticalAlign: "middle", ...style };
   const icons = {
-    bag: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>,
-    check: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-    truck: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
-    card: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
-    star: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-    skincare: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"><path d="M12 2l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1 2-4z"/></svg>,
-    wellness: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>,
-    bundle: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>,
-    sparkle: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round"><path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5L12 3z"/></svg>,
-    menu: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
-    warning: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
-    dotRed: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><circle cx="12" cy="12" r="6"/></svg>,
-    dotAmber: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><circle cx="12" cy="12" r="6"/></svg>,
-    tiktok: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z"/></svg>,
-    whatsapp: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.137.564 4.14 1.547 5.872L0 24l6.305-1.525A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.794 9.794 0 01-5.031-1.388l-.36-.214-3.742.906.946-3.648-.235-.374A9.795 9.795 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>,
+    bag: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" /></svg>,
+    check: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>,
+    truck: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>,
+    card: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>,
+    star: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
+    skincare: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"><path d="M12 2l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1 2-4z" /></svg>,
+    wellness: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /></svg>,
+    bundle: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>,
+    sparkle: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round"><path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5L12 3z" /></svg>,
+    menu: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>,
+    warning: <svg style={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>,
+    dotRed: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><circle cx="12" cy="12" r="6" /></svg>,
+    dotAmber: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><circle cx="12" cy="12" r="6" /></svg>,
+    tiktok: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z" /></svg>,
+    whatsapp: <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /><path d="M12 0C5.373 0 0 5.373 0 12c0 2.137.564 4.14 1.547 5.872L0 24l6.305-1.525A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.794 9.794 0 01-5.031-1.388l-.36-.214-3.742.906.946-3.648-.235-.374A9.795 9.795 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z" /></svg>,
   };
   return icons[name] || icons.sparkle;
 };
@@ -219,7 +219,7 @@ function TypewriterTitle({ text, style }) {
 }
 
 // ─── CLOUDINARY CONFIG ───────────────────────────────────────────────────────
-const CLOUDINARY_CLOUD  = "dccf0ffxr";
+const CLOUDINARY_CLOUD = "dccf0ffxr";
 const CLOUDINARY_PRESET = "slay_products";
 
 function compressImage(file, maxWidth = 1200, quality = 0.82) {
@@ -230,7 +230,7 @@ function compressImage(file, maxWidth = 1200, quality = 0.82) {
       URL.revokeObjectURL(url);
       const ratio = Math.min(1, maxWidth / img.width);
       const canvas = document.createElement("canvas");
-      canvas.width  = Math.round(img.width  * ratio);
+      canvas.width = Math.round(img.width * ratio);
       canvas.height = Math.round(img.height * ratio);
       canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(
@@ -274,24 +274,24 @@ async function deleteCloudinaryImage(imageUrl) {
   }
 }
 
-const GHS  = (n) => "GH₵ " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 0 });
-const ago  = (ts) => { const d = Math.floor((Date.now() - ts) / 86400000); return d === 0 ? "Today" : d === 1 ? "Yesterday" : d + " days ago"; };
+const GHS = (n) => "GH₵ " + Number(n).toLocaleString("en-GH", { minimumFractionDigits: 0 });
+const ago = (ts) => { const d = Math.floor((Date.now() - ts) / 86400000); return d === 0 ? "Today" : d === 1 ? "Yesterday" : d + " days ago"; };
 const genCode = () => { const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = "SLY-"; for (let i = 0; i < 6; i++) s += c[Math.floor(Math.random() * c.length)]; return s; };
 
 // ─── PRODUCT CATEGORIES ───────────────────────────────────────────────────────
 const ORIG = { skincare: [], wellness: [], bundles: [] };
 
 const CAT_LABELS = { skincare: "Skincare", wellness: "Wellness", bundles: "Bundles & Sets" };
-const BG_MAP     = {
+const BG_MAP = {
   skincare: "#ffffff",
   wellness: "#ffffff",
-  bundles:  "#ffffff",
+  bundles: "#ffffff",
 };
 const ACCENT_MAP = { skincare: "#e8a0b4", wellness: "#e8a0b4", bundles: "#e8a0b4" };
 const SUBCAT_OPTS = {
   skincare: ["face wash", "serum", "moisturiser", "toner", "sunscreen", "eye cream", "mask", "oil", "other"],
   wellness: ["supplements", "intimate care", "period care", "hormone support", "detox", "herbal", "other"],
-  bundles:  ["starter kit", "glow kit", "self-care kit", "gift set", "other"],
+  bundles: ["starter kit", "glow kit", "self-care kit", "gift set", "other"],
 };
 
 function buildPills(category) {
@@ -379,14 +379,14 @@ const supa = {
       return { data: null, error: e };
     }
   },
-  async getProducts()         { return this._req("GET",    "products?select=*&order=id.asc",    null, { "Accept": "application/json" }); },
-  async insertProduct(row)    { return this._req("POST",   "products", row); },
-  async updateProduct(id, u)  { return this._req("PATCH",  "products?id=eq." + encodeURIComponent(id), u); },
-  async deleteProduct(id)     { return this._req("DELETE", "products?id=eq." + encodeURIComponent(id), null); },
-  async getOrders()           { return this._req("GET",    "orders?select=*&order=timestamp_ms.desc", null, { "Accept": "application/json" }); },
-  async insertOrder(row)      { return this._req("POST",   "orders", row); },
-  async updateOrder(id, u)    { return this._req("PATCH",  "orders?id=eq." + encodeURIComponent(id), u); },
-  async deleteOrder(id)       { return this._req("DELETE", "orders?id=eq." + encodeURIComponent(id), null); },
+  async getProducts() { return this._req("GET", "products?select=*&order=id.asc", null, { "Accept": "application/json" }); },
+  async insertProduct(row) { return this._req("POST", "products", row); },
+  async updateProduct(id, u) { return this._req("PATCH", "products?id=eq." + encodeURIComponent(id), u); },
+  async deleteProduct(id) { return this._req("DELETE", "products?id=eq." + encodeURIComponent(id), null); },
+  async getOrders() { return this._req("GET", "orders?select=*&order=timestamp_ms.desc", null, { "Accept": "application/json" }); },
+  async insertOrder(row) { return this._req("POST", "orders", row); },
+  async updateOrder(id, u) { return this._req("PATCH", "orders?id=eq." + encodeURIComponent(id), u); },
+  async deleteOrder(id) { return this._req("DELETE", "orders?id=eq." + encodeURIComponent(id), null); },
   async upsertCustomer(phone, name, email, total) {
     const { data: ex } = await this._req("GET", "customers?phone=eq." + encodeURIComponent(phone) + "&select=id,total_orders,total_spent", null, { "Accept": "application/json" });
     if (ex && ex.length > 0) {
@@ -401,10 +401,10 @@ const supa = {
     await this._req("DELETE", "orders?id=not.is.null", null);
     await this._req("DELETE", "customers?id=not.is.null", null);
   },
-  async getTestimonials()          { return this._req("GET",    "slay_testimonials?select=*&order=created_at.desc", null, { "Accept": "application/json" }); },
-  async insertTestimonial(row)     { return this._req("POST",   "slay_testimonials", row); },
-  async deleteTestimonial(id)      { return this._req("DELETE", "slay_testimonials?id=eq." + encodeURIComponent(id), null); },
-  async updateTestimonial(id, u)   { return this._req("PATCH",  "slay_testimonials?id=eq." + encodeURIComponent(id), u); },
+  async getTestimonials() { return this._req("GET", "slay_testimonials?select=*&order=created_at.desc", null, { "Accept": "application/json" }); },
+  async insertTestimonial(row) { return this._req("POST", "slay_testimonials", row); },
+  async deleteTestimonial(id) { return this._req("DELETE", "slay_testimonials?id=eq." + encodeURIComponent(id), null); },
+  async updateTestimonial(id, u) { return this._req("PATCH", "slay_testimonials?id=eq." + encodeURIComponent(id), u); },
   async signIn(email, password) {
     if (!this._ready) return false;
     try {
@@ -435,7 +435,7 @@ const supa = {
     let stopped = false;
     const run = async () => {
       if (stopped) return;
-      try { await callback(); } catch {}
+      try { await callback(); } catch { }
       timer = setTimeout(run, intervalMs);
     };
     timer = setTimeout(run, intervalMs);
@@ -554,7 +554,7 @@ function useLocalStorage(key, init) {
   const save = useCallback((v) => {
     setVal(prev => {
       const next = v instanceof Function ? v(prev) : v;
-      try { localStorage.setItem(key, JSON.stringify(next)); } catch {}
+      try { localStorage.setItem(key, JSON.stringify(next)); } catch { }
       return next;
     });
   }, [key]);
@@ -563,7 +563,7 @@ function useLocalStorage(key, init) {
       if (e.key === key) {
         try {
           setVal(e.newValue ? JSON.parse(e.newValue) : (typeof init === "function" ? init() : init));
-        } catch {}
+        } catch { }
       }
     };
     window.addEventListener("storage", handleStorage);
@@ -674,22 +674,22 @@ function useProducts() {
     setProducts(prev => ({ ...prev, [cat]: prev[cat].map(p => p.id === id ? { ...p, ...updates } : p) }));
     if (supa._ready) {
       const snaked = {};
-      if ("price"            in updates) snaked.price               = updates.price;
-      if ("originalPrice"    in updates) snaked.original_price      = updates.originalPrice;
-      if ("stock"            in updates) snaked.stock               = updates.stock;
-      if ("promoActive"      in updates) snaked.promo_active        = updates.promoActive;
-      if ("promoPrice"       in updates) snaked.promo_price         = updates.promoPrice;
-      if ("image"            in updates) snaked.image               = updates.image;
-      if ("secondaryImage"   in updates) snaked.secondary_image     = updates.secondaryImage;
-      if ("bestseller"       in updates) snaked.bestseller          = updates.bestseller;
-      if ("lowStockThreshold"in updates) snaked.low_stock_threshold = updates.lowStockThreshold;
-      if ("name"             in updates) snaked.name                = updates.name;
-      if ("brand"            in updates) snaked.brand               = updates.brand;
-      if ("notes"            in updates) snaked.notes               = updates.notes;
-      if ("extra"            in updates) snaked.extra               = updates.extra;
-      if ("gender"           in updates) snaked.gender              = updates.gender;
-      if ("subcategory"      in updates) snaked.subcategory         = updates.subcategory;
-      if ("isTrending"       in updates) snaked.is_trending         = updates.isTrending;
+      if ("price" in updates) snaked.price = updates.price;
+      if ("originalPrice" in updates) snaked.original_price = updates.originalPrice;
+      if ("stock" in updates) snaked.stock = updates.stock;
+      if ("promoActive" in updates) snaked.promo_active = updates.promoActive;
+      if ("promoPrice" in updates) snaked.promo_price = updates.promoPrice;
+      if ("image" in updates) snaked.image = updates.image;
+      if ("secondaryImage" in updates) snaked.secondary_image = updates.secondaryImage;
+      if ("bestseller" in updates) snaked.bestseller = updates.bestseller;
+      if ("lowStockThreshold" in updates) snaked.low_stock_threshold = updates.lowStockThreshold;
+      if ("name" in updates) snaked.name = updates.name;
+      if ("brand" in updates) snaked.brand = updates.brand;
+      if ("notes" in updates) snaked.notes = updates.notes;
+      if ("extra" in updates) snaked.extra = updates.extra;
+      if ("gender" in updates) snaked.gender = updates.gender;
+      if ("subcategory" in updates) snaked.subcategory = updates.subcategory;
+      if ("isTrending" in updates) snaked.is_trending = updates.isTrending;
       try {
         await supa.updateProduct(id, snaked);
         if (oldProduct) {
@@ -787,7 +787,7 @@ function useProducts() {
           const results = await Promise.all(updatesList.map(async ({ id, updates }) => {
             const snaked = {};
             if ("promoActive" in updates) snaked.promo_active = updates.promoActive;
-            if ("promoPrice"  in updates) snaked.promo_price  = updates.promoPrice;
+            if ("promoPrice" in updates) snaked.promo_price = updates.promoPrice;
             return supa.updateProduct(id, snaked);
           }));
           const failed = results.filter(r => r.error);
@@ -809,7 +809,7 @@ function useOrders() {
   const [orders, setOrders] = useLocalStorage(SK_ORDERS, []);
   const [loaded, setLoaded] = useState(false);
   // Guard: when admin is actively updating a status, suppress poll overwrite for 6 s
-  const mutatingRef  = useRef(false);
+  const mutatingRef = useRef(false);
   const mutatingTimer = useRef(null);
   // Always-current ref so callbacks never close over stale orders
   const ordersRef = useRef(orders);
@@ -885,11 +885,11 @@ function useOrders() {
     // Cascade: ticking a later step implies earlier steps are also done
     if (field === "delivered" && val) {
       next.dispatched = true; if (!next.dispatchedAt) next.dispatchedAt = now;
-      next.packaged   = true; if (!next.packagedAt)   next.packagedAt   = now;
-      next.payment    = true; if (!next.paymentAt)    next.paymentAt    = now;
+      next.packaged = true; if (!next.packagedAt) next.packagedAt = now;
+      next.payment = true; if (!next.paymentAt) next.paymentAt = now;
     } else if (field === "dispatched" && val) {
       next.packaged = true; if (!next.packagedAt) next.packagedAt = now;
-      next.payment  = true; if (!next.paymentAt)  next.paymentAt  = now;
+      next.payment = true; if (!next.paymentAt) next.paymentAt = now;
     } else if (field === "packaged" && val) {
       // Always mark paid when packaged — admin physically has the cash/confirmed momo
       next.payment = true; if (!next.paymentAt) next.paymentAt = now;
@@ -902,7 +902,7 @@ function useOrders() {
       next.delivered = false; next.deliveredAt = null;
     } else if (field === "packaged" && !val) {
       next.dispatched = false; next.dispatchedAt = null;
-      next.delivered  = false; next.deliveredAt  = null;
+      next.delivered = false; next.deliveredAt = null;
     } else if (field === "dispatched" && !val) {
       next.delivered = false; next.deliveredAt = null;
     }
@@ -914,14 +914,14 @@ function useOrders() {
     if (supa._ready) {
       try {
         const res = await supa.updateOrder(id, {
-          status_payment:      !!next.payment,
-          status_payment_at:   next.paymentAt   || null,
-          status_packaged:     !!next.packaged,
-          status_packaged_at:  next.packagedAt  || null,
-          status_dispatched:   !!next.dispatched,
+          status_payment: !!next.payment,
+          status_payment_at: next.paymentAt || null,
+          status_packaged: !!next.packaged,
+          status_packaged_at: next.packagedAt || null,
+          status_dispatched: !!next.dispatched,
           status_dispatched_at: next.dispatchedAt || null,
-          status_delivered:    !!next.delivered,
-          status_delivered_at: next.deliveredAt  || null,
+          status_delivered: !!next.delivered,
+          status_delivered_at: next.deliveredAt || null,
         });
         if (res.error) {
           console.error("Failed to update order status in Supabase:", res.error);
@@ -986,7 +986,7 @@ function useOrders() {
 
   // Auto-separate: active orders = not fully fulfilled; log orders = all 3 flags true
   const activeOrders_ = orders.filter(o => !(o.status.payment && o.status.packaged && o.status.dispatched && o.status.delivered));
-  const logOrders_    = orders.filter(o => o.status.payment && o.status.packaged && o.status.dispatched && o.status.delivered);
+  const logOrders_ = orders.filter(o => o.status.payment && o.status.packaged && o.status.dispatched && o.status.delivered);
   return { orders, activeOrders: activeOrders_, logOrders: logOrders_, addOrder, updateOrderStatus, updateOrderFields, deleteOrder };
 }
 
@@ -1111,15 +1111,16 @@ function ImageInputCompact({ value, onChange }) {
     } catch { setBusy(false); }
   };
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
       <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFile} />
       {value ? (
-        <div style={{ position: "relative", flexShrink: 0 }}>
-          <img src={value} alt="product" onClick={() => setIsOpen(true)} style={{ width: 56, height: 56, objectFit: "cover", border: "1px solid #e8a0b444", display: "block", opacity: busy ? 0.4 : 1, cursor: "pointer", transition: "transform .2s" }} onError={e => { e.target.style.opacity = "0.2"; }} />
-          <div style={{ position: "absolute", bottom: 2, right: 2, width: 8, height: 8, borderRadius: "50%", background: "#22c55e", border: "1px solid #ffffff", pointerEvents: "none" }} />
-          <button onClick={() => onChange("")} style={{ position: "absolute", top: -5, right: -5, width: 16, height: 16, borderRadius: "50%", background: "#e8a0b4", border: "none", color: "#111111", cursor: "pointer", fontSize: 10, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, fontFamily: "'Raleway',sans-serif!important", fontWeight: 600 }}>x</button>
-          <button type="button" onClick={() => fileRef.current.click()} style={{ marginTop: 3, fontFamily: "'Raleway',sans-serif", fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 0", border: "none", background: "transparent", color: "#22c55e", fontWeight: 600, cursor: "pointer", display: "block", width: 56, textAlign: "center" }}>{busy ? "…" : "Change"}</button>
-          
+        <>
+          <div style={{ position: "relative" }}>
+            <img src={value} alt="product" onClick={() => setIsOpen(true)} style={{ width: 64, height: 64, objectFit: "cover", border: "1px solid #e8a0b444", borderRadius: 4, display: "block", opacity: busy ? 0.4 : 1, cursor: "pointer" }} onError={e => { e.target.style.opacity = "0.2"; }} />
+            <div style={{ position: "absolute", bottom: 3, right: 3, width: 9, height: 9, borderRadius: "50%", background: "#22c55e", border: "1.5px solid #ffffff", pointerEvents: "none" }} />
+            <button onClick={() => onChange("")} aria-label="Remove image" style={{ position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%", background: "#e8a0b4", border: "1.5px solid #ffffff", color: "#111111", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, fontWeight: 700 }}>×</button>
+          </div>
+          <button type="button" onClick={() => fileRef.current.click()} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 0", border: "none", background: "transparent", color: "#22c55e", fontWeight: 600, cursor: "pointer", width: 64, textAlign: "center" }}>{busy ? "…" : "Change"}</button>
           {isOpen && (
             <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 99999, padding: 24, cursor: "zoom-out" }} onClick={() => setIsOpen(false)}>
               <div style={{ position: "relative", maxWidth: "90%", maxHeight: "90%", display: "flex", flexDirection: "column", alignItems: "center" }} onClick={e => e.stopPropagation()}>
@@ -1132,9 +1133,13 @@ function ImageInputCompact({ value, onChange }) {
               </div>
             </div>
           )}
-        </div>
+        </>
       ) : (
-        <button type="button" onClick={() => fileRef.current.click()} disabled={busy} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".12em", textTransform: "uppercase", padding: "6px 12px", border: "1px solid #e8a0b4", background: "transparent", color: "#e8a0b4", cursor: "pointer", height: 34 }}>{busy ? "…" : "Upload"}</button>
+        <button type="button" onClick={() => fileRef.current.click()} disabled={busy}
+          style={{ width: 64, height: 64, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4, border: "1.5px dashed #e8a0b4", borderRadius: 4, background: "#fdf6f8", color: "#e8a0b4", cursor: "pointer" }}>
+          <span style={{ fontSize: 18, lineHeight: 1 }}>{busy ? "…" : "+"}</span>
+          <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, letterSpacing: ".08em", textTransform: "uppercase", fontWeight: 600 }}>{busy ? "" : "Upload"}</span>
+        </button>
       )}
     </div>
   );
@@ -1149,6 +1154,7 @@ const CSS = `
 @keyframes pillWave{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
 .subcat-pill{animation:pillWave 2.4s ease-in-out infinite;}
 *{box-sizing:border-box;margin:0;padding:0;}
+button,input,select,textarea{border-radius:3px;}
 html{overflow-x:hidden;}
 body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#f5f5f5;}::-webkit-scrollbar-thumb{background:#cccccc;border-radius:2px;}
@@ -1167,7 +1173,7 @@ body{background:#ffffff;color:#111111;font-family:'Cormorant Garamond',serif;-we
 .ghost-btn{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #dddddd;background:#ffffff;color:#666666;cursor:pointer;padding:13px 28px;transition:all .3s;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;}
 .ghost-btn:hover{border-color:#e8a0b4;color:#111111;}
 .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;}
-.drawer{position:fixed;top:0;right:0;height:100vh;height:100dvh;width:100vw;background:#ffffff;border-left:1px solid #e8e8e8;z-index:100;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.08);}
+.drawer{position:fixed;top:0;right:0;height:100vh;height:100dvh;width:100vw;background:#ffffff;border-left:1px solid #e8e8e8;z-index:100;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.08);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);box-sizing:border-box;}
 @media(min-width:481px){.drawer{width:440px;}}
 input,textarea,select{background:#ffffff;border:1px solid #e8e8e8;color:#111111;padding:11px 14px;font-family:'Raleway',sans-serif;font-size:14px;width:100%;outline:none;transition:border-color .3s;min-height:44px;border-radius:0;-webkit-appearance:none;}
 @media(max-width:768px){input,textarea,select{font-size:16px;}}
@@ -1259,7 +1265,7 @@ label{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:.15em;text-
   .modal-body{padding:8px 18px 0;overflow:visible;}
   .modal-footer{padding:16px 18px 28px;border-top:none;background:transparent;position:static;}
 }
-@media(max-width:640px){.subcat-pill-img{display:none!important;}.subcat-pill{padding:12px 20px!important;margin-top:0!important;}}
+@media(max-width:640px){.subcat-pill-img{display:none!important;}.subcat-pill{padding:12px 20px!important;margin-top:0!important;}.product-page-grid{grid-template-columns:1fr!important;gap:24px!important;}.admin-note-grid{grid-template-columns:1fr!important;}}
 .stats-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2, 1fr)!important;} .desktop-nav{display:none!important;} .mobile-menu-btn{display:flex!important;} .two-col{grid-template-columns:1fr!important;}}
@@ -1479,22 +1485,22 @@ export default function App() {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
-    const lastMonthEnd   = new Date(now.getFullYear(), now.getMonth(), 0).getTime();
-    const confirmed  = orders.filter(o => o.status.payment);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0).getTime();
+    const confirmed = orders.filter(o => o.status.payment);
     const confirmedRev = confirmed.reduce((s, o) => s + o.total, 0);
-    const pendingRev   = orders.filter(o => !o.status.payment).reduce((s, o) => s + o.total, 0);
-    const curMonthRev  = confirmed.filter(o => o.timestamp >= startOfMonth).reduce((s, o) => s + o.total, 0);
+    const pendingRev = orders.filter(o => !o.status.payment).reduce((s, o) => s + o.total, 0);
+    const curMonthRev = confirmed.filter(o => o.timestamp >= startOfMonth).reduce((s, o) => s + o.total, 0);
     const lastMonthRev = confirmed.filter(o => o.timestamp >= lastMonthStart && o.timestamp <= lastMonthEnd).reduce((s, o) => s + o.total, 0);
     const custMap = {};
     orders.forEach(o => { const k = o.customer?.phone || o.customer?.name; if (k) custMap[k] = (custMap[k] || 0) + 1; });
     const repeatCust = Object.values(custMap).filter(v => v > 1).length;
-    const totalCust  = Object.keys(custMap).length;
+    const totalCust = Object.keys(custMap).length;
     const totalO = orders.length || 1;
     const sPct = {
-      unpaid:     (orders.filter(o => !o.status.payment).length / totalO * 100).toFixed(0),
-      packing:    (orders.filter(o => o.status.payment && !o.status.packaged).length / totalO * 100).toFixed(0),
+      unpaid: (orders.filter(o => !o.status.payment).length / totalO * 100).toFixed(0),
+      packing: (orders.filter(o => o.status.payment && !o.status.packaged).length / totalO * 100).toFixed(0),
       delivering: (orders.filter(o => o.status.packaged && !o.status.delivered).length / totalO * 100).toFixed(0),
-      fulfilled:  (orders.filter(o => o.status.delivered).length / totalO * 100).toFixed(0),
+      fulfilled: (orders.filter(o => o.status.delivered).length / totalO * 100).toFixed(0),
     };
     const pStats = {};
     orders.forEach(o => o.items?.forEach(i => {
@@ -1523,7 +1529,7 @@ export default function App() {
             style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, background: "rgba(0,0,0,0.2)", color: "#000000", border: "1px solid rgba(0,0,0,0.15)", padding: "6px 14px", cursor: "pointer", fontWeight: "bold", textTransform: "uppercase", letterSpacing: ".1em", transition: "all .2s", borderRadius: "4px" }}>
             Track Order
           </button>
-          <button onClick={() => { navigator.clipboard.writeText("Order ID: " + orderSuccess.id + " | Code: " + orderSuccess.code).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 2500); }}
+          <button onClick={() => { navigator.clipboard.writeText("Order ID: " + orderSuccess.id + " | Code: " + orderSuccess.code).catch(() => { }); setCopied(true); setTimeout(() => setCopied(false), 2500); }}
             style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, background: copied ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.3)", color: "#000000", border: "1px solid rgba(0,0,0,0.15)", padding: "6px 14px", cursor: "pointer", fontWeight: "bold", textTransform: "uppercase", letterSpacing: ".1em", transition: "all .2s", borderRadius: "4px" }}>
             {copied ? "Copied" : "Copy"}
           </button>
@@ -1532,14 +1538,14 @@ export default function App() {
       )}
       {route === "/slay-staff-dashboard"
         ? <AdminApp products={products} allFlat={allFlat} addProduct={addProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} bulkUpdatePromos={bulkUpdatePromos}
-            orders={activeOrders} logOrders={logOrders} updateOrderStatus={updateOrderStatus} updateOrderFields={updateOrderFields} deleteOrder={deleteOrder} loaded={loaded} syncing={syncing}
-            addOrder={addOrder} testimonials={testimonials} setTestimonials={setTestimonials}
-            stats={stats} simulatedEnabled={simulatedEnabled} setSimulatedEnabled={setSimulatedEnabled}
-            onOrderPlaced={handleOrderPlaced} />
+          orders={activeOrders} logOrders={logOrders} updateOrderStatus={updateOrderStatus} updateOrderFields={updateOrderFields} deleteOrder={deleteOrder} loaded={loaded} syncing={syncing}
+          addOrder={addOrder} testimonials={testimonials} setTestimonials={setTestimonials}
+          stats={stats} simulatedEnabled={simulatedEnabled} setSimulatedEnabled={setSimulatedEnabled}
+          onOrderPlaced={handleOrderPlaced} />
         : <StorefrontApp products={products} allFlat={allFlat} orders={orders} addOrder={addOrder}
-            decrementStock={decrementStock} testimonials={testimonials}
-            simulatedEnabled={simulatedEnabled} onOrderPlaced={handleOrderPlaced}
-            trackOrderId={trackOrderId} setTrackOrderId={setTrackOrderId} />
+          decrementStock={decrementStock} testimonials={testimonials}
+          simulatedEnabled={simulatedEnabled} onOrderPlaced={handleOrderPlaced}
+          trackOrderId={trackOrderId} setTrackOrderId={setTrackOrderId} />
       }
     </div>
   );
@@ -1556,6 +1562,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
   const [showCart, setShowCart] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const openProductPage = (p) => { setSelectedProduct(p); nav("product"); };
   const [mobileMenu, setMobileMenu] = useState(false);
   const [hidePromo, setHidePromo] = useState(false);
   const [initialFilter, setInitialFilter] = useState(null);
@@ -1597,7 +1604,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
   const removeFromCart = useCallback((id) => setCart(prev => prev.filter(i => i.id !== id)), []);
   const cartTotal = useMemo(() => cart.reduce((s, i) => s + (i.promoActive && i.promoPrice ? i.promoPrice : i.price) * i.qty, 0), [cart]);
   const cartCount = useMemo(() => cart.reduce((s, i) => s + i.qty, 0), [cart]);
-  useEffect(() => { try { localStorage.setItem(SK_CART, JSON.stringify(cart)); } catch {} }, [cart]);
+  useEffect(() => { try { localStorage.setItem(SK_CART, JSON.stringify(cart)); } catch { } }, [cart]);
   const clearCart = useCallback(() => { setCart([]); localStorage.removeItem(SK_CART); }, []);
   const handleOrderPlacedInternal = (res) => { clearCart(); setShowCart(false); if (onOrderPlaced) onOrderPlaced({ ...res, items: cart }); };
   const nav = (p) => { if (p !== page) prevPage.current = page; setPage(p); setMobileMenu(false); window.scrollTo(0, 0); };
@@ -1623,7 +1630,7 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8, textAlign: "center" }}>
               <Icon name="bag" size={14} color="#111111" />
               {promoProducts.length === 1
-                ? <>🎉 <strong>{pct}% OFF</strong> — {names}</>  
+                ? <>🎉 <strong>{pct}% OFF</strong> — {names}</>
                 : promoProducts.every(p => Math.round((1 - p.promoPrice / (p.originalPrice || p.price)) * 100) === pct)
                   ? <><strong>{pct}% OFF</strong> selected items — {names}</>
                   : <>🔥 Sale on: {names}</>}
@@ -1643,10 +1650,10 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <button onClick={() => setShowSearch(true)} style={{ background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, padding: 0, color: "#111111", boxShadow: "0 1px 4px rgba(0,0,0,.04)", transition: "border-color .2s, box-shadow .2s" }} onMouseEnter={e => { e.currentTarget.style.borderColor = "#e8a0b4"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(232,160,180,.18)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e8e8e8"; e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,.04)"; }} aria-label="Search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.5"/><path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.5" /><path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           </button>
           <button onClick={() => setShowCart(true)} style={{ background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 999, cursor: "pointer", position: "relative", display: "flex", alignItems: "center", gap: 8, minHeight: 44, padding: "9px 16px 9px 14px", color: "#111111", boxShadow: "0 1px 4px rgba(0,0,0,.04)", transition: "border-color .2s, box-shadow .2s" }} onMouseEnter={e => { e.currentTarget.style.borderColor = "#e8a0b4"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(232,160,180,.18)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e8e8e8"; e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,.04)"; }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" /></svg>
             <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".12em", textTransform: "uppercase", fontWeight: 600 }}>Bag</span>
             {cartCount > 0 && <span key={cartCount} className="badge-pop" style={{ position: "absolute", top: -6, right: -6, background: "#e8a0b4", color: "#000000", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, fontFamily: "'Raleway',sans-serif" }}>{cartCount}</span>}
           </button>
@@ -1663,13 +1670,14 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
           </div>
         </>
       )}
-      {page === "home"    && <HomePage setPage={nav} setActiveCat={setActiveCat} setInitialFilter={setInitialFilter} products={products} addToCart={addToCart} cart={cart} testimonials={testimonials} onSelectProduct={setSelectedProduct} />}
-      {page === "shop"    && <ShopPage products={products} activeCat={activeCat} setActiveCat={setActiveCat} initialFilter={initialFilter} setInitialFilter={setInitialFilter} addToCart={addToCart} cart={cart} onSelectProduct={setSelectedProduct} />}
-      {page === "about"   && <AboutPage />}
-      {page === "faq"     && <FaqPage setPage={nav} />}
+      {page === "home" && <HomePage setPage={nav} setActiveCat={setActiveCat} setInitialFilter={setInitialFilter} products={products} addToCart={addToCart} cart={cart} testimonials={testimonials} onSelectProduct={openProductPage} />}
+      {page === "shop" && <ShopPage products={products} activeCat={activeCat} setActiveCat={setActiveCat} initialFilter={initialFilter} setInitialFilter={setInitialFilter} addToCart={addToCart} cart={cart} onSelectProduct={openProductPage} />}
+      {page === "about" && <AboutPage />}
+      {page === "faq" && <FaqPage setPage={nav} />}
       {page === "privacy" && <PrivacyPage />}
-      {page === "terms"   && <TermsPage onBack={() => nav(prevPage.current || "home")} />}
-      {page === "track"   && <OrderTracking orders={orders} trackOrderId={trackOrderId} />}
+      {page === "terms" && <TermsPage onBack={() => nav(prevPage.current || "home")} />}
+      {page === "track" && <OrderTracking orders={orders} trackOrderId={trackOrderId} />}
+      {page === "product" && selectedProduct && <ProductDetailPage p={selectedProduct} onBack={() => nav(prevPage.current || "home")} addToCart={addToCart} cart={cart} onAddedToBag={() => setShowCart(true)} />}
       <SiteFooter setPage={nav} />
       {showCart && (
         <>
@@ -1677,7 +1685,6 @@ function StorefrontApp({ products, allFlat, orders, addOrder, decrementStock, te
           <CartDrawer cart={cart} updateCartQty={updateCartQty} removeFromCart={removeFromCart} cartTotal={cartTotal} onClose={() => setShowCart(false)} addOrder={addOrder} onOrderPlaced={handleOrderPlacedInternal} products={products} />
         </>
       )}
-      {selectedProduct && <ProductModal p={selectedProduct} onClose={() => setSelectedProduct(null)} addToCart={addToCart} cart={cart} />}
       <SocialProof products={products} orders={orders} simulatedEnabled={simulatedEnabled} testimonials={testimonials} />
     </>
   );
@@ -1691,11 +1698,11 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   const [trustRef, trustVisible] = useScrollReveal();
   const [drRef, drVisible] = useScrollReveal();
   const bestsellers = useMemo(() => Object.values(products).flat().filter(p => p.bestseller).slice(0, 4), [products]);
-  const trending    = useMemo(() => {
+  const trending = useMemo(() => {
     const shown = new Set(bestsellers.map(p => p.id));
     return Object.values(products).flat().filter(p => p.isTrending && !shown.has(p.id)).slice(0, 4);
   }, [products, bestsellers]);
-  const reviewList  = testimonials.length > 0 ? testimonials : DEFAULT_TESTIMONIALS;
+  const reviewList = testimonials.length > 0 ? testimonials : DEFAULT_TESTIMONIALS;
   const heroPromo = useMemo(() => {
     const flat = Object.values(products).flat();
     const promoProducts = flat.filter(p => p.promoActive && p.promoPrice);
@@ -1715,43 +1722,43 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   }, [products]);
 
   return (
-      <div>
-        <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
-          <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" />
-          <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
+    <div>
+      <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
+        <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" />
+        <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
 
-            <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
-            {heroPromo ? (
-              <>
-                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
-                  Enjoy up to {heroPromo.pct}% off<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>our beauty range</em>
-                </h1>
-                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
-                  Grab special discounts of up to {heroPromo.pct}% off on selected items: {heroPromo.names}. Premium cosmetics, skincare, body wash and beauty essentials in Accra.
-                </p>
-              </>
-            ) : (
-              <>
-                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
-                  Your Ultimate<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>beauty destination</em>
-                </h1>
-                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
-                  Discover authentic premium cosmetics, skincare, body wash and beauty essentials in Accra. Handpicked products for the ultimate self-care routine.
-                </p>
-              </>
-            )}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-              <button className="rose-btn" onClick={() => setPage("shop")}>Shop Now</button>
-              <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 21s7-7.58 7-12a7 7 0 10-14 0c0 4.42 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
-                  <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6"/>
-                </svg>
-                Get Directions ({LOCATION})
-              </a>
-            </div>
+          <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
+          {heroPromo ? (
+            <>
+              <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
+                Enjoy up to {heroPromo.pct}% off<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>our beauty range</em>
+              </h1>
+              <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
+                Grab special discounts of up to {heroPromo.pct}% off on selected items: {heroPromo.names}. Premium cosmetics, skincare, body wash and beauty essentials in Accra.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
+                Your Ultimate<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>beauty destination</em>
+              </h1>
+              <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
+                Discover authentic premium cosmetics, skincare, body wash and beauty essentials in Accra. Handpicked products for the ultimate self-care routine.
+              </p>
+            </>
+          )}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <button className="rose-btn" onClick={() => setPage("shop")}>Shop Now</button>
+            <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21s7-7.58 7-12a7 7 0 10-14 0c0 4.42 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+              </svg>
+              Get Directions ({LOCATION})
+            </a>
           </div>
-        </section>
+        </div>
+      </section>
 
       <div ref={trustRef} className="trust-strip">
         {TRUST_BULLETS.map((t, i) => (
@@ -1959,17 +1966,17 @@ function ShopPage({ products, activeCat, setActiveCat, initialFilter, setInitial
 }
 
 function ProductCard({ p, index, activeCat, addToCart, cart, qty, setQty, onClick }) {
-  const oos      = p.stock === 0;
-  const onlyOne  = p.stock === 1;
-  const low      = p.stock > 1 && p.stock <= p.lowStockThreshold;
+  const oos = p.stock === 0;
+  const onlyOne = p.stock === 1;
+  const low = p.stock > 1 && p.stock <= p.lowStockThreshold;
   const showPromo = p.promoActive && p.promoPrice;
   const dispPrice = showPromo ? p.promoPrice : p.price;
-  const discPct   = showPromo ? Math.round((1 - p.promoPrice / p.originalPrice) * 100) : 0;
+  const discPct = showPromo ? Math.round((1 - p.promoPrice / p.originalPrice) * 100) : 0;
   const currentQty = qty(p.id);
-  const inCart   = cart.find(c => c.id === p.id);
+  const inCart = cart.find(c => c.id === p.id);
   const qtyInCart = inCart ? inCart.qty : 0;
-  const trulyOos  = p.stock - qtyInCart <= 0;
-  const accent    = ACCENT_MAP[activeCat] || "#e8a0b4";
+  const trulyOos = p.stock - qtyInCart <= 0;
+  const accent = ACCENT_MAP[activeCat] || "#e8a0b4";
   const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
   return (
     <div className={"product-card fade-in" + (oos ? " oos" : "") + (hasSecondary ? " has-secondary" : "")} style={{ animationDelay: (index * 0.06) + "s" }} onClick={onClick}>
@@ -1986,9 +1993,9 @@ function ProductCard({ p, index, activeCat, addToCart, cart, qty, setQty, onClic
         {p.bestseller && <span className="tag tag-rose">Bestseller</span>}
         {showPromo && <span className="tag" style={{ background: "#e8a0b4", color: "#000000" }}>PROMO</span>}
         {showPromo && <span className="tag tag-red">&#8722;{discPct}%</span>}
-        {oos     && <span className="tag tag-red">Out of Stock</span>}
+        {oos && <span className="tag tag-red">Out of Stock</span>}
         {onlyOne && !oos && <span className="tag tag-rose">Only 1 Left</span>}
-        {low     && <span className="tag tag-amber">Low Stock</span>}
+        {low && <span className="tag tag-amber">Low Stock</span>}
       </div>
       <div className="card-detail-panel">
         <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: accent, letterSpacing: ".25em", textTransform: "uppercase", marginBottom: 6 }}>{p.brand}</p>
@@ -2031,14 +2038,14 @@ function CartDrawer({ cart, updateCartQty, removeFromCart, cartTotal, onClose, a
       const prev = stored.find(o => o.customer?.phone === details.phone);
       if (prev) { setReturning(true); if (prev.customer.name && !details.name) set("name", prev.customer.name); if (prev.customer.email && !details.email) set("email", prev.customer.email); }
       else setReturning(false);
-    } catch {}
+    } catch { }
   };
   const validate = () => {
     const e = {};
-    if (!details.name.trim())          e.name          = "Required";
-    if (!details.phone.trim())         e.phone         = "Required";
+    if (!details.name.trim()) e.name = "Required";
+    if (!details.phone.trim()) e.phone = "Required";
     if (!details.streetAddress.trim()) e.streetAddress = "Required";
-    if (!details.city.trim())          e.city          = "Required";
+    if (!details.city.trim()) e.city = "Required";
     setErrors(e); return Object.keys(e).length === 0;
   };
   const buildOrderPayload = (paidViaPaystack, paystackRef = null) => {
@@ -2214,7 +2221,7 @@ function CartDrawer({ cart, updateCartQty, removeFromCart, cartTotal, onClose, a
           <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#888888", letterSpacing: ".1em" }}>Total</span>
           <span style={{ fontSize: 24, fontWeight: 300, color: "#e8a0b4" }}>{GHS(cartTotal)}</span>
         </div>
-        {step === "cart"    && cart.length > 0 && <button className="rose-btn" style={{ width: "100%", justifyContent: "center" }} onClick={() => setStep("details")}>Continue →</button>}
+        {step === "cart" && cart.length > 0 && <button className="rose-btn" style={{ width: "100%", justifyContent: "center" }} onClick={() => setStep("details")}>Continue →</button>}
         {step === "details" && (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button className="ghost-btn" onClick={() => setStep("cart")} style={{ flex: "0 0 auto" }}>← Back</button>
@@ -2251,7 +2258,7 @@ function SearchOverlay({ products, onClose, onSelect }) {
     const all = Object.values(products).flat();
     return all.map(p => {
       let score = 0;
-      const name  = p.name.toLowerCase();
+      const name = p.name.toLowerCase();
       const brand = (p.brand || "").toLowerCase();
       const notes = (p.notes || "").toLowerCase();
       q.forEach(term => {
@@ -2272,7 +2279,7 @@ function SearchOverlay({ products, onClose, onSelect }) {
           <span className="search-hint">Search the shop</span>
           <div className="search-field-wrap" style={{ marginBottom: 28 }}>
             <span className="search-field-icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><line x1="20" y1="20" x2="16.5" y2="16.5" /></svg>
             </span>
             <input ref={inputRef} value={query} onChange={e => setQuery(e.target.value)} placeholder="Product name, brand, or benefit…" className="search-field" />
             <button onClick={onClose} className="search-close-btn" aria-label="Close search">x</button>
@@ -2345,14 +2352,14 @@ function ProductModal({ p, onClose, addToCart, cart }) {
       };
     }
   }, [lightboxOpen]);
-  const inCart    = cart.find(c => c.id === p.id);
+  const inCart = cart.find(c => c.id === p.id);
   const qtyInCart = inCart ? inCart.qty : 0;
-  const avail     = p.stock - qtyInCart;
-  const trulyOos  = avail <= 0;
-  const lowStock  = !trulyOos && avail <= (p.lowStockThreshold || 3);
-  const accent    = ACCENT_MAP[p.category] || "#e8a0b4";
+  const avail = p.stock - qtyInCart;
+  const trulyOos = avail <= 0;
+  const lowStock = !trulyOos && avail <= (p.lowStockThreshold || 3);
+  const accent = ACCENT_MAP[p.category] || "#e8a0b4";
   const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
-  const displayImg   = showSecondary && hasSecondary ? p.secondaryImage : p.image;
+  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : p.image;
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
   return (
     <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
@@ -2397,11 +2404,149 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             <line x1="1" y1="13" x2="13" y2="1"></line>
           </svg>
         </button>
-      <div ref={sheetRef} className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
-      <div className="product-modal" style={{ width: "100%" }}>
+        <div ref={sheetRef} className="fade-in modal-sheet" style={{ position: "relative", width: "100%", maxHeight: "92vh", overflowY: "auto", overflowX: "hidden", WebkitOverflowScrolling: "touch", background: "#ffffff", border: "1px solid #e8e8e8", borderRadius: 4 }}>
+          <div className="product-modal" style={{ width: "100%" }}>
 
-        <div className="product-modal-image" style={{ background: BG_MAP[p.category] }}>
-          <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => setLightboxOpen(true)} />
+            <div className="product-modal-image" style={{ background: BG_MAP[p.category] }}>
+              <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => setLightboxOpen(true)} />
+              <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
+                {trulyOos
+                  ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>OUT OF STOCK</span>
+                  : lowStock
+                    ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>LOW STOCK — {avail} LEFT</span>
+                    : <span style={{ ...stockBadgeStyle, background: "#ffffff", border: "1px solid #111111", color: "#111111" }}>IN STOCK</span>
+                }
+              </div>
+              {hasSecondary && (
+                <div style={{ position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 6, zIndex: 2 }}>
+                  <button onClick={() => setShowSecondary(false)} style={{ width: 30, height: 30, border: showSecondary ? "1px solid #333333" : "1px solid #e8a0b4", background: showSecondary ? "rgba(0,0,0,.6)" : "rgba(232,160,180,.2)", cursor: "pointer", color: "#e8a0b4", fontSize: 10 }}>1</button>
+                  <button onClick={() => setShowSecondary(true)} style={{ width: 30, height: 30, border: showSecondary ? "1px solid #e8a0b4" : "1px solid #333333", background: showSecondary ? "rgba(232,160,180,.2)" : "rgba(0,0,0,.6)", cursor: "pointer", color: "#e8a0b4", fontSize: 10 }}>2</button>
+                </div>
+              )}
+            </div>
+            <div className="product-modal-content">
+
+              {/* ZONE 1 — header: brand, name, price */}
+              <div className="modal-header">
+                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: accent, letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 8 }}>{p.brand}</p>
+                <h2 style={{ fontSize: 28, fontWeight: 300, marginBottom: 14, color: "#111111", lineHeight: 1.2 }}>{p.name}</h2>
+                <div style={{ marginBottom: 0, paddingBottom: 14, borderBottom: "1px solid #f0f0f0" }}>
+                  {p.promoActive && <p style={{ fontSize: 13, color: "#888888", textDecoration: "line-through", marginBottom: 2 }}>{GHS(p.originalPrice)}</p>}
+                  <p style={{ fontSize: 22, color: "#e8a0b4", margin: 0 }}>{GHS(p.promoActive ? p.promoPrice : p.price)}</p>
+                </div>
+              </div>
+
+              {/* ZONE 2 — scrollable body: description */}
+              <div className="modal-body">
+                <div style={{ paddingTop: 16, fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.9 }}>
+                  {p.notes && (() => {
+                    const lines = p.notes.split('\n');
+                    return (
+                      <div>
+                        {lines.map((line, i) => {
+                          const trimmed = line.trim();
+                          if (!trimmed) return <div key={i} style={{ height: 10 }} />;
+                          const isHeading = trimmed === trimmed.toUpperCase() && trimmed.length < 60 && !/·/.test(trimmed) || trimmed.endsWith(':');
+                          if (isHeading) return <p key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 6, marginTop: i > 0 ? 14 : 0, fontWeight: 600 }}>{trimmed.replace(/:$/, '')}</p>;
+                          const parts = trimmed.split(' · ');
+                          if (parts.length > 1) return <p key={i} style={{ color: "#111111", marginBottom: 4, display: "flex", flexWrap: "wrap", gap: "0 10px" }}>{parts.map((pt, pi) => <span key={pi} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{pi > 0 && <span style={{ color: "#e8a0b4", fontSize: 10 }}>·</span>}{pt}</span>)}</p>;
+                          return <p key={i} style={{ color: "#111111", marginBottom: 4 }}>{trimmed}</p>;
+                        })}
+                      </div>
+                    );
+                  })()}
+                  {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
+                </div>
+              </div>
+
+              {/* ZONE 3 — pinned footer: qty + add to bag */}
+              <div className="modal-footer">
+                <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <button className="qty-ctrl" onClick={() => setQ(Math.max(1, q - 1))} disabled={q <= 1}>-</button>
+                    <span style={{ fontSize: 16, minWidth: 24, textAlign: "center", color: "#111111" }}>{q}</span>
+                    <button className="qty-ctrl" onClick={() => setQ(Math.min(avail, q + 1))} disabled={q >= avail || trulyOos}>+</button>
+                  </div>
+                  {!trulyOos && <span style={{ fontSize: 11, color: lowStock ? "#e8a0b4" : "#666666" }}>{avail} available</span>}
+                </div>
+                <button className="rose-btn" style={{ width: "100%", padding: "18px" }} onClick={() => { addToCart(p, q); onClose(); }} disabled={trulyOos}>
+                  {trulyOos ? "OUT OF STOCK" : "ADD TO BAG"}
+                </button>
+              </div>
+
+            </div>
+            {lightboxOpen && createPortal(
+              <div
+                style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
+                onClick={() => setLightboxOpen(false)}
+                onTouchStart={onLightboxTouchStart}
+                onTouchMove={onLightboxTouchMove}
+                onTouchEnd={onLightboxTouchEnd}
+              >
+                <img
+                  src={displayImg}
+                  alt={p.name}
+                  onClick={e => e.stopPropagation()}
+                  style={{
+                    maxWidth: "94%", maxHeight: "90vh", objectFit: "contain",
+                    transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.9)})`,
+                    transition: dragging ? "none" : "transform .2s ease",
+                    boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
+                  }}
+                />
+                <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13" /><line x1="1" y1="13" x2="13" y2="1" /></svg>
+                </button>
+              </div>,
+              document.body
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProductDetailPage({ p, onBack, addToCart, cart, onAddedToBag }) {
+  const [q, setQ] = useState(1);
+  const [showSecondary, setShowSecondary] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [dragY, setDragY] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const dragStartY = useRef(0);
+  const onLightboxTouchStart = (e) => { dragStartY.current = e.touches[0].clientY; setDragging(true); };
+  const onLightboxTouchMove = (e) => {
+    const delta = e.touches[0].clientY - dragStartY.current;
+    if (delta > 0) setDragY(delta);
+  };
+  const onLightboxTouchEnd = () => {
+    setDragging(false);
+    if (dragY > 110) { setLightboxOpen(false); }
+    setDragY(0);
+  };
+  useEffect(() => {
+    if (lightboxOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [lightboxOpen]);
+  const inCart = cart.find(c => c.id === p.id);
+  const qtyInCart = inCart ? inCart.qty : 0;
+  const avail = p.stock - qtyInCart;
+  const trulyOos = avail <= 0;
+  const lowStock = !trulyOos && avail <= (p.lowStockThreshold || 3);
+  const accent = ACCENT_MAP[p.category] || "#e8a0b4";
+  const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
+  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : p.image;
+  const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
+
+  return (
+    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "24px 16px 80px" }}>
+      <button className="ghost-btn" onClick={onBack} style={{ marginBottom: 24, padding: "8px 16px", minHeight: 0 }}>← BACK</button>
+      <div className="product-page-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 48 }}>
+        <div className="product-modal-image" style={{ background: BG_MAP[p.category], position: "relative", height: "auto" }}>
+          <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in", width: "100%", height: "auto", display: "block", objectFit: "contain" }} alt="" onClick={() => setLightboxOpen(true)} />
           <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
             {trulyOos
               ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>OUT OF STOCK</span>
@@ -2417,85 +2562,70 @@ function ProductModal({ p, onClose, addToCart, cart }) {
             </div>
           )}
         </div>
-        <div className="product-modal-content">
-
-          {/* ZONE 1 — header: brand, name, price */}
-          <div className="modal-header">
-            <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: accent, letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 8 }}>{p.brand}</p>
-            <h2 style={{ fontSize: 28, fontWeight: 300, marginBottom: 14, color: "#111111", lineHeight: 1.2 }}>{p.name}</h2>
-            <div style={{ marginBottom: 0, paddingBottom: 14, borderBottom: "1px solid #f0f0f0" }}>
-              {p.promoActive && <p style={{ fontSize: 13, color: "#888888", textDecoration: "line-through", marginBottom: 2 }}>{GHS(p.originalPrice)}</p>}
-              <p style={{ fontSize: 22, color: "#e8a0b4", margin: 0 }}>{GHS(p.promoActive ? p.promoPrice : p.price)}</p>
-            </div>
+        <div>
+          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: accent, letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 8 }}>{p.brand}</p>
+          <h1 style={{ fontSize: 32, fontWeight: 300, marginBottom: 14, color: "#111111", lineHeight: 1.2 }}>{p.name}</h1>
+          <div style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid #f0f0f0" }}>
+            {p.promoActive && <p style={{ fontSize: 13, color: "#888888", textDecoration: "line-through", marginBottom: 2 }}>{GHS(p.originalPrice)}</p>}
+            <p style={{ fontSize: 24, color: "#e8a0b4", margin: 0 }}>{GHS(p.promoActive ? p.promoPrice : p.price)}</p>
           </div>
-
-          {/* ZONE 2 — scrollable body: description */}
-          <div className="modal-body">
-            <div style={{ paddingTop: 16, fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.9 }}>
-              {p.notes && (() => {
-                const lines = p.notes.split('\n');
-                return (
-                  <div>
-                    {lines.map((line, i) => {
-                      const trimmed = line.trim();
-                      if (!trimmed) return <div key={i} style={{ height: 10 }} />;
-                      const isHeading = trimmed === trimmed.toUpperCase() && trimmed.length < 60 && !/·/.test(trimmed) || trimmed.endsWith(':');
-                      if (isHeading) return <p key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 6, marginTop: i > 0 ? 14 : 0, fontWeight: 600 }}>{trimmed.replace(/:$/, '')}</p>;
-                      const parts = trimmed.split(' · ');
-                      if (parts.length > 1) return <p key={i} style={{ color: "#111111", marginBottom: 4, display: "flex", flexWrap: "wrap", gap: "0 10px" }}>{parts.map((pt, pi) => <span key={pi} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{pi > 0 && <span style={{ color: "#e8a0b4", fontSize: 10 }}>·</span>}{pt}</span>)}</p>;
-                      return <p key={i} style={{ color: "#111111", marginBottom: 4 }}>{trimmed}</p>;
-                    })}
-                  </div>
-                );
-              })()}
-              {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
-            </div>
+          <div style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.9, marginBottom: 28 }}>
+            {p.notes && (() => {
+              const lines = p.notes.split('\n');
+              return (
+                <div>
+                  {lines.map((line, i) => {
+                    const trimmed = line.trim();
+                    if (!trimmed) return <div key={i} style={{ height: 10 }} />;
+                    const isHeading = trimmed === trimmed.toUpperCase() && trimmed.length < 60 && !/·/.test(trimmed) || trimmed.endsWith(':');
+                    if (isHeading) return <p key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 6, marginTop: i > 0 ? 14 : 0, fontWeight: 600 }}>{trimmed.replace(/:$/, '')}</p>;
+                    const parts = trimmed.split(' · ');
+                    if (parts.length > 1) return <p key={i} style={{ color: "#111111", marginBottom: 4, display: "flex", flexWrap: "wrap", gap: "0 10px" }}>{parts.map((pt, pi) => <span key={pi} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>{pi > 0 && <span style={{ color: "#e8a0b4", fontSize: 10 }}>·</span>}{pt}</span>)}</p>;
+                    return <p key={i} style={{ color: "#111111", marginBottom: 4 }}>{trimmed}</p>;
+                  })}
+                </div>
+              );
+            })()}
+            {p.extra && <p style={{ whiteSpace: "pre-wrap", color: "#888888", marginTop: 8 }}>{p.extra}</p>}
           </div>
-
-          {/* ZONE 3 — pinned footer: qty + add to bag */}
-          <div className="modal-footer">
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <button className="qty-ctrl" onClick={() => setQ(Math.max(1, q - 1))} disabled={q <= 1}>-</button>
-                <span style={{ fontSize: 16, minWidth: 24, textAlign: "center", color: "#111111" }}>{q}</span>
-                <button className="qty-ctrl" onClick={() => setQ(Math.min(avail, q + 1))} disabled={q >= avail || trulyOos}>+</button>
-              </div>
-              {!trulyOos && <span style={{ fontSize: 11, color: lowStock ? "#e8a0b4" : "#666666" }}>{avail} available</span>}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button className="qty-ctrl" onClick={() => setQ(Math.max(1, q - 1))} disabled={q <= 1}>-</button>
+              <span style={{ fontSize: 16, minWidth: 24, textAlign: "center", color: "#111111" }}>{q}</span>
+              <button className="qty-ctrl" onClick={() => setQ(Math.min(avail, q + 1))} disabled={q >= avail || trulyOos}>+</button>
             </div>
-            <button className="rose-btn" style={{ width: "100%", padding: "18px" }} onClick={() => { addToCart(p, q); onClose(); }} disabled={trulyOos}>
-              {trulyOos ? "OUT OF STOCK" : "ADD TO BAG"}
-            </button>
+            {!trulyOos && <span style={{ fontSize: 11, color: lowStock ? "#e8a0b4" : "#666666" }}>{avail} available</span>}
           </div>
-
-        </div>
-        {lightboxOpen && createPortal(
-          <div
-            style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
-            onClick={() => setLightboxOpen(false)}
-            onTouchStart={onLightboxTouchStart}
-            onTouchMove={onLightboxTouchMove}
-            onTouchEnd={onLightboxTouchEnd}
-          >
-            <img
-              src={displayImg}
-              alt={p.name}
-              onClick={e => e.stopPropagation()}
-              style={{
-                maxWidth: "94%", maxHeight: "90vh", objectFit: "contain",
-                transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.9)})`,
-                transition: dragging ? "none" : "transform .2s ease",
-                boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
-              }}
-            />
-            <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="1" y1="13" x2="13" y2="1"/></svg>
-            </button>
-          </div>,
-          document.body
-        )}
+          <button className="rose-btn" style={{ width: "100%", padding: "18px" }} onClick={() => { addToCart(p, q); if (onAddedToBag) onAddedToBag(); }} disabled={trulyOos}>
+            {trulyOos ? "OUT OF STOCK" : "ADD TO BAG"}
+          </button>
         </div>
       </div>
-      </div>
+      {lightboxOpen && createPortal(
+        <div
+          style={{ position: "fixed", inset: 0, background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 24, cursor: "zoom-out", overflow: "hidden", touchAction: "none" }}
+          onClick={() => setLightboxOpen(false)}
+          onTouchStart={onLightboxTouchStart}
+          onTouchMove={onLightboxTouchMove}
+          onTouchEnd={onLightboxTouchEnd}
+        >
+          <img
+            src={displayImg}
+            alt={p.name}
+            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: "94%", maxHeight: "90vh", objectFit: "contain",
+              transform: `translateY(${dragY}px) scale(${Math.max(1 - dragY / 800, 0.9)})`,
+              transition: dragging ? "none" : "transform .2s ease",
+              boxShadow: "0 4px 32px rgba(0,0,0,0.10)",
+            }}
+          />
+          <button onClick={() => setLightboxOpen(false)} aria-label="Close image" style={{ position: "absolute", top: 20, right: 20, background: "rgba(255,255,255,.95)", border: "1px solid #e8e8e8", color: "#111111", width: 42, height: 42, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="1" y1="1" x2="13" y2="13" /><line x1="1" y1="13" x2="13" y2="1" /></svg>
+          </button>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
@@ -2521,12 +2651,12 @@ function SocialProof({ products, orders, simulatedEnabled, testimonials }) {
         const item = o.items[Math.floor(Math.random() * o.items.length)];
         const p = allProducts.find(x => x.name === item.name) || { name: item.name, image: item.image || "" };
         const loc = o.customer?.city || o.customer?.address || locations[Math.floor(Math.random() * locations.length)];
-        setActive({ 
-          p, 
-          loc, 
-          time: ago(o.timestamp), 
-          isReal: true, 
-          text: `Someone in ${loc} purchased ${item.name}` 
+        setActive({
+          p,
+          loc,
+          time: ago(o.timestamp),
+          isReal: true,
+          text: `Someone in ${loc} purchased ${item.name}`
         });
       } else if (simulatedEnabled) {
         const hasReviews = testimonials && testimonials.length > 0;
@@ -2569,7 +2699,7 @@ function SocialProof({ products, orders, simulatedEnabled, testimonials }) {
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, color: active.isReal ? "#22c55e" : "#e8a0b4", fontWeight: "bold", letterSpacing: ".12em", textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: 4 }}>
-          <Icon name={active.isReal ? "check" : "sparkle"} size={10} color={active.isReal ? "#22c55e" : "#e8a0b4"} /> 
+          <Icon name={active.isReal ? "check" : "sparkle"} size={10} color={active.isReal ? "#22c55e" : "#e8a0b4"} />
           {active.isReal ? "VERIFIED ORDER" : "RECENT ACTIVITY"}
         </span>
         <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", margin: "4px 0 0", lineHeight: 1.3 }}>
@@ -2660,10 +2790,10 @@ function TestimonialSection({ testimonials }) {
 function OrderStepper({ status }) {
   const fmtTs = (ts) => ts ? new Date(ts).toLocaleString("en-GH", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : null;
   const steps = [
-    { key: "payment",   label: "Payment",          ts: status.paymentAt },
-    { key: "packaged",  label: "Packaging",        ts: status.packagedAt },
-    { key: "dispatched",label: "Out for Delivery", ts: status.dispatchedAt },
-    { key: "delivered", label: "Delivered",        ts: status.deliveredAt },
+    { key: "payment", label: "Payment", ts: status.paymentAt },
+    { key: "packaged", label: "Packaging", ts: status.packagedAt },
+    { key: "dispatched", label: "Out for Delivery", ts: status.dispatchedAt },
+    { key: "delivered", label: "Delivered", ts: status.deliveredAt },
   ];
   const completedCount = steps.filter(s => status[s.key]).length;
   // Progress spans between first and last dot center (33.33% per gap across 3 gaps)
@@ -2766,7 +2896,7 @@ function OrderTracking({ orders, trackOrderId }) {
               <div style={{ marginTop: 16, background: "#ffffff", border: "1px solid #e8e8e8", borderLeft: "3px solid #22c55e", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
                 {activeOrder.estimatedDelivery && (
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
                     <div>
                       <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#888888", letterSpacing: ".12em", textTransform: "uppercase" }}>Estimated Delivery</p>
                       <p style={{ fontSize: 13, color: "#111111", marginTop: 2 }}>{activeOrder.estimatedDelivery}</p>
@@ -2775,7 +2905,7 @@ function OrderTracking({ orders, trackOrderId }) {
                 )}
                 {activeOrder.adminNote && (
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: 2, flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: 2, flexShrink: 0 }}><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                     <div>
                       <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#888888", letterSpacing: ".12em", textTransform: "uppercase" }}>Note from Team</p>
                       <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 12, color: "#555555", lineHeight: 1.6, marginTop: 2 }}>{activeOrder.adminNote}</p>
@@ -2939,10 +3069,10 @@ function SiteFooter({ setPage }) {
         <div>
           <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 24 }}>Support</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <button onClick={() => nav("faq")}     style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>FAQ</button>
-            <button onClick={() => nav("track")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Track Order</button>
+            <button onClick={() => nav("faq")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>FAQ</button>
+            <button onClick={() => nav("track")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Track Order</button>
             <button onClick={() => nav("privacy")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Privacy Policy</button>
-            <button onClick={() => nav("terms")}   style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Terms & Conditions</button>
+            <button onClick={() => nav("terms")} style={{ background: "none", border: "none", color: "#888888", textAlign: "left", cursor: "pointer", fontSize: 13, padding: 0, transition: "color .2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#888888"}>Terms & Conditions</button>
           </div>
         </div>
         <div>
@@ -2954,7 +3084,7 @@ function SiteFooter({ setPage }) {
               <Icon name="whatsapp" size={24} color="currentColor" />
             </a>
             <a href={INSTAGRAM} target="_blank" rel="noreferrer" title="Instagram" style={{ color: "#666666", textDecoration: "none", transition: "color .2s", display: "flex" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#666666"}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
             </a>
             <a href={TIKTOK} target="_blank" rel="noreferrer" title="TikTok" style={{ color: "#666666", textDecoration: "none", transition: "color .2s", display: "flex" }} onMouseEnter={e => e.currentTarget.style.color = "#e8a0b4"} onMouseLeave={e => e.currentTarget.style.color = "#666666"}>
               <Icon name="tiktok" size={24} color="currentColor" />
@@ -3067,10 +3197,10 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
     setAdminCart(prev => { const ex = prev.find(i => i.id === p.id); if (ex) return prev.map(i => i.id === p.id ? { ...i, qty: i.qty + qty } : i); return [...prev, { ...p, qty }]; });
     setShowAdminCart(true);
   }, []);
-  const updateAdminQty   = useCallback((id, qty) => { if (qty < 1) { setAdminCart(p => p.filter(i => i.id !== id)); return; } setAdminCart(p => p.map(i => i.id === id ? { ...i, qty } : i)); }, []);
-  const removeAdminItem  = useCallback((id) => setAdminCart(p => p.filter(i => i.id !== id)), []);
-  const adminCartTotal   = useMemo(() => adminCart.reduce((s, i) => { const p = allFlat.find(x => x.id === i.id); const price = (p?.promoActive && p?.promoPrice) ? p.promoPrice : i.price; return s + price * i.qty; }, 0), [adminCart, allFlat]);
-  const adminCartCount   = useMemo(() => adminCart.reduce((s, i) => s + i.qty, 0), [adminCart]);
+  const updateAdminQty = useCallback((id, qty) => { if (qty < 1) { setAdminCart(p => p.filter(i => i.id !== id)); return; } setAdminCart(p => p.map(i => i.id === id ? { ...i, qty } : i)); }, []);
+  const removeAdminItem = useCallback((id) => setAdminCart(p => p.filter(i => i.id !== id)), []);
+  const adminCartTotal = useMemo(() => adminCart.reduce((s, i) => { const p = allFlat.find(x => x.id === i.id); const price = (p?.promoActive && p?.promoPrice) ? p.promoPrice : i.price; return s + price * i.qty; }, 0), [adminCart, allFlat]);
+  const adminCartCount = useMemo(() => adminCart.reduce((s, i) => s + i.qty, 0), [adminCart]);
   const [selectedAdminProduct, setSelectedAdminProduct] = useState(null);
 
   const login = async () => {
@@ -3085,7 +3215,7 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
       }
     }
     const curHash = btoa(pwdInput);
-    
+
     // First-time offline initialization: if no password hash is stored, set the entered password
     if (!adminPwd && !supa._ready) {
       localStorage.setItem(SK_PWD, JSON.stringify(curHash));
@@ -3122,7 +3252,7 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                 <input type={showLoginPwd ? "text" : "password"} value={pwdInput} onChange={e => { setPwdInput(e.target.value); setLoginErr(""); }} placeholder="Enter password" onKeyDown={e => e.key === "Enter" && login()} style={{ width: "100%", paddingRight: "40px" }} />
                 <button type="button" onClick={() => setShowLoginPwd(!showLoginPwd)} style={{ position: "absolute", right: "12px", background: "none", border: "none", color: "#888888", cursor: "pointer", display: "flex", alignItems: "center", padding: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{showLoginPwd ? <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}</svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{showLoginPwd ? <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>}</svg>
                 </button>
               </div>
               {loginErr && <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", marginTop: 5 }}>{loginErr}</p>}
@@ -3136,9 +3266,9 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
   }
 
   // orders prop is already pre-filtered to active-only from App
-  const activeOrders     = orders;
+  const activeOrders = orders;
   const awaitingDelivery = activeOrders.filter(o => o.status.packaged && o.status.payment).sort((a, b) => a.timestamp - b.timestamp);
-  const TABS = [["orders","Orders"],["log","Log"],["reviews","Reviews"],["products","Products"],["shop","Shop"],["insights","Insights"],["customers","Customers"],["settings","Settings"]];
+  const TABS = [["orders", "Orders"], ["log", "Log"], ["reviews", "Reviews"], ["products", "Products"], ["shop", "Shop"], ["insights", "Insights"], ["customers", "Customers"], ["settings", "Settings"]];
 
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 16px" }}>
@@ -3159,8 +3289,8 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22, position: "relative", zIndex: 40, flexWrap: "wrap", gap: 12 }}>
         {/* Tab Select Dropdown (Shelter) */}
         <div style={{ position: "relative", width: "fit-content" }}>
-          <button 
-            onClick={() => setDropdownOpen(!dropdownOpen)} 
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -3188,18 +3318,18 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
             }}
           >
             <span>{TABS.find(t => t[0] === view)?.[1] || view}</span>
-            <svg 
-              width="12" 
-              height="12" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeLinejoin="round"
-              style={{ 
-                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)", 
-                transition: "transform 0.25s ease" 
+              style={{
+                transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.25s ease"
               }}
             >
               <polyline points="6 9 12 15 18 9"></polyline>
@@ -3208,21 +3338,21 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
 
           {dropdownOpen && (
             <>
-              <div 
-                style={{ position: "fixed", inset: 0, zIndex: 41 }} 
-                onClick={() => setDropdownOpen(false)} 
+              <div
+                style={{ position: "fixed", inset: 0, zIndex: 41 }}
+                onClick={() => setDropdownOpen(false)}
               />
-              <div 
+              <div
                 className="fade-in"
-                style={{ 
-                  position: "absolute", 
-                  top: "100%", 
-                  left: 0, 
-                  marginTop: 4, 
-                  background: "#ffffff", 
-                  border: "1px solid #e8e8e8", 
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)", 
-                  zIndex: 42, 
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  marginTop: 4,
+                  background: "#ffffff",
+                  border: "1px solid #e8e8e8",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                  zIndex: 42,
                   minWidth: 160,
                   display: "flex",
                   flexDirection: "column",
@@ -3276,7 +3406,7 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
           {syncing && <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", animation: "fadeIn 1s infinite alternate" }}>● Syncing…</span>}
           {view === "shop" && (
             <button onClick={() => setShowAdminCart(true)} className="ghost-btn" style={{ gap: 8, padding: "10px 18px" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" /></svg>
               Staff Cart {adminCartCount > 0 && <span style={{ background: "#e8a0b4", color: "#000000", borderRadius: "50%", width: 18, height: 18, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700 }}>{adminCartCount}</span>}
             </button>
           )}
@@ -3288,9 +3418,9 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
         <div className="fade-in">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
             {[
-              ["TOTAL REVENUE",    GHS(stats.confirmedRev), "#e8a0b4"],
-              ["ACTIVE ORDERS",    activeOrders.length,     "#111111"],
-              ["PENDING PAYMENT",  activeOrders.filter(o => !o.status.payment).length, "#e8a0b4"],
+              ["TOTAL REVENUE", GHS(stats.confirmedRev), "#e8a0b4"],
+              ["ACTIVE ORDERS", activeOrders.length, "#111111"],
+              ["PENDING PAYMENT", activeOrders.filter(o => !o.status.payment).length, "#e8a0b4"],
             ].map(([label, val, color]) => (
               <div key={label} style={{ background: "#fafafa", padding: "20px", border: "1px solid #e8e8e8", borderLeft: "4px solid " + color }}>
                 <p style={{ fontSize: 9, color: "#666666", letterSpacing: ".1em", marginBottom: 4, fontFamily: "'Raleway',sans-serif" }}>{label}</p>
@@ -3310,16 +3440,16 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
           <div style={{ marginBottom: 16, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <input value={logSearch} onChange={e => setLogSearch(e.target.value)} placeholder="Search by ID, name, or phone…" style={{ maxWidth: 400, flex: 1 }} />
             <button onClick={exportCSV} className="rose-btn" style={{ height: "42px", padding: "0 20px", display: "inline-flex", alignItems: "center", gap: 8 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
               EXPORT CSV
             </button>
           </div>
           <OrdersList orders={filteredLog} updateOrderStatus={updateOrderStatus} updateOrderFields={updateOrderFields} deleteOrder={handleDeleteRequest} onBulkDelete={triggerBulkDelete} adminPwd={adminPwd} />
         </div>
       )}
-      {view === "reviews"   && <ErrorBoundary><AdminTestimonialsView testimonials={testimonials} setTestimonials={setTestimonials} /></ErrorBoundary>}
-      {view === "products"  && <ErrorBoundary><AdminProductsView products={products} allFlat={allFlat} addProduct={addProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} bulkUpdatePromos={bulkUpdatePromos} orders={orders} /></ErrorBoundary>}
-      {view === "shop"      && (
+      {view === "reviews" && <ErrorBoundary><AdminTestimonialsView testimonials={testimonials} setTestimonials={setTestimonials} /></ErrorBoundary>}
+      {view === "products" && <ErrorBoundary><AdminProductsView products={products} allFlat={allFlat} addProduct={addProduct} updateProduct={updateProduct} deleteProduct={deleteProduct} bulkUpdatePromos={bulkUpdatePromos} orders={orders} /></ErrorBoundary>}
+      {view === "shop" && (
         <div style={{ border: "1px solid #e8a0b488", padding: "32px 0 0", position: "relative", marginTop: 32, borderRadius: 4 }}>
           <div style={{ position: "absolute", top: -14, left: 24, background: "#ffffff", padding: "0 12px" }}>
             <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#e8a0b4", letterSpacing: ".2em", fontWeight: "bold" }}>SHOP PREVIEW</span>
@@ -3332,9 +3462,9 @@ function AdminApp({ products, allFlat, addProduct, updateProduct, deleteProduct,
           {selectedAdminProduct && <ProductModal p={selectedAdminProduct} onClose={() => setSelectedAdminProduct(null)} addToCart={addToAdminCart} cart={adminCart} />}
         </div>
       )}
-      {view === "insights"  && <InsightsView stats={stats} />}
+      {view === "insights" && <InsightsView stats={stats} />}
       {view === "customers" && <AdminCustomers orders={[...orders, ...logOrders]} />}
-      {view === "settings"  && <AdminSettingsView adminPwd={adminPwd} setAdminPwd={setAdminPwd} products={products} addProduct={addProduct} handleLogout={handleLogout} simulatedEnabled={simulatedEnabled} setSimulatedEnabled={setSimulatedEnabled} updateProduct={updateProduct} allFlat={allFlat} />}
+      {view === "settings" && <AdminSettingsView adminPwd={adminPwd} setAdminPwd={setAdminPwd} products={products} addProduct={addProduct} handleLogout={handleLogout} simulatedEnabled={simulatedEnabled} setSimulatedEnabled={setSimulatedEnabled} updateProduct={updateProduct} allFlat={allFlat} />}
 
       {showAdminCart && (
         <>
@@ -3381,12 +3511,12 @@ function AdminOrdersView({ orders, updateOrderStatus, updateOrderFields, deleteO
     orders.forEach(o => { const cats = new Set(o.items.map(i => (i.category || "").toLowerCase())); cats.forEach(cat => { if (cat.includes("skincare")) c.skincare++; else if (cat.includes("wellness")) c.wellness++; else if (cat.includes("bundle")) c.bundles++; }); });
     return c;
   }, [orders]);
-  const orderTabs = [["all","All Orders"],["skincare","Skincare"],["wellness","Wellness"],["bundles","Bundles"]];
+  const orderTabs = [["all", "All Orders"], ["skincare", "Skincare"], ["wellness", "Wellness"], ["bundles", "Bundles"]];
   return (
     <div>
       <div style={{ position: "relative", marginBottom: 16 }}>
         <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search ID, name, phone, or code…" style={{ width: "100%", background: "#fafafa", border: "1px solid #e8e8e8", padding: "12px 16px 12px 42px", color: "#111111", fontFamily: "'Raleway',sans-serif", fontSize: 11 }} />
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666666" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666666" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
         {searchTerm && <button onClick={() => setSearchTerm("")} style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#e8a0b4", cursor: "pointer", fontSize: 14 }}>×</button>}
       </div>
       <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
@@ -3410,7 +3540,7 @@ function AdminOrdersView({ orders, updateOrderStatus, updateOrderFields, deleteO
             <div style={{ borderTop: "1px solid #333333", padding: "12px 18px", display: "flex", flexDirection: "column", gap: 8, background: "#fafafa" }}>
               {awaitingDelivery.map(o => {
                 const days = Math.floor((Date.now() - o.timestamp) / 86400000);
-                const col  = days >= 5 ? "#e8a0b4" : days >= 3 ? "#e8a0b4" : "#888888";
+                const col = days >= 5 ? "#e8a0b4" : days >= 3 ? "#e8a0b4" : "#888888";
                 return (
                   <div key={o.id} style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, padding: "10px 12px", background: "#ffffff", border: "1px solid #e8e8e8", borderLeft: "3px solid " + col }}>
                     <div>
@@ -3536,11 +3666,11 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
   const { payment, packaged, dispatched, delivered } = order.status;
 
   let statusLabel, statusColor, statusBg;
-  if (delivered)           { statusLabel = "Fulfilled";        statusColor = "#ffffff"; statusBg = "#111111"; }
-  else if (dispatched)     { statusLabel = "Out for Delivery"; statusColor = "#ffffff"; statusBg = "#111111"; }
-  else if (packaged)       { statusLabel = "Packed";           statusColor = "#ffffff"; statusBg = "#111111"; }
-  else if (payment)        { statusLabel = "Paid · Packing";   statusColor = "#ffffff"; statusBg = "#111111"; }
-  else                     { statusLabel = "Awaiting Payment"; statusColor = "#000000"; statusBg = "#ffffff"; }
+  if (delivered) { statusLabel = "Fulfilled"; statusColor = "#ffffff"; statusBg = "#111111"; }
+  else if (dispatched) { statusLabel = "Out for Delivery"; statusColor = "#ffffff"; statusBg = "#111111"; }
+  else if (packaged) { statusLabel = "Packed"; statusColor = "#ffffff"; statusBg = "#111111"; }
+  else if (payment) { statusLabel = "Paid · Packing"; statusColor = "#ffffff"; statusBg = "#111111"; }
+  else { statusLabel = "Awaiting Payment"; statusColor = "#000000"; statusBg = "#ffffff"; }
 
   const saveNote = async () => {
     if (updateOrderFields) {
@@ -3569,12 +3699,12 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
           text: { body: `Hello ${order.customer?.name || ""}! 🌸 Your Hajia Slay Empire order *${order.id}* is Out for Delivery! 🚚${estVal ? "\nEstimated: " + estVal : ""}${noteVal ? "\n" + noteVal : ""}\nTrack: https://hajiaslayempire.com 💕` }
         })
       });
-      setWaMsg(res.ok ? "✓ Sent!" : "✗ Failed"); 
+      setWaMsg(res.ok ? "✓ Sent!" : "✗ Failed");
     } catch { setWaMsg("✗ Error"); }
     setWaSending(false); setTimeout(() => setWaMsg(""), 3000);
   };
 
-  const checks = [["payment","Paid","#e8a0b4","#111111"],["packaged","Packed","#ffffff","#111111"],["dispatched","Dispatched","#ffffff","#111111"],["delivered","Delivered","#ffffff","#111111"]];
+  const checks = [["payment", "Paid", "#e8a0b4", "#111111"], ["packaged", "Packed", "#ffffff", "#111111"], ["dispatched", "Dispatched", "#ffffff", "#111111"], ["delivered", "Delivered", "#ffffff", "#111111"]];
 
   return (
     <>
@@ -3597,10 +3727,10 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
             <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#666666", marginTop: 2 }}>{order.customer?.phone} · {dateStr}</p>
           </div>
           <div className="order-status-checks" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {checks.map(([k,l,c,bg]) => (
+            {checks.map(([k, l, c, bg]) => (
               <div key={k} style={{ display: "flex", alignItems: "center", gap: 5, background: order.status[k] ? bg : "#111111", padding: "6px 10px", border: "1px solid " + (order.status[k] ? c : "#222222"), cursor: readOnly ? "default" : "pointer", transition: "all .2s" }}
                 onClick={e => { e.stopPropagation(); if (!readOnly) updateOrderStatus(order.id, k, !order.status[k]); }}>
-                <input type="checkbox" className="check-box" checked={!!order.status[k]} readOnly onChange={() => {}} />
+                <input type="checkbox" className="check-box" checked={!!order.status[k]} readOnly onChange={() => { }} />
                 <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: order.status[k] ? c : "#666666", fontWeight: order.status[k] ? "bold" : "normal" }}>{l}</span>
               </div>
             ))}
@@ -3616,7 +3746,7 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 20 }}>
               {/* Customer Info */}
               <div style={{ position: "relative" }}>
-                <button onClick={e => { e.stopPropagation(); const win = window.open("","_blank"); let h = "<html><head><title>"+STORE_NAME+" Receipt - "+order.id+"</title><style>body{font-family:sans-serif;padding:40px;color:#222;max-width:500px;margin:0 auto}.h{display:flex;justify-content:space-between;border-bottom:2px solid #c06080;padding-bottom:10px;margin-bottom:20px}.t{font-size:22px;font-weight:bold;letter-spacing:2px;color:#c06080}.it{width:100%;border-collapse:collapse;margin:20px 0}.it th{text-align:left;border-bottom:1px solid #ddd;padding:8px}.it td{padding:8px;border-bottom:1px solid #eee}.tot{font-size:18px;font-weight:bold;text-align:right;margin-top:15px;color:#c06080}.f{margin-top:40px;font-size:11px;text-align:center;color:#888}</style></head>"; h+="<body onload='window.print()'><div class='h'><div class='t'>HAJIA SLAY EMPIRE</div><div>"+order.id+"</div></div>"; h+="<p><strong>Customer:</strong> "+(order.customer?.name||"")+"<br><strong>Phone:</strong> "+(order.customer?.phone||"")+"<br><strong>Date:</strong> "+new Date(order.timestamp).toLocaleString()+"</p>"; h+="<table class='it'><thead><tr><th>Product</th><th>Qty</th><th>Subtotal</th></tr></thead><tbody>"; order.items.forEach(i=>{h+="<tr><td>"+i.name+"</td><td>"+i.qty+"</td><td>GH₵ "+(i.price*i.qty)+"</td></tr>";}); h+="</tbody></table><div class='tot'>Total Paid: GH₵ "+order.total+"</div><div class='f'>THANK YOU FOR SHOPPING WITH HAJIA SLAY EMPIRE<br>"+PHONE+"</div></body></html>"; win.document.write(h); win.document.close(); }} style={{ position: "absolute", top: -8, right: 0, background: "#e8a0b4", color: "#000000", border: "none", padding: "4px 8px", fontSize: 9, fontWeight: "bold", cursor: "pointer", zIndex: 10 }}>PRINT</button>
+                <button onClick={e => { e.stopPropagation(); const win = window.open("", "_blank"); let h = "<html><head><title>" + STORE_NAME + " Receipt - " + order.id + "</title><style>body{font-family:sans-serif;padding:40px;color:#222;max-width:500px;margin:0 auto}.h{display:flex;justify-content:space-between;border-bottom:2px solid #c06080;padding-bottom:10px;margin-bottom:20px}.t{font-size:22px;font-weight:bold;letter-spacing:2px;color:#c06080}.it{width:100%;border-collapse:collapse;margin:20px 0}.it th{text-align:left;border-bottom:1px solid #ddd;padding:8px}.it td{padding:8px;border-bottom:1px solid #eee}.tot{font-size:18px;font-weight:bold;text-align:right;margin-top:15px;color:#c06080}.f{margin-top:40px;font-size:11px;text-align:center;color:#888}</style></head>"; h += "<body onload='window.print()'><div class='h'><div class='t'>HAJIA SLAY EMPIRE</div><div>" + order.id + "</div></div>"; h += "<p><strong>Customer:</strong> " + (order.customer?.name || "") + "<br><strong>Phone:</strong> " + (order.customer?.phone || "") + "<br><strong>Date:</strong> " + new Date(order.timestamp).toLocaleString() + "</p>"; h += "<table class='it'><thead><tr><th>Product</th><th>Qty</th><th>Subtotal</th></tr></thead><tbody>"; order.items.forEach(i => { h += "<tr><td>" + i.name + "</td><td>" + i.qty + "</td><td>GH₵ " + (i.price * i.qty) + "</td></tr>"; }); h += "</tbody></table><div class='tot'>Total Paid: GH₵ " + order.total + "</div><div class='f'>THANK YOU FOR SHOPPING WITH HAJIA SLAY EMPIRE<br>" + PHONE + "</div></body></html>"; win.document.write(h); win.document.close(); }} style={{ position: "absolute", top: -8, right: 0, background: "#e8a0b4", color: "#000000", border: "none", padding: "4px 8px", fontSize: 9, fontWeight: "bold", cursor: "pointer", zIndex: 10 }}>PRINT</button>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", letterSpacing: ".2em", marginBottom: 10 }}>CUSTOMER</p>
                 <p style={{ fontSize: 16, marginBottom: 5 }}>{order.customer?.name}</p>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#888888", marginBottom: 3 }}>📞 {order.customer?.phone}</p>
@@ -3646,7 +3776,7 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
             {!readOnly && (
               <div style={{ background: "#ffffff", border: "1px solid #e8e8e8", borderLeft: "3px solid #e8a0b4", padding: "16px" }}>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", letterSpacing: ".18em", marginBottom: 14 }}>ADMIN NOTE & DELIVERY INFO</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                <div className="admin-note-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                   <div>
                     <label>Estimated Delivery</label>
                     <input value={estVal} onChange={e => setEstVal(e.target.value)} placeholder="e.g. Mon 16 Jun · 2–5pm" />
@@ -3666,7 +3796,7 @@ function OrderCard({ order, updateOrderStatus, updateOrderFields, deleteOrder, a
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <button onClick={sendWhatsApp} disabled={!packaged || waSending}
                   style={{ display: "flex", alignItems: "center", gap: 8, background: packaged ? "#25D366" : "#333333", color: "#ffffff", border: "none", padding: "10px 18px", fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".12em", cursor: packaged ? "pointer" : "not-allowed", opacity: packaged ? 1 : 0.5, transition: "all .2s" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.989.574 3.842 1.563 5.408L2 22l4.748-1.543A9.954 9.954 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.72 0-3.322-.498-4.667-1.355l-.334-.2-3.462 1.124 1.152-3.37-.218-.347A7.951 7.951 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-7.001 8z"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.989.574 3.842 1.563 5.408L2 22l4.748-1.543A9.954 9.954 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.72 0-3.322-.498-4.667-1.355l-.334-.2-3.462 1.124 1.152-3.37-.218-.347A7.951 7.951 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-7.001 8z" /></svg>
                   {waSending ? "SENDING…" : waMsg || (packaged ? "SEND DELIVERY NOTIFICATION" : "MARK PACKAGED FIRST")}
                 </button>
                 <button onClick={() => deleteOrder(order.id)}
@@ -3723,11 +3853,11 @@ function AdminTestimonialsView({ testimonials, setTestimonials }) {
         <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".18em", marginBottom: 20 }}>{editingId ? "EDIT TESTIMONIAL" : "ADD TESTIMONIAL"}</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
           <Fld label="Customer Name"><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Abena Osei" /></Fld>
-          <Fld label="Social Handle (@)"><input value={form.handle} onChange={e => setForm({ ...form, handle: e.target.value.replace("@","") })} placeholder="e.g. abena_glows" /></Fld>
+          <Fld label="Social Handle (@)"><input value={form.handle} onChange={e => setForm({ ...form, handle: e.target.value.replace("@", "") })} placeholder="e.g. abena_glows" /></Fld>
         </div>
         <Fld label="Review Text"><textarea value={form.review} onChange={e => setForm({ ...form, review: e.target.value })} placeholder="What did they say about their glow?" style={{ height: 80 }} /></Fld>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Fld label="Rating (1-5)"><select value={form.rating} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>{[5,4,3,2,1].map(n => <option key={n} value={n}>{n} Stars</option>)}</select></Fld>
+          <Fld label="Rating (1-5)"><select value={form.rating} onChange={e => setForm({ ...form, rating: Number(e.target.value) })}>{[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} Stars</option>)}</select></Fld>
           <button className="rose-btn" onClick={submit} disabled={busy}>{busy ? "SAVING…" : (editingId ? "UPDATE" : "ADD REVIEW")}</button>
         </div>
       </div>
@@ -3756,7 +3886,7 @@ function BulkUpdatePanel({ allFlat, updateProduct, applyPromo, bulkUpdatePromos 
   const [bulkCat, setBulkCat] = useState("all");
   const [bulkMsg, setBulkMsg] = useState("");
   const [busy, setBusy] = useState(false);
-  const cats = [["all","All Categories"],["skincare","Skincare"],["wellness","Wellness"],["bundles","Bundles & Sets"]];
+  const cats = [["all", "All Categories"], ["skincare", "Skincare"], ["wellness", "Wellness"], ["bundles", "Bundles & Sets"]];
   const promoCount = allFlat.filter(p => p.promoActive && p.promoPrice).length;
 
   const applyBulk = async () => {
@@ -3792,7 +3922,7 @@ function BulkUpdatePanel({ allFlat, updateProduct, applyPromo, bulkUpdatePromos 
     <div style={{ border: "1px solid #e8e8e8", marginBottom: 0 }}>
       <div style={{ padding: "14px 18px", background: "#fafafa", display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} onClick={() => setOpen(o => !o)}>
         <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".18em", display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
           BULK PRICE / PROMO UPDATE
           {promoCount > 0 && <span style={{ background: "#22c55e", color: "#fff", borderRadius: 10, padding: "1px 7px", fontSize: 9, fontWeight: "bold" }}>{promoCount} ACTIVE</span>}
         </span>
@@ -3846,7 +3976,7 @@ function AdminProductsView({ products, allFlat, addProduct, updateProduct, delet
   const [imgEdit, setImgEdit] = useState({});
   const [search, setSearch] = useState("");
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
-  const topProducts = useMemo(() => { const counts = {}; orders.forEach(o => o.items?.forEach(i => { counts[i.id] = (counts[i.id] || 0) + i.qty; })); return Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5).map(([id,count]) => ({ id, count, p: allFlat.find(x => x.id === id) })); }, [orders, allFlat]);
+  const topProducts = useMemo(() => { const counts = {}; orders.forEach(o => o.items?.forEach(i => { counts[i.id] = (counts[i.id] || 0) + i.qty; })); return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, count]) => ({ id, count, p: allFlat.find(x => x.id === id) })); }, [orders, allFlat]);
   const oos = allFlat.filter(p => p.stock === 0);
   const low = allFlat.filter(p => p.stock > 0 && p.stock <= p.lowStockThreshold);
   const handleEdit = (cat, p) => { setEditingId({ cat, id: p.id }); setForm({ image: p.image || "", secondaryImage: p.secondaryImage || "", name: p.name, brand: p.brand || "", category: cat, subcategory: p.subcategory || "face wash", price: p.price, notes: p.notes || "", extra: p.extra || "", gender: p.gender || "women", stock: p.stock, lowStockThreshold: p.lowStockThreshold || 3, bestseller: !!p.bestseller, isTrending: !!p.isTrending }); window.scrollTo({ top: 0, behavior: "smooth" }); };
@@ -3870,7 +4000,7 @@ function AdminProductsView({ products, allFlat, addProduct, updateProduct, delet
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ display: "flex", gap: 12, alignItems: "center", background: "#fafafa", padding: "16px", border: "1px solid #e8e8e8" }}>
         <div style={{ position: "relative", flex: 1 }}>
-          <div style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#666666", display: "flex", alignItems: "center" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#666666", display: "flex", alignItems: "center" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg></div>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products…" style={{ width: "100%", padding: "12px 16px 12px 42px", background: "#ffffff", border: "1px solid #e8e8e8", color: "#111111", fontFamily: "'Raleway',sans-serif", fontSize: 12 }} />
           {search && <button onClick={() => setSearch("")} style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#e8a0b4", cursor: "pointer" }}>×</button>}
         </div>
@@ -3927,14 +4057,14 @@ function AdminProductsView({ products, allFlat, addProduct, updateProduct, delet
       </div>
       {/* ── BULK UPDATE PANEL ── */}
       <BulkUpdatePanel allFlat={allFlat} updateProduct={updateProduct} applyPromo={applyPromo} bulkUpdatePromos={bulkUpdatePromos} />
-      {["skincare","wellness","bundles"].map(cat => (
+      {["skincare", "wellness", "bundles"].map(cat => (
         <div key={cat} style={{ border: "1px solid #e8e8e8" }}>
           <div style={{ padding: "12px 18px", background: "#fafafa", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".18em" }}>{CAT_LABELS[cat].toUpperCase()}</span>
           </div>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
-              <thead><tr style={{ borderBottom: "1px solid #e8e8e8" }}>{["# Rank","Product","Primary Img","Detail Img","Price","Stock","% Off","Action"].map(h => (<th key={h} style={{ padding: "10px 12px", textAlign: "left", fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", letterSpacing: ".15em" }}>{h}</th>))}</tr></thead>
+              <thead><tr style={{ borderBottom: "1px solid #e8e8e8" }}>{["# Rank", "Product", "Primary Img", "Detail Img", "Price", "Stock", "% Off", "Action"].map(h => (<th key={h} style={{ padding: "10px 12px", textAlign: "left", fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", letterSpacing: ".15em" }}>{h}</th>))}</tr></thead>
               <tbody>
                 {(filteredProducts.filter(p => p.category === cat)).map((p, pIdx) => {
                   const pct = p.promoActive && p.promoPrice ? Math.round((1 - p.promoPrice / (p.originalPrice || p.price)) * 100) : "";
@@ -3942,12 +4072,12 @@ function AdminProductsView({ products, allFlat, addProduct, updateProduct, delet
                     <tr key={p.id} style={{ borderBottom: "1px solid #1a1a1a" }}>
                       <td style={{ padding: "12px", fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", fontWeight: "bold" }}>#{pIdx + 1}</td>
                       <td style={{ padding: "12px" }}><p style={{ fontSize: 14 }}>{p.name} <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4" }}>{p.id}</span></p><p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", marginTop: 2 }}>{p.brand} · {p.subcategory}</p></td>
-                      <td style={{ padding: "12px", width: 70 }}>
+                      <td style={{ padding: "12px", width: 84 }}>
                         <div><p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, color: "#e8a0b4", letterSpacing: ".1em", marginBottom: 4 }}>PRIMARY</p>
                           <ImageInputCompact value={imgEdit[p.id] !== undefined ? imgEdit[p.id] : (p.image || "")} onChange={v => { setImgEdit(prev => ({ ...prev, [p.id]: v })); updateProduct(cat, p.id, { image: v }); }} />
                         </div>
                       </td>
-                      <td style={{ padding: "12px", width: 70 }}>
+                      <td style={{ padding: "12px", width: 84 }}>
                         <div><p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, color: "#e8a0b4", letterSpacing: ".1em", marginBottom: 4 }}>DETAIL</p>
                           <ImageInputCompact value={imgEdit[p.id + "_sec"] !== undefined ? imgEdit[p.id + "_sec"] : (p.secondaryImage || "")} onChange={v => { setImgEdit(prev => ({ ...prev, [p.id + "_sec"]: v })); updateProduct(cat, p.id, { secondaryImage: v }); }} />
                         </div>
@@ -3969,13 +4099,13 @@ function AdminProductsView({ products, allFlat, addProduct, updateProduct, delet
                       <td style={{ padding: "12px" }}>
                         {del[p.id]
                           ? <div style={{ display: "flex", gap: 4 }}>
-                              <button onClick={() => deleteProduct(cat, p.id)} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "#f5f5f5", border: "1px solid #e8a0b4", padding: "6px 12px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }}>CONFIRM</button>
-                              <button onClick={() => setDel(prev => ({ ...prev, [p.id]: false }))} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", background: "none", border: "1px solid #e8e8e8", padding: "6px 10px", cursor: "pointer", borderRadius: 2 }}>CANCEL</button>
-                            </div>
+                            <button onClick={() => deleteProduct(cat, p.id)} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "#f5f5f5", border: "1px solid #e8a0b4", padding: "6px 12px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }}>CONFIRM</button>
+                            <button onClick={() => setDel(prev => ({ ...prev, [p.id]: false }))} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#666666", background: "none", border: "1px solid #e8e8e8", padding: "6px 10px", cursor: "pointer", borderRadius: 2 }}>CANCEL</button>
+                          </div>
                           : <div style={{ display: "flex", gap: 6 }}>
-                              <button onClick={() => handleEdit(cat, p)} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "rgba(232,160,180,0.05)", border: "1px solid #e8a0b488", padding: "6px 14px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }} onMouseEnter={e => { e.currentTarget.style.background = "#e8a0b4"; e.currentTarget.style.color = "#000000"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(232,160,180,0.05)"; e.currentTarget.style.color = "#e8a0b4"; }}>EDIT</button>
-                              <button onClick={() => setDel(prev => ({ ...prev, [p.id]: true }))} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "rgba(232,160,180,0.05)", border: "1px solid #e8a0b488", padding: "6px 14px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }} onMouseEnter={e => { e.currentTarget.style.background = "#e8a0b4"; e.currentTarget.style.color = "#000000"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(232,160,180,0.05)"; e.currentTarget.style.color = "#e8a0b4"; }}>DELETE</button>
-                            </div>
+                            <button onClick={() => handleEdit(cat, p)} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "rgba(232,160,180,0.05)", border: "1px solid #e8a0b488", padding: "6px 14px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }} onMouseEnter={e => { e.currentTarget.style.background = "#e8a0b4"; e.currentTarget.style.color = "#000000"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(232,160,180,0.05)"; e.currentTarget.style.color = "#e8a0b4"; }}>EDIT</button>
+                            <button onClick={() => setDel(prev => ({ ...prev, [p.id]: true }))} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", background: "rgba(232,160,180,0.05)", border: "1px solid #e8a0b488", padding: "6px 14px", cursor: "pointer", borderRadius: 2, fontWeight: "bold" }} onMouseEnter={e => { e.currentTarget.style.background = "#e8a0b4"; e.currentTarget.style.color = "#000000"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(232,160,180,0.05)"; e.currentTarget.style.color = "#e8a0b4"; }}>DELETE</button>
+                          </div>
                         }
                       </td>
                     </tr>
@@ -3995,9 +4125,9 @@ function InsightsView({ stats }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
         {[
-          { title: "REVENUE OVERVIEW",      rows: [{ val: GHS(stats.confirmedRev), label: "CONFIRMED (PAID)",   color: "#111111" }, { val: GHS(stats.pendingRev), label: "PENDING (UNPAID)", color: "#888" }] },
-          { title: "MONTHLY PERFORMANCE",   rows: [{ val: GHS(stats.curMonthRev), label: "THIS MONTH SO FAR",   color: "#111111" }, { val: GHS(stats.lastMonthRev), label: "LAST MONTH TOTAL", color: "#666" }] },
-          { title: "BUSINESS INTELLIGENCE", rows: [{ val: GHS(stats.aov), label: "AVG ORDER VALUE",            color: "#111111" }, { val: stats.lowStockItems + " of " + stats.totalItems, label: "LOW STOCK ALERTS", color: stats.lowStockItems > 0 ? "#e8a0b4" : "#111111" }] },
+          { title: "REVENUE OVERVIEW", rows: [{ val: GHS(stats.confirmedRev), label: "CONFIRMED (PAID)", color: "#111111" }, { val: GHS(stats.pendingRev), label: "PENDING (UNPAID)", color: "#888" }] },
+          { title: "MONTHLY PERFORMANCE", rows: [{ val: GHS(stats.curMonthRev), label: "THIS MONTH SO FAR", color: "#111111" }, { val: GHS(stats.lastMonthRev), label: "LAST MONTH TOTAL", color: "#666" }] },
+          { title: "BUSINESS INTELLIGENCE", rows: [{ val: GHS(stats.aov), label: "AVG ORDER VALUE", color: "#111111" }, { val: stats.lowStockItems + " of " + stats.totalItems, label: "LOW STOCK ALERTS", color: stats.lowStockItems > 0 ? "#e8a0b4" : "#111111" }] },
         ].map(({ title, rows }) => (
           <div key={title} style={{ background: "#fafafa", padding: 22, border: "1px solid #e8e8e8" }}>
             <p style={{ fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", marginBottom: 12, fontFamily: "'Raleway',sans-serif" }}>{title}</p>
@@ -4014,26 +4144,26 @@ function InsightsView({ stats }) {
         <p style={{ fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", marginBottom: 20, fontFamily: "'Raleway',sans-serif" }}>PRODUCT INCOME BREAKDOWN</p>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead><tr style={{ borderBottom: "1px solid #e8e8e8" }}>{["#","PRODUCT","UNITS","REVENUE","% SHARE"].map(h => <th key={h} style={{ textAlign: h === "REVENUE" || h === "% SHARE" ? "right" : h === "UNITS" ? "center" : "left", padding: "10px 12px", fontSize: 9, color: "#666666", letterSpacing: ".15em", fontFamily: "'Raleway',sans-serif" }}>{h}</th>)}</tr></thead>
+            <thead><tr style={{ borderBottom: "1px solid #e8e8e8" }}>{["#", "PRODUCT", "UNITS", "REVENUE", "% SHARE"].map(h => <th key={h} style={{ textAlign: h === "REVENUE" || h === "% SHARE" ? "right" : h === "UNITS" ? "center" : "left", padding: "10px 12px", fontSize: 9, color: "#666666", letterSpacing: ".15em", fontFamily: "'Raleway',sans-serif" }}>{h}</th>)}</tr></thead>
             <tbody>
               {stats.prodRank.length === 0
                 ? <tr><td colSpan={5} style={{ padding: 32, textAlign: "center", fontSize: 12, color: "#222222", fontFamily: "'Raleway',sans-serif", letterSpacing: ".15em" }}>NO SALES DATA YET</td></tr>
                 : stats.prodRank.map(([name, data], i) => {
-                    const pct  = stats.confirmedRev > 0 ? ((data.rev / stats.confirmedRev) * 100).toFixed(1) : "0.0";
-                    const barW = stats.confirmedRev > 0 ? (data.rev / stats.confirmedRev) * 100 : 0;
-                    return (
-                      <tr key={name} style={{ borderBottom: "1px solid #1a1a1a" }}>
-                        <td style={{ padding: "12px", fontSize: 11, color: "#333333", fontFamily: "'Raleway',sans-serif", width: 32 }}>{String(i + 1).padStart(2, "0")}</td>
-                        <td style={{ padding: "12px" }}>
-                          <p style={{ fontSize: 14, margin: "0 0 4px" }}>{name}</p>
-                          <div style={{ height: 2, background: "#f5f5f5", borderRadius: 1, width: "100%", maxWidth: 180 }}><div style={{ height: "100%", width: barW + "%", background: i === 0 ? "#e8a0b4" : "#333333", borderRadius: 1 }} /></div>
-                        </td>
-                        <td style={{ padding: "12px", fontSize: 13, color: "#888888", textAlign: "center" }}>{data.qty}</td>
-                        <td style={{ padding: "12px", fontSize: 15, textAlign: "right", color: i === 0 ? "#e8a0b4" : "#111111", fontWeight: i === 0 ? 500 : 300 }}>{GHS(data.rev)}</td>
-                        <td style={{ padding: "12px", fontSize: 12, textAlign: "right", color: "#666666", fontFamily: "'Raleway',sans-serif" }}>{pct}%</td>
-                      </tr>
-                    );
-                  })
+                  const pct = stats.confirmedRev > 0 ? ((data.rev / stats.confirmedRev) * 100).toFixed(1) : "0.0";
+                  const barW = stats.confirmedRev > 0 ? (data.rev / stats.confirmedRev) * 100 : 0;
+                  return (
+                    <tr key={name} style={{ borderBottom: "1px solid #1a1a1a" }}>
+                      <td style={{ padding: "12px", fontSize: 11, color: "#333333", fontFamily: "'Raleway',sans-serif", width: 32 }}>{String(i + 1).padStart(2, "0")}</td>
+                      <td style={{ padding: "12px" }}>
+                        <p style={{ fontSize: 14, margin: "0 0 4px" }}>{name}</p>
+                        <div style={{ height: 2, background: "#f5f5f5", borderRadius: 1, width: "100%", maxWidth: 180 }}><div style={{ height: "100%", width: barW + "%", background: i === 0 ? "#e8a0b4" : "#333333", borderRadius: 1 }} /></div>
+                      </td>
+                      <td style={{ padding: "12px", fontSize: 13, color: "#888888", textAlign: "center" }}>{data.qty}</td>
+                      <td style={{ padding: "12px", fontSize: 15, textAlign: "right", color: i === 0 ? "#e8a0b4" : "#111111", fontWeight: i === 0 ? 500 : 300 }}>{GHS(data.rev)}</td>
+                      <td style={{ padding: "12px", fontSize: 12, textAlign: "right", color: "#666666", fontFamily: "'Raleway',sans-serif" }}>{pct}%</td>
+                    </tr>
+                  );
+                })
               }
             </tbody>
             {stats.prodRank.length > 0 && <tfoot><tr style={{ borderTop: "2px solid #222222" }}><td colSpan={3} style={{ padding: "12px", fontSize: 10, color: "#666666", fontFamily: "'Raleway',sans-serif", letterSpacing: ".1em" }}>TOTAL CONFIRMED REVENUE</td><td style={{ padding: "12px", fontSize: 16, textAlign: "right", color: "#e8a0b4" }}>{GHS(stats.confirmedRev)}</td><td style={{ padding: "12px", textAlign: "right", fontSize: 11, color: "#666666" }}>100%</td></tr></tfoot>}
@@ -4043,7 +4173,7 @@ function InsightsView({ stats }) {
       <div style={{ background: "#fafafa", padding: 22, border: "1px solid #e8e8e8" }}>
         <p style={{ fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", marginBottom: 20, fontFamily: "'Raleway',sans-serif" }}>PAYMENT & FULFILLMENT STATUS (%)</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
-          {[["Awaiting Payment", stats.sPct.unpaid, "#e8a0b4"],["Paid & Packing", stats.sPct.packing, "#e8a0b4"],["Out for Delivery", stats.sPct.delivering, "#111111"],["Fulfilled", stats.sPct.fulfilled, "#111111"]].map(([l,p,c]) => (
+          {[["Awaiting Payment", stats.sPct.unpaid, "#e8a0b4"], ["Paid & Packing", stats.sPct.packing, "#e8a0b4"], ["Out for Delivery", stats.sPct.delivering, "#111111"], ["Fulfilled", stats.sPct.fulfilled, "#111111"]].map(([l, p, c]) => (
             <div key={l} style={{ background: "#ffffff", padding: 16, borderLeft: "2px solid " + c }}>
               <p style={{ fontSize: 22, color: c, fontWeight: 500 }}>{p}%</p>
               <p style={{ fontSize: 9, color: "#666666", marginTop: 4, letterSpacing: ".1em", fontFamily: "'Raleway',sans-serif" }}>{l.toUpperCase()}</p>
@@ -4064,11 +4194,11 @@ function AdminCustomers({ orders }) {
       if (!m[ph]) m[ph] = { name: o.customer.name, phone: ph, email: o.customer.email, orders: 0, spent: 0, first: o.timestamp, last: o.timestamp };
       m[ph].orders++; m[ph].spent += o.total;
       if (o.timestamp < m[ph].first) m[ph].first = o.timestamp;
-      if (o.timestamp > m[ph].last)  m[ph].last  = o.timestamp;
+      if (o.timestamp > m[ph].last) m[ph].last = o.timestamp;
     });
     return m;
   }, [orders]);
-  const customers = useMemo(() => Object.values(map).sort((a,b) => b.last - a.last).filter(c => !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.phone?.includes(search)), [map, search]);
+  const customers = useMemo(() => Object.values(map).sort((a, b) => b.last - a.last).filter(c => !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.phone?.includes(search)), [map, search]);
   return (
     <div>
       <div style={{ marginBottom: 16 }}><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or phone…" style={{ maxWidth: 340 }} /></div>
@@ -4080,7 +4210,7 @@ function AdminCustomers({ orders }) {
               <div style={{ flex: 1, minWidth: 160 }}>
                 <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", marginBottom: 4 }}>
                   <p style={{ fontSize: 17 }}>{c.name}</p>
-                  {c.orders >= 5  && <span className="tag tag-teal">Gift Eligible</span>}
+                  {c.orders >= 5 && <span className="tag tag-teal">Gift Eligible</span>}
                   {(c.orders >= 3 || c.spent >= 1000) && <span className="tag tag-rose">VIP</span>}
                 </div>
                 <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#666666" }}>{c.phone}{c.email ? " · " + c.email : ""}</p>
@@ -4105,7 +4235,7 @@ function AdminSettingsView({ adminPwd, setAdminPwd, products, addProduct, handle
   const [resetting, setResetting] = useState(null);
   const EyeIcon = ({ show }) => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      {show ? <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}
+      {show ? <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></> : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>}
     </svg>
   );
   const changePwd = async () => {
@@ -4121,15 +4251,15 @@ function AdminSettingsView({ adminPwd, setAdminPwd, products, addProduct, handle
         return setMsg({ type: "err", text: "Failed: " + errMsg });
       }
     }
-    try { localStorage.setItem(SK_PWD, JSON.stringify(btoa(np))); } catch {}
+    try { localStorage.setItem(SK_PWD, JSON.stringify(btoa(np))); } catch { }
     setAdminPwd(btoa(np)); handleLogout(); setCur(""); setNp(""); setCp("");
     setMsg({ type: "ok", text: "Password updated. Please log in again." });
     setTimeout(() => setMsg({ type: "", text: "" }), 5000);
   };
   const [sheetsUrl, setSheetsUrl] = useLocalStorage(SK_SHEETS, "");
-  const [autoSync, setAutoSync]   = useLocalStorage(SK_SYNC, false);
+  const [autoSync, setAutoSync] = useLocalStorage(SK_SYNC, false);
   const [importStatus, setImportStatus] = useState("");
-  const [previewRows, setPreviewRows]   = useState(null);
+  const [previewRows, setPreviewRows] = useState(null);
   const parseCSVLine = (line) => { const result = []; let cur = "", inQ = false; for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') inQ = !inQ; else if (ch === ',' && !inQ) { result.push(cur.trim()); cur = ""; } else cur += ch; } result.push(cur.trim()); return result.map(v => v.replace(/^\"|\"$/g, "")); };
   const parseCSV = (text) => { const rows = text.split("\n").filter(r => r.trim()); if (rows.length < 2) throw new Error("CSV has no data rows"); const headers = parseCSVLine(rows[0]).map(h => h.toLowerCase()); return rows.slice(1).map(row => { const vals = parseCSVLine(row); const obj = {}; headers.forEach((h, i) => { if (h) obj[h] = vals[i] || ""; }); return obj; }); };
   const fetchCSV = async () => { try { setImportStatus("Fetching CSV…"); const res = await fetch(sheetsUrl); if (!res.ok) throw new Error("Network error"); const text = await res.text(); const parsed = parseCSV(text); setPreviewRows(parsed); setImportStatus("Found " + parsed.length + " row(s). Review then confirm."); } catch (e) { setImportStatus("Error: " + e.message); setPreviewRows(null); } };
@@ -4273,7 +4403,7 @@ function AdminSettingsView({ adminPwd, setAdminPwd, products, addProduct, handle
       <div style={{ background: "#fafafa", padding: 22, border: "1px solid #e8e8e8", flex: 1, minWidth: 280 }}>
         <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", marginBottom: 16 }}>GOOGLE SHEETS SYNC</p>
         <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 20 }}>
-          {[["1. PREPARE","Use headers: name, brand, category, subcategory, price, notes, extra, gender, stock, bestseller, image"],["2. PUBLISH","File → Share → Publish to web → Whole Document → CSV"],["3. CONNECT","Paste the link below. Preview first, then Confirm to import."]].map(([t,d]) => (
+          {[["1. PREPARE", "Use headers: name, brand, category, subcategory, price, notes, extra, gender, stock, bestseller, image"], ["2. PUBLISH", "File → Share → Publish to web → Whole Document → CSV"], ["3. CONNECT", "Paste the link below. Preview first, then Confirm to import."]].map(([t, d]) => (
             <div key={t} style={{ borderLeft: "2px solid #e8a0b4", paddingLeft: 12 }}><p style={{ fontSize: 10, color: "#e8a0b4", fontWeight: "bold", marginBottom: 4, fontFamily: "'Raleway',sans-serif" }}>{t}</p><p style={{ fontSize: 11, color: "#666666", lineHeight: 1.5, fontFamily: "'Raleway',sans-serif" }}>{d}</p></div>
           ))}
         </div>
@@ -4288,7 +4418,7 @@ function AdminSettingsView({ adminPwd, setAdminPwd, products, addProduct, handle
             {previewRows && <button className="rose-btn" style={{ padding: "10px 16px" }} onClick={confirmImport}>Confirm Import</button>}
           </div>
           {importStatus && <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: importStatus.startsWith("Error") ? "#e8a0b4" : "#e8a0b4" }}>{importStatus}</p>}
-          {previewRows && <div style={{ borderTop: "1px solid #e8e8e8", paddingTop: 14, maxHeight: 160, overflowY: "auto" }}>{previewRows.map((r,i) => <div key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#888888", borderBottom: "1px solid #e8e8e8", padding: "4px 0" }}>{r.name} · {r.category} · GH₵{r.price}</div>)}</div>}
+          {previewRows && <div style={{ borderTop: "1px solid #e8e8e8", paddingTop: 14, maxHeight: 160, overflowY: "auto" }}>{previewRows.map((r, i) => <div key={i} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#888888", borderBottom: "1px solid #e8e8e8", padding: "4px 0" }}>{r.name} · {r.category} · GH₵{r.price}</div>)}</div>}
         </div>
         <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid #e8e8e8" }}>
           <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, color: "#e8a0b4", letterSpacing: ".2em", marginBottom: 20 }}>SOCIAL PROOF CONTROL</p>
