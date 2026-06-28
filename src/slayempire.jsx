@@ -20,7 +20,7 @@ const LOCATION = "Lapaz, Accra";
 const MAPS_URL = "https://maps.app.goo.gl/H5dvywtX3wZ17Key8";
 
 const STORE_NAME = "Hajia Slay Empire";
-const HERO_BG = "https://res.cloudinary.com/dccf0ffxr/image/upload/v1782445718/hero/hero_bg.jpg";
+const HERO_BG = "/hero_new.jpg";
 
 const STORE_ABOUT = "Hajia Slay Empire is a trusted cosmetics and beauty essentials shop in Accra, Ghana, offering skincare, body wash, glow products, makeup and premium beauty items with secure online checkout.";
 
@@ -1724,7 +1724,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   return (
     <div>
       <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "cover", backgroundPosition: "center 20%", backgroundAttachment: "scroll", borderBottom: "1px solid #e8e8e8" }}>
-        <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" />
+        <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" fetchpriority="high" />
         <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
 
           <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
@@ -1855,7 +1855,7 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
           {[
             { key: "skincare", label: "Skincare", desc: "Cleansers · Serums · Moisturisers · Sunscreen", image: "https://images.unsplash.com/photo-1747303969063-3b90bcb3942e?w=900&h=1100&q=80&auto=format&fit=crop" },
-            { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
+            { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", image: "/wellness_new.jpg" },
             { key: "bundles", label: "Bundles & Sets", desc: "Starter Kits · Glow Kits · Gift Sets", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
           ].map(c => (
             <div key={c.key} onClick={() => { setActiveCat(c.key); setPage("shop"); }}
