@@ -13,6 +13,7 @@ const SK_TESTIMONIALS = "slay_testimonials";
 const SK_SESSION_AT = "slay_session_at";
 
 const PHONE = "053 795 9673";
+const MOMO_NUMBER = "024 751 3470";
 const WA = "https://wa.me/233537959673";
 const TIKTOK = "https://www.tiktok.com/discover/hajia-slay-empire";
 const INSTAGRAM = "https://www.instagram.com/hajia_slay_empire_?igsh=czczOXRhc2ZoNjVp";
@@ -2257,7 +2258,7 @@ function CartDrawer({ cart, updateCartQty, removeFromCart, cartTotal, onClose, a
                 <div style={{ borderLeft: "2px solid #e8a0b4", paddingLeft: 14 }}>
                   <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 12, color: "#888888", lineHeight: 2.1 }}>
                     Network: <strong style={{ color: "#111111" }}>MTN / Telecel / AT Money</strong><br />
-                    Number: <strong style={{ color: "#111111" }}>{PHONE}</strong><br />
+                    Number: <strong style={{ color: "#111111" }}>{MOMO_NUMBER}</strong><br />
                     Name: <strong style={{ color: "#111111" }}>{STORE_NAME}</strong><br />
                     Amount: <strong style={{ color: "#e8a0b4" }}>{GHS(cartTotal)}</strong>
                   </p>
