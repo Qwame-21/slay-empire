@@ -319,6 +319,11 @@ function useScrollReveal() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      setVisible(true);
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(([entry]) => {
@@ -329,6 +334,43 @@ function useScrollReveal() {
   }, []);
   return [ref, visible];
 }
+
+function ScrollFadeIn({ children, delay = 0 }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      setVisible(true);
+      return;
+    }
+
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        obs.disconnect();
+      }
+    }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const style = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(16px)",
+    transition: `opacity 350ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 350ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
+  };
+
+  return (
+    <div ref={ref} style={style}>
+      {children}
+    </div>
+  );
+}
+
 
 function findCoverImage(products, cat, filterKey) {
   const list = products[cat] || [];
@@ -1724,40 +1766,42 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
   return (
     <div>
       <section className="section-pad hero-section" style={{ paddingTop: 160, paddingBottom: 180, maxWidth: "none", width: "auto", boxSizing: "border-box", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", backgroundImage: `url('${HERO_BG}')`, backgroundSize: "auto 100%", backgroundPosition: "right center", backgroundRepeat: "no-repeat", backgroundAttachment: "scroll", backgroundColor: "#fce9ed", borderBottom: "1px solid #e8e8e8" }}>
-        <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" fetchpriority="high" />
-        <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
+        <ScrollFadeIn>
+          <img src={HERO_BG} alt="Hajia Slay Empire" className="hero-mobile-img" fetchpriority="high" />
+          <div className="hero-section-content" style={{ maxWidth: 640, margin: "0 auto 0 max(40px, 7%)", padding: "0 24px" }}>
 
-          <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
-          {heroPromo ? (
-            <>
-              <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
-                Enjoy up to {heroPromo.pct}% off<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>our beauty range</em>
-              </h1>
-              <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
-                Grab special discounts of up to {heroPromo.pct}% off on selected items: {heroPromo.names}. Premium cosmetics, skincare, body wash and beauty essentials in Accra.
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
-                Your Ultimate<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>beauty destination</em>
-              </h1>
-              <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
-                Discover authentic premium cosmetics, skincare, body wash and beauty essentials in Accra. Handpicked products for the ultimate self-care routine.
-              </p>
-            </>
-          )}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-            <button className="rose-btn" onClick={() => setPage("shop")}>Shop Now</button>
-            <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 21s7-7.58 7-12a7 7 0 10-14 0c0 4.42 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-                <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
-              </svg>
-              Get Directions ({LOCATION})
-            </a>
+            <p className="section-label">Best Cosmetics & Beauty Shop · {LOCATION}</p>
+            {heroPromo ? (
+              <>
+                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
+                  Enjoy up to {heroPromo.pct}% off<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>our beauty range</em>
+                </h1>
+                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
+                  Grab special discounts of up to {heroPromo.pct}% off on selected items: {heroPromo.names}. Premium cosmetics, skincare, body wash and beauty essentials in Accra.
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 style={{ fontWeight: 300, lineHeight: 1.05, letterSpacing: "-.02em", marginBottom: 24, fontSize: "clamp(40px,7vw,72px)", textShadow: "0 2px 16px rgba(255,255,255,0.9), 0 1px 4px rgba(255,255,255,0.9)" }}>
+                  Your Ultimate<br /><em style={{ fontStyle: "italic", color: "#e8a0b4" }}>beauty destination</em>
+                </h1>
+                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 14, color: "#333333", lineHeight: 1.9, marginBottom: 32, maxWidth: 520, textShadow: "0 1px 12px rgba(255,255,255,0.85)" }}>
+                  Discover authentic premium cosmetics, skincare, body wash and beauty essentials in Accra. Handpicked products for the ultimate self-care routine.
+                </p>
+              </>
+            )}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <button className="rose-btn" onClick={() => setPage("shop")}>Shop Now</button>
+              <a href={MAPS_URL} target="_blank" rel="noreferrer" className="ghost-btn" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 21s7-7.58 7-12a7 7 0 10-14 0c0 4.42 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+                </svg>
+                Get Directions ({LOCATION})
+              </a>
+            </div>
           </div>
-        </div>
+        </ScrollFadeIn>
       </section>
 
       <div ref={trustRef} className="trust-strip">
@@ -1812,87 +1856,99 @@ function HomePage({ setPage, setActiveCat, setInitialFilter, products, addToCart
       </section>
 
       <section className="section-pad" style={{ background: "#fafafa", maxWidth: "none", borderTop: "1px solid #e8e8e8", borderBottom: "1px solid #e8e8e8" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p className="section-label">Why choose us</p>
-          <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 40 }}>Trusted products, real results</h2>
-          <div className="feature-grid">
-            {WHY_CHOOSE_US.map(f => (
-              <div key={f.title} style={{ background: "#ffffff", border: "1px solid #e8e8e8", padding: "32px 28px", borderTop: "3px solid #e8a0b4" }}>
-                <h3 style={{ fontSize: 20, fontWeight: 400, marginBottom: 12 }}>{f.title}</h3>
-                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 12, color: "#666666", lineHeight: 1.8 }}>{f.desc}</p>
-              </div>
-            ))}
+        <ScrollFadeIn>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <p className="section-label">Why choose us</p>
+            <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 40 }}>Trusted products, real results</h2>
+            <div className="feature-grid">
+              {WHY_CHOOSE_US.map(f => (
+                <div key={f.title} style={{ background: "#ffffff", border: "1px solid #e8e8e8", padding: "32px 28px", borderTop: "3px solid #e8a0b4" }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 400, marginBottom: 12 }}>{f.title}</h3>
+                  <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 12, color: "#666666", lineHeight: 1.8 }}>{f.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollFadeIn>
       </section>
 
       {trending.length > 0 && (
         <section className="section-pad">
-          <p className="section-label">In the spotlight</p>
-          <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 40 }}>Trending now</h2>
-          <div className="grid-products-compact">
-            {trending.map((p, i) => <ProductCard key={p.id} p={p} index={i} activeCat={p.category} addToCart={addToCart} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />)}
-          </div>
+          <ScrollFadeIn>
+            <p className="section-label">In the spotlight</p>
+            <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 40 }}>Trending now</h2>
+            <div className="grid-products-compact">
+              {trending.map((p, i) => <ProductCard key={p.id} p={p} index={i} activeCat={p.category} addToCart={addToCart} cart={cart} qty={qty} setQty={setQty} onClick={() => onSelectProduct(p)} />)}
+            </div>
+          </ScrollFadeIn>
         </section>
       )}
 
-      <TestimonialSection testimonials={reviewList} />
+      <ScrollFadeIn>
+        <TestimonialSection testimonials={reviewList} />
+      </ScrollFadeIn>
 
       <section className="section-pad" style={{ background: "#fafafa", maxWidth: "none", borderTop: "1px solid #e8e8e8", borderBottom: "1px solid #e8e8e8" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
-          <p className="section-label">Community</p>
-          <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 300, marginBottom: 12 }}>Follow our beauty looks on TikTok</h2>
-          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.8, marginBottom: 28 }}>
-            See product demos, customer transformations, and new arrivals.
-          </p>
-          <a href={TIKTOK} target="_blank" rel="noreferrer" className="rose-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><Icon name="tiktok" size={16} color="#000000" /> Visit TikTok</a>
-        </div>
+        <ScrollFadeIn>
+          <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+            <p className="section-label">Community</p>
+            <h2 style={{ fontSize: "clamp(24px,4vw,36px)", fontWeight: 300, marginBottom: 12 }}>Follow our beauty looks on TikTok</h2>
+            <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "#666666", lineHeight: 1.8, marginBottom: 28 }}>
+              See product demos, customer transformations, and new arrivals.
+            </p>
+            <a href={TIKTOK} target="_blank" rel="noreferrer" className="rose-btn" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><Icon name="tiktok" size={16} color="#000000" /> Visit TikTok</a>
+          </div>
+        </ScrollFadeIn>
       </section>
 
       <section className="section-pad">
-        <p className="section-label">Shop by category</p>
-        <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 32 }}>Find your routine</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
-          {[
-            { key: "skincare", label: "Skincare", desc: "Cleansers · Serums · Moisturisers · Sunscreen", image: "https://images.unsplash.com/photo-1747303969063-3b90bcb3942e?w=900&h=1100&q=80&auto=format&fit=crop" },
-            { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", image: "/wellness_new.jpg" },
-            { key: "bundles", label: "Bundles & Sets", desc: "Starter Kits · Glow Kits · Gift Sets", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
-          ].map(c => (
-            <div key={c.key} onClick={() => { setActiveCat(c.key); setPage("shop"); }}
-              style={{ position: "relative", height: 380, overflow: "hidden", cursor: "pointer", border: "1px solid #e8e8e8" }}
-              onMouseEnter={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1.06)"; }}
-              onMouseLeave={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1)"; }}>
-              <img src={c.image} alt={c.label} loading="lazy"
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transition: "transform .5s ease" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,.68) 100%)" }} />
-              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "24px 26px" }}>
-                <h3 style={{ fontSize: 26, fontWeight: 300, color: "#ffffff", marginBottom: 6 }}>{c.label}</h3>
-                <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "rgba(255,255,255,.85)", letterSpacing: ".06em", lineHeight: 1.6, marginBottom: 12 }}>{c.desc}</p>
-                <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".15em", textTransform: "uppercase", color: "#e8a0b4", fontWeight: 600 }}>Shop {c.label} →</span>
+        <ScrollFadeIn>
+          <p className="section-label">Shop by category</p>
+          <h2 style={{ fontSize: "clamp(28px,5vw,48px)", fontWeight: 300, marginBottom: 32 }}>Find your routine</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+            {[
+              { key: "skincare", label: "Skincare", desc: "Cleansers · Serums · Moisturisers · Sunscreen", image: "https://images.unsplash.com/photo-1747303969063-3b90bcb3942e?w=900&h=1100&q=80&auto=format&fit=crop" },
+              { key: "wellness", label: "Wellness", desc: "Supplements · Intimate Care · Period Support", image: "/wellness_new.jpg" },
+              { key: "bundles", label: "Bundles & Sets", desc: "Starter Kits · Glow Kits · Gift Sets", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=900&h=1100&q=80&auto=format&fit=crop&crop=center" },
+            ].map(c => (
+              <div key={c.key} onClick={() => { setActiveCat(c.key); setPage("shop"); }}
+                style={{ position: "relative", height: 380, overflow: "hidden", cursor: "pointer", border: "1px solid #e8e8e8" }}
+                onMouseEnter={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1.06)"; }}
+                onMouseLeave={e => { const img = e.currentTarget.querySelector("img"); if (img) img.style.transform = "scale(1)"; }}>
+                <img src={c.image} alt={c.label} loading="lazy"
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transition: "transform .5s ease" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,.68) 100%)" }} />
+                <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, padding: "24px 26px" }}>
+                  <h3 style={{ fontSize: 26, fontWeight: 300, color: "#ffffff", marginBottom: 6 }}>{c.label}</h3>
+                  <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "rgba(255,255,255,.85)", letterSpacing: ".06em", lineHeight: 1.6, marginBottom: 12 }}>{c.desc}</p>
+                  <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".15em", textTransform: "uppercase", color: "#e8a0b4", fontWeight: 600 }}>Shop {c.label} →</span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="subcat-row" style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16, paddingTop: 10 }}>
-          {[
-            { cat: "wellness", filter: "intimate", label: "Intimate Care", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=120&h=120&q=80&auto=format&fit=crop" },
-            { cat: "wellness", filter: "hormonal", label: "Period Support", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=120&h=120&q=80&auto=format&fit=crop" },
-            { cat: "bundles", filter: "skincare", label: "Skincare Kits", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=120&h=120&q=80&auto=format&fit=crop" },
-            { cat: "bundles", filter: "wellness", label: "Wellness Kits", image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=120&h=120&q=80&auto=format&fit=crop" },
-          ].map((s, i) => (
-            <button key={s.label} className="wobble-pill subcat-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
-              style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 18px 8px 8px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600, display: "flex", alignItems: "center", gap: 10, animationDelay: `${i * 180}ms` }}>
-              <img src={s.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} className="subcat-pill-img" />
-              {s.label}
-            </button>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="subcat-row" style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 16, paddingTop: 10 }}>
+            {[
+              { cat: "wellness", filter: "intimate", label: "Intimate Care", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=120&h=120&q=80&auto=format&fit=crop" },
+              { cat: "wellness", filter: "hormonal", label: "Period Support", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=120&h=120&q=80&auto=format&fit=crop" },
+              { cat: "bundles", filter: "skincare", label: "Skincare Kits", image: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=120&h=120&q=80&auto=format&fit=crop" },
+              { cat: "bundles", filter: "wellness", label: "Wellness Kits", image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=120&h=120&q=80&auto=format&fit=crop" },
+            ].map((s, i) => (
+              <button key={s.label} className="wobble-pill subcat-pill" onClick={() => { setActiveCat(s.cat); setInitialFilter(s.filter); setPage("shop"); }}
+                style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 18px 8px 8px", border: "1px solid #e8a0b4", background: "#ffffff", color: "#111111", cursor: "pointer", fontWeight: 600, display: "flex", alignItems: "center", gap: 10, animationDelay: `${i * 180}ms` }}>
+                <img src={s.image} alt="" style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} className="subcat-pill-img" />
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </ScrollFadeIn>
       </section>
 
       <section style={{ background: "#e8a0b4", padding: "56px 24px", textAlign: "center" }}>
-        <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 300, color: "#000000", marginBottom: 16 }}>Ready to upgrade your beauty routine?</h2>
-        <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "rgba(0,0,0,.7)", marginBottom: 28 }}>Shop online now and enjoy 50% off every product.</p>
-        <button className="rose-btn" style={{ background: "#000000", color: "#ffffff", borderColor: "#000000" }} onClick={() => setPage("shop")}>Shop Products</button>
+        <ScrollFadeIn>
+          <h2 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 300, color: "#000000", marginBottom: 16 }}>Ready to upgrade your beauty routine?</h2>
+          <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 13, color: "rgba(0,0,0,.7)", marginBottom: 28 }}>Shop online now and enjoy 50% off every product.</p>
+          <button className="rose-btn" style={{ background: "#000000", color: "#ffffff", borderColor: "#000000" }} onClick={() => setPage("shop")}>Shop Products</button>
+        </ScrollFadeIn>
       </section>
     </div>
   );
