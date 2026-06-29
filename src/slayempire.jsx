@@ -2016,7 +2016,7 @@ function ShopPage({ products, activeCat, setActiveCat, initialFilter, setInitial
       )}
       <div style={{ marginTop: 32, padding: "14px 18px", background: "#fce8ee", border: "1px solid #e8a0b444", display: "flex", gap: 10, alignItems: "center" }}>
         <Icon name="sparkle" size={14} color="#e8a0b4" />
-        <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#666666", letterSpacing: ".08em" }}>{DELIVERY_NOTE} · {PHONE}</p>
+        <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 11, color: "#666666", letterSpacing: ".08em" }}>{DELIVERY_NOTE}</p>
       </div>
     </div>
   );
