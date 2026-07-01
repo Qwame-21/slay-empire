@@ -146,8 +146,8 @@ function syncDefaultProductImages(products) {
       if (!ref) return p;
       return {
         ...p,
-        image: p.image || ref.image,
-        secondaryImage: p.secondaryImage || ref.secondaryImage,
+        image: (p.image === undefined || p.image === null) ? ref.image : p.image,
+        secondaryImage: (p.secondaryImage === undefined || p.secondaryImage === null) ? ref.secondaryImage : p.secondaryImage,
       };
     });
   }
@@ -2034,13 +2034,19 @@ function ProductCard({ p, index, activeCat, addToCart, cart, qty, setQty, onClic
   const qtyInCart = inCart ? inCart.qty : 0;
   const trulyOos = p.stock - qtyInCart <= 0;
   const accent = ACCENT_MAP[activeCat] || "#e8a0b4";
-  const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
+  const primaryImg = p.image || p.secondaryImage || "";
+  const hasSecondary = !!(p.image && p.secondaryImage && p.secondaryImage !== p.image);
   return (
     <div className={"product-card fade-in" + (oos ? " oos" : "") + (hasSecondary ? " has-secondary" : "")} style={{ animationDelay: (index * 0.06) + "s" }} onClick={onClick}>
       <div className="card-img-container" style={{ background: BG_MAP[activeCat] }}>
-        {p.image && <img className="card-img primary" src={p.image} alt={p.name} />}
-        {hasSecondary && <img className="card-img secondary" src={p.secondaryImage} alt={p.name + " detail"} />}
-        {!p.image && <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><CatIcon category={activeCat} size={64} color={accent} opacity={0.14} /></div>}
+        {primaryImg ? (
+          <>
+            <img className="card-img primary" src={primaryImg} alt={p.name} />
+            {hasSecondary && <img className="card-img secondary" src={p.secondaryImage} alt={p.name + " detail"} />}
+          </>
+        ) : (
+          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><CatIcon category={activeCat} size={64} color={accent} opacity={0.14} /></div>
+        )}
       </div>
       <div className="card-hover-overlay" />
       <div style={{ position: "absolute", top: 12, left: 12, zIndex: 3 }}>
@@ -2200,7 +2206,7 @@ function CartDrawer({ cart, updateCartQty, removeFromCart, cartTotal, onClose, a
                 return (
                   <div key={item.id} style={{ display: "flex", gap: 12, padding: "14px 0", borderBottom: "1px solid #e8e8e8" }}>
                     <div style={{ width: 54, height: 54, flexShrink: 0, background: BG_MAP[item.category] || "#111111", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                      {item.image ? <img src={item.image} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <CatIcon category={item.category} size={20} />}
+                      {(item.image || item.secondaryImage) ? <img src={item.image || item.secondaryImage} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <CatIcon category={item.category} size={20} />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontFamily: "'Raleway',sans-serif", fontSize: 9, color: "#e8a0b4", letterSpacing: ".18em", marginBottom: 3 }}>{item.id}</p>
@@ -2345,7 +2351,7 @@ function SearchOverlay({ products, onClose, onSelect }) {
             {results.map(p => (
               <div key={p.id} onClick={() => onSelect(p, true)} className="search-result-row">
                 <div style={{ width: 60, height: 74, flexShrink: 0, background: BG_MAP[p.category] || "#fafafa", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", border: "1px solid #e8e8e8" }}>
-                  {p.image ? <img src={p.image} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" /> : <CatIcon category={p.category} size={24} />}
+                  {(p.image || p.secondaryImage) ? <img src={p.image || p.secondaryImage} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" /> : <CatIcon category={p.category} size={24} />}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: "clamp(16px,4vw,18px)", color: "#111111", margin: "0 0 4px", fontWeight: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</p>
@@ -2415,8 +2421,9 @@ function ProductModal({ p, onClose, addToCart, cart }) {
   const trulyOos = avail <= 0;
   const lowStock = !trulyOos && avail <= (p.lowStockThreshold || 3);
   const accent = ACCENT_MAP[p.category] || "#e8a0b4";
-  const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
-  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : p.image;
+  const primaryImg = p.image || p.secondaryImage || "";
+  const hasSecondary = !!(p.image && p.secondaryImage && p.secondaryImage !== p.image);
+  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : primaryImg;
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
   return (
     <div className="modal-overlay-fixed" style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
@@ -2465,7 +2472,11 @@ function ProductModal({ p, onClose, addToCart, cart }) {
           <div className="product-modal" style={{ width: "100%" }}>
 
             <div className="product-modal-image" style={{ background: BG_MAP[p.category] }}>
-              <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => setLightboxOpen(true)} />
+              {displayImg ? (
+                <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in" }} alt="" onClick={() => displayImg && setLightboxOpen(true)} />
+              ) : (
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}><CatIcon category={p.category} size={96} color={accent} opacity={0.14} /></div>
+              )}
               <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
                 {trulyOos
                   ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>OUT OF STOCK</span>
@@ -2594,8 +2605,9 @@ function ProductDetailPage({ p, onBack, addToCart, cart, onAddedToBag }) {
   const trulyOos = avail <= 0;
   const lowStock = !trulyOos && avail <= (p.lowStockThreshold || 3);
   const accent = ACCENT_MAP[p.category] || "#e8a0b4";
-  const hasSecondary = !!(p.secondaryImage && p.secondaryImage !== p.image);
-  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : p.image;
+  const primaryImg = p.image || p.secondaryImage || "";
+  const hasSecondary = !!(p.image && p.secondaryImage && p.secondaryImage !== p.image);
+  const displayImg = showSecondary && hasSecondary ? p.secondaryImage : primaryImg;
   const stockBadgeStyle = { fontFamily: "'Raleway',sans-serif", fontSize: 9, letterSpacing: ".18em", padding: "5px 10px", fontWeight: 600 };
 
   return (
@@ -2603,7 +2615,11 @@ function ProductDetailPage({ p, onBack, addToCart, cart, onAddedToBag }) {
       <button className="ghost-btn" onClick={onBack} style={{ marginBottom: 24, padding: "8px 16px", minHeight: 0 }}>← BACK</button>
       <div className="product-page-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 48 }}>
         <div className="product-modal-image" style={{ background: BG_MAP[p.category], position: "relative", height: "auto" }}>
-          <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in", width: "100%", height: "auto", display: "block", objectFit: "contain" }} alt="" onClick={() => setLightboxOpen(true)} />
+          {displayImg ? (
+            <img src={displayImg} style={{ transition: "opacity .3s", cursor: "zoom-in", width: "100%", height: "auto", display: "block", objectFit: "contain" }} alt="" onClick={() => displayImg && setLightboxOpen(true)} />
+          ) : (
+            <div style={{ width: "100%", minHeight: 300, display: "flex", alignItems: "center", justifyContent: "center", background: "#fafafa" }}><CatIcon category={p.category} size={96} color={accent} opacity={0.14} /></div>
+          )}
           <div style={{ position: "absolute", top: 14, left: 14, zIndex: 2 }}>
             {trulyOos
               ? <span style={{ ...stockBadgeStyle, background: "#fafafa", border: "1px solid #e8a0b4", color: "#e8a0b4" }}>OUT OF STOCK</span>
@@ -2752,7 +2768,7 @@ function SocialProof({ products, orders, simulatedEnabled, testimonials }) {
   return (
     <div style={{ position: "fixed", bottom: 20, right: 16, zIndex: 300, background: "rgba(255,255,255,.97)", backdropFilter: "blur(12px)", border: "1px solid #e8e8e8", borderRight: "3px solid " + (active.isReal ? "#22c55e" : "#e8a0b4"), padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, maxWidth: 310, boxShadow: "0 12px 40px rgba(0,0,0,.1)", animation: "slideUp 0.6s cubic-bezier(0.16,1,0.3,1)" }}>
       <div style={{ width: 46, height: 46, flexShrink: 0, overflow: "hidden", background: "#fafafa", border: "1px solid #e8e8e8" }}>
-        {active.p.image ? <img src={active.p.image} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="sparkle" size={20} color={active.isReal ? "#22c55e" : "#e8a0b4"} /></div>}
+        {(active.p.image || active.p.secondaryImage) ? <img src={active.p.image || active.p.secondaryImage} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="sparkle" size={20} color={active.isReal ? "#22c55e" : "#e8a0b4"} /></div>}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <span style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, color: active.isReal ? "#22c55e" : "#e8a0b4", fontWeight: "bold", letterSpacing: ".12em", textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: 4 }}>
