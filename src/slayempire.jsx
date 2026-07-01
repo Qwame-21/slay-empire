@@ -749,15 +749,13 @@ function useProducts() {
     }
   }, [products, setProducts]);
 
-  const deleteProduct = useCallback(async (cat, id) => {
-    if (!verifyAdminPassword("delete this product")) return;
-    if (!confirm("Delete this product permanently?")) return;
+  const deleteProductDirect = useCallback(async (cat, id) => {
     mutatingRef.current = true;
     clearTimeout(mutatingTimer.current);
     mutatingTimer.current = setTimeout(() => { mutatingRef.current = false; }, 8000);
 
     const productToDelete = products[cat]?.find(p => p.id === id);
-    setProducts(prev => ({ ...prev, [cat]: prev[cat].filter(p => p.id !== id) }));
+    setProducts(prev => ({ ...prev, [cat]: (prev[cat] || []).filter(p => p.id !== id) }));
     if (supa._ready) {
       try {
         await supa.deleteProduct(id);
@@ -770,6 +768,80 @@ function useProducts() {
       }
     }
   }, [products, setProducts]);
+
+  const deleteProduct = useCallback(async (cat, id) => {
+    if (!verifyAdminPassword("delete this product")) return;
+    if (!confirm("Delete this product permanently?")) return;
+    await deleteProductDirect(cat, id);
+  }, [deleteProductDirect]);
+
+  const [imagelessRegistry, setImagelessRegistry] = useLocalStorage("slay_imageless_registry", {});
+
+  useEffect(() => {
+    let changed = false;
+    const nextRegistry = { ...imagelessRegistry };
+    const allFlat = Object.values(products).flat();
+    const activeIds = new Set(allFlat.map(p => p.id));
+    
+    for (const id in nextRegistry) {
+      if (!activeIds.has(id)) {
+        delete nextRegistry[id];
+        changed = true;
+      }
+    }
+    
+    allFlat.forEach(p => {
+      const isImageless = !p.image && !p.secondaryImage;
+      if (isImageless) {
+        if (!nextRegistry[p.id]) {
+          nextRegistry[p.id] = Date.now();
+          changed = true;
+        }
+      } else {
+        if (nextRegistry[p.id]) {
+          delete nextRegistry[p.id];
+          changed = true;
+        }
+      }
+    });
+    
+    if (changed) {
+      setImagelessRegistry(nextRegistry);
+    }
+  }, [products]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const allFlat = Object.values(products).flat();
+      const nextRegistry = { ...imagelessRegistry };
+      let changed = false;
+
+      for (const id in nextRegistry) {
+        const timestamp = nextRegistry[id];
+        if (now - timestamp >= 10 * 60 * 1000) {
+          let category = null;
+          for (const [cat, list] of Object.entries(products)) {
+            if (list.some(p => p.id === id)) {
+              category = cat;
+              break;
+            }
+          }
+          if (category) {
+            deleteProductDirect(category, id);
+            delete nextRegistry[id];
+            changed = true;
+          }
+        }
+      }
+
+      if (changed) {
+        setImagelessRegistry(nextRegistry);
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [products, imagelessRegistry, deleteProductDirect, setImagelessRegistry]);
 
   const decrementStock = useCallback(async (items) => {
     mutatingRef.current = true;
@@ -1127,7 +1199,7 @@ function ImageInput({ value, onChange }) {
         <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
           <div style={{ position: "relative", flexShrink: 0 }}>
             <img src={value} alt="preview" style={{ width: 90, height: 90, objectFit: "cover", border: "1px solid #e8a0b4", display: "block" }} onError={e => { e.target.style.opacity = "0.2"; }} />
-            <button onClick={() => { onChange(""); setStatusMsg(""); }} style={{ position: "absolute", top: -6, right: -6, background: "#e8a0b4", border: "none", color: "#111111", width: 20, height: 20, borderRadius: "50%", cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Raleway',sans-serif!important", fontWeight: 600 }}>x</button>
+            <button onClick={() => { if (confirm("Are you sure you want to clear this image?")) { onChange(""); setStatusMsg(""); } }} style={{ position: "absolute", top: -6, right: -6, background: "#e8a0b4", border: "none", color: "#111111", width: 20, height: 20, borderRadius: "50%", cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Raleway',sans-serif!important", fontWeight: 600 }}>x</button>
           </div>
         </div>
       )}
@@ -1161,7 +1233,7 @@ function ImageInputCompact({ value, onChange }) {
           <div style={{ position: "relative" }}>
             <img src={value} alt="product" onClick={() => setIsOpen(true)} style={{ width: 64, height: 64, objectFit: "cover", border: "1px solid #e8a0b444", borderRadius: 4, display: "block", opacity: busy ? 0.4 : 1, cursor: "pointer" }} onError={e => { e.target.style.opacity = "0.2"; }} />
             <div style={{ position: "absolute", bottom: 3, right: 3, width: 9, height: 9, borderRadius: "50%", background: "#22c55e", border: "1.5px solid #ffffff", pointerEvents: "none" }} />
-            <button onClick={() => onChange("")} aria-label="Remove image" style={{ position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%", background: "#e8a0b4", border: "1.5px solid #ffffff", color: "#111111", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, fontWeight: 700 }}>×</button>
+            <button onClick={() => { if (confirm("Are you sure you want to clear this image?")) { onChange(""); } }} aria-label="Remove image" style={{ position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%", background: "#e8a0b4", border: "1.5px solid #ffffff", color: "#111111", cursor: "pointer", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10, fontWeight: 700 }}>×</button>
           </div>
           <button type="button" onClick={() => fileRef.current.click()} style={{ fontFamily: "'Raleway',sans-serif", fontSize: 8, letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 0", border: "none", background: "transparent", color: "#22c55e", fontWeight: 600, cursor: "pointer", width: 64, textAlign: "center" }}>{busy ? "…" : "Change"}</button>
           {isOpen && (
@@ -1171,7 +1243,7 @@ function ImageInputCompact({ value, onChange }) {
                 <button onClick={() => setIsOpen(false)} style={{ position: "absolute", top: -40, right: 0, background: "none", border: "none", color: "#ffffff", fontSize: 24, cursor: "pointer", fontFamily: "'Raleway',sans-serif!important", fontWeight: 600 }}>x</button>
                 <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
                   <button onClick={() => { fileRef.current.click(); setIsOpen(false); }} style={{ background: "#e8a0b4", border: "none", color: "#000000", fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 16px", cursor: "pointer", fontWeight: "bold" }}>CHANGE IMAGE</button>
-                  <button onClick={() => { onChange(""); setIsOpen(false); }} style={{ background: "transparent", border: "1px solid #ef4444", color: "#ef4444", fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 16px", cursor: "pointer" }}>DELETE IMAGE</button>
+                  <button onClick={() => { if (confirm("Are you sure you want to clear this image?")) { onChange(""); setIsOpen(false); } }} style={{ background: "transparent", border: "1px solid #ef4444", color: "#ef4444", fontFamily: "'Raleway',sans-serif", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", padding: "8px 16px", cursor: "pointer" }}>DELETE IMAGE</button>
                 </div>
               </div>
             </div>
